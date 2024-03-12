@@ -210,7 +210,7 @@ export function CoaView(base) {
                     }
 
                     .form-fields {
-                        display: grid;
+                        display: block;
                         grid-template-columns: max-content 1fr;
                         grid-gap: 10px;
                         text-align: right;
@@ -711,9 +711,18 @@ export function CoaView(base) {
                 ".table-container-results tbody"
             );
             const tableItems = tbody.querySelectorAll("tr");
-            const totalPages = Math.ceil(tableItems.length / 14);
-            const lastItemsCount = tableItems.length % 14;
-            const lastItemsLeft = 14 - lastItemsCount;
+            const portraitCount = 14;
+            const landscapeCount = 6;
+            const totalPortraitPages = Math.ceil(
+                tableItems.length / portraitCount
+            );
+            const lastItemsLeftPortrait =
+                portraitCount - (tableItems.length % portraitCount);
+
+            const totalLandscapePages = Math.ceil(
+                tableItems.length / landscapeCount
+            );
+
             const pageStr = this.lang === "en" ? "Page" : "Página";
             const ofStr = this.lang === "en" ? "of" : "de";
 
@@ -788,7 +797,7 @@ export function CoaView(base) {
                     position: absolute;
                     top: 90px;
                     right: 0px;
-                    content: "${pageStr} " counter(page_index) " ${ofStr} ${totalPages}";
+                    content: "${pageStr} " counter(page_index) " ${ofStr} ${totalPortraitPages}";
                   }
   
                   tr:nth-child(14)::after {
@@ -797,6 +806,27 @@ export function CoaView(base) {
   
                   tr:nth-child(14) td:last-child::after {
                     top: 84px;
+                  }
+                  #print-document-footer {
+                    position: relative;
+                    margin-top: ${50 * lastItemsLeftPortrait - 150}px;
+                  }
+  
+                  #print-document-footer::before {
+                    display: block;
+                    position: absolute;
+                    font-style: italic;
+                    top: 150px;
+                    left: 20px;
+                    content: "${this.documentFooter(data)}";
+                  }
+  
+                  #print-document-footer::after {
+                    display: block;
+                    position: absolute;
+                    top: 150px;
+                    right: 20px;
+                    content: "${pageStr} " counter(page_index) " ${ofStr} ${totalPortraitPages}";
                   }
                 }
 
@@ -827,7 +857,7 @@ export function CoaView(base) {
                     position: absolute;
                     top: 90px;
                     right: 0px;
-                    content: "${pageStr} " counter(page_index) " ${ofStr} ${totalPages}";
+                    content: "${pageStr} " counter(page_index) " ${ofStr} ${totalLandscapePages}";
                   }
   
                   tr:nth-child(6)::after {
@@ -836,6 +866,27 @@ export function CoaView(base) {
   
                   tr:nth-child(6) td:last-child::after {
                     top: 84px;
+                  }
+                  #print-document-footer {
+                    position: relative;
+                    margin-top: ${50 * lastItemsLeftPortrait - 150}px;
+                  }
+  
+                  #print-document-footer::before {
+                    display: block;
+                    position: absolute;
+                    font-style: italic;
+                    top: 150px;
+                    left: 20px;
+                    content: "${this.documentFooter(data)}";
+                  }
+  
+                  #print-document-footer::after {
+                    display: block;
+                    position: absolute;
+                    top: 150px;
+                    right: 20px;
+                    content: "${pageStr} " counter(page_index) " ${ofStr} ${totalLandscapePages}";
                   }
                 }
   
@@ -855,27 +906,7 @@ export function CoaView(base) {
 
                   
   
-                  #print-document-footer {
-                    position: relative;
-                    margin-top: ${50 * lastItemsLeft - 150}px;
-                  }
-  
-                  #print-document-footer::before {
-                    display: block;
-                    position: absolute;
-                    font-style: italic;
-                    top: 150px;
-                    left: 20px;
-                    content: "${this.documentFooter(data)}";
-                  }
-  
-                  #print-document-footer::after {
-                    display: block;
-                    position: absolute;
-                    top: 150px;
-                    right: 20px;
-                    content: "${pageStr} " counter(page_index) " ${ofStr} ${totalPages}";
-                  }
+                  
                 }
                 </style>
               </head>
