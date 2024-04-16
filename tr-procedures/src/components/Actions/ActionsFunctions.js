@@ -140,7 +140,7 @@ return class extends (base) {
    */
    trazitCheckProcList(isProcManagement) {
     if (this.isProcManagement!==undefined&&this.isProcManagement===true){
-      return true
+      //return true
     }
     if (this.area!==undefined&&this.area==="app"){
       return true
@@ -151,7 +151,7 @@ return class extends (base) {
     let pArr = []
     let procList = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures
     if (isProcManagement!==undefined&&isProcManagement===true){
-      pArr = procList.filter(p => p.procInstanceName == 'proc_management')
+      pArr = procList.filter(p => p.procInstanceName == 'app')
     }else{
       pArr = procList.filter(p => p.procInstanceName == this.procInstanceName)
     }
