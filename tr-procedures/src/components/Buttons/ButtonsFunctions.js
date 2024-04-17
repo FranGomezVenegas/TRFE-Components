@@ -13,7 +13,7 @@ export function ButtonsFunctions(base) {
       if (actions === undefined) { actions = this.viewModelFromProcModel }
       return html`
         <style>
-          mwc-icon-button#lang {        
+          mwc-icon-button#lang {
             color : rgba(36, 192, 235, 1);
             font-family : Montserrat;
             font-weight : bold;
@@ -27,7 +27,7 @@ export function ButtonsFunctions(base) {
             --mdc-theme-primary:rgba(36, 192, 235, 1);
             border-radius: 12px;
           }
-          mwc-button.button {        
+          mwc-button.button {
             color : rgba(36, 192, 235, 1);
             font-family : Montserrat;
             font-weight : bold;
@@ -41,19 +41,19 @@ export function ButtonsFunctions(base) {
             --mdc-button-fill-color: red;
             --mdc-button-ink-color: blue;
             border-radius: 12px;
-          }            
-          mwc-icon-button {        
+          }
+          mwc-icon-button {
             color : rgba(36, 192, 235, 1);
             font-family : Montserrat;
             font-weight : bold;
             font-size : 19px;
-          }        
-          mwc-icon-button.disabledtrue{        
+          }
+          mwc-icon-button.disabledtrue{
             color : red;
             font-family : Montserrat;
             font-weight : bold;
-            font-size : 19px;            
-          }        
+            font-size : 19px;
+          }
           mwc-icon-button#video {
             color : #FFFFFF;
             color : rgba(36, 192, 235, 1);
@@ -74,49 +74,49 @@ export function ButtonsFunctions(base) {
           mwc-textfield {
             border-style : Solid;
             border-color : #999999;
-            border-color : rgba(153, 153, 153, 1);        
+            border-color : rgba(153, 153, 153, 1);
             border-width : 1px;
             border-radius : 7px;
             -moz-border-radius : 7px;
-            -webkit-border-radius : 7px;   
+            -webkit-border-radius : 7px;
             font-family : Montserrat;
             font-weight : bold;
             font-size : 19px;
             background-color :  #FFFFFF;
-            background-color : rgb(255, 255, 255);     
+            background-color : rgb(255, 255, 255);
             background: rgba(255, 255, 255, 0) none repeat scroll 0% 0%;
           }
           mwc-textfield.mdc-text-field {
             background-color :  #FFFFFF;
-            background-color : rgb(255, 255, 255);     
+            background-color : rgb(255, 255, 255);
           }
           mwc-textfield.mdc-textfield.mdc-floating-label {
-            color: red; 
+            color: red;
           }
-        </style>     
+        </style>
           ${actions !== undefined && actions.map(action =>
         html`
           ${this.btnHiddenForRows(action, data) ? nothing :
             html`${action.button ?
               html`${action.button.icon ?
-                html`<mwc-icon-button 
+                html`<mwc-icon-button
                   class="${action.button.class} disabled${this.btnDisabled(action, actions)}"
-                  icon="${action.button.icon}" id="${action.actionName}" 
-                  title="${action.button.title['label_' + this.lang]}" 
+                  icon="${action.button.icon}" id="${action.actionName}"
+                  title="${action.button.title['label_' + this.lang]}"
                   ?disabled=${this.btnDisabled(action, actions)}
                   ?hidden=${this.btnHiddenForRows(action, data)}
                   @click=${(e) => this.trazitButtonsMethod(e, action, actions, null, null, data, isProcManagement, parentData)}></mwc-icon-button>` :
                 html`${action.button.img ?
-                  html`<mwc-icon-button 
+                  html`<mwc-icon-button
                   class="${action.button.class} disabled${this.btnDisabled(action, actions)} img"
-                  title="${action.button.title['label_' + this.lang]}" id="${action.actionName}" 
+                  title="${action.button.title['label_' + this.lang]}" id="${action.actionName}"
                   ?disabled=${this.btnDisabled(action, actions)}
                   ?hidden=${this.btnHiddenForRows(action, data)}
                   @click=${(e) => this.trazitButtonsMethod(e, action, actions, null, null, data, isProcManagement, parentData)}>
                       <img class="iconBtn" src="images/${action.button.img}">
                   </mwc-icon-button>` :
-                  html`<mwc-button dense raised 
-                  label="${action.button.title['label_' + this.lang]}" id="${action.actionName}" 
+                  html`<mwc-button dense raised
+                  label="${action.button.title['label_' + this.lang]}" id="${action.actionName}"
                   class="${action.button.class} disabled${this.btnDisabled(action, actions)} img"
                   ?disabled=${this.btnDisabled(action, actions)}
                   ?hidden=${this.btnHiddenForRows(action, data)}
@@ -130,14 +130,13 @@ export function ButtonsFunctions(base) {
       `
     }
 
-
     getButton(sectionModel, data, isProcManagement) {
       if (sectionModel === undefined) { sectionModel = this.viewModelFromProcModel }
       console.log("getButtondatasectionModel", sectionModel);
       console.log('getButtondata', data)
       return html`
         <style>
-          mwc-icon-button#lang {        
+          mwc-icon-button#lang {
             color : rgba(36, 192, 235, 1);
             font-family : Montserrat;
             font-weight : bold;
@@ -151,7 +150,7 @@ export function ButtonsFunctions(base) {
             --mdc-theme-primary:rgba(36, 192, 235, 1);
             border-radius: 12px;
           }
-          mwc-button.button {        
+          mwc-button.button {
             color : rgba(36, 192, 235, 1);
             font-family : Montserrat;
             font-weight : bold;
@@ -165,19 +164,19 @@ export function ButtonsFunctions(base) {
             --mdc-button-fill-color: red;
             --mdc-button-ink-color: blue;
             border-radius: 12px;
-          }            
-          mwc-icon-button {        
+          }
+          mwc-icon-button {
             color : rgba(36, 192, 235, 1);
             font-family : Montserrat;
             font-weight : bold;
             font-size : 19px;
-          }        
-          mwc-icon-button.disabledtrue{        
+          }
+          mwc-icon-button.disabledtrue{
             color : red;
             font-family : Montserrat;
             font-weight : bold;
             font-size : 19px;
-          }                
+          }
           mwc-icon-button#video {
             color : #FFFFFF;
             color : rgba(36, 192, 235, 1);
@@ -198,32 +197,32 @@ export function ButtonsFunctions(base) {
           mwc-textfield {
             border-style : Solid;
             border-color : #999999;
-            border-color : rgba(153, 153, 153, 1);        
+            border-color : rgba(153, 153, 153, 1);
             border-width : 1px;
             border-radius : 7px;
             -moz-border-radius : 7px;
-            -webkit-border-radius : 7px;   
+            -webkit-border-radius : 7px;
             font-family : Montserrat;
             font-weight : bold;
             font-size : 19px;
             background-color :  #FFFFFF;
-            background-color : rgb(255, 255, 255);     
+            background-color : rgb(255, 255, 255);
             background: rgba(255, 255, 255, 0) none repeat scroll 0% 0%;
           }
           mwc-textfield.mdc-text-field {
             background-color :  #FFFFFF;
-            background-color : rgb(255, 255, 255);     
+            background-color : rgb(255, 255, 255);
           }
           mwc-textfield.mdc-textfield.mdc-floating-label {
-            color: red; 
+            color: red;
           }
-        </style>     
+        </style>
           ${sectionModel !== undefined && sectionModel.viewQuery && sectionModel.viewQuery.addRefreshButton && sectionModel.viewQuery.addRefreshButton === true ?
           html`
-          <mwc-icon-button 
+          <mwc-icon-button
               class="${sectionModel.viewQuery.button.class}"
-              icon="${sectionModel.viewQuery.button.icon}" id="refresh" 
-              title="${sectionModel.viewQuery.button.title['label_' + this.lang]}"             
+              icon="${sectionModel.viewQuery.button.icon}" id="refresh"
+              title="${sectionModel.viewQuery.button.title['label_' + this.lang]}"
               @click=${() => this.GetViewData()}
               style="${sectionModel.viewQuery.button.style !== undefined ? sectionModel.viewQuery.button.style : ''}">
           </mwc-icon-button>` : nothing
@@ -235,8 +234,8 @@ export function ButtonsFunctions(base) {
                 html`${action.button.icon ?
                   html`<mwc-icon-button id="${action.actionName}"
                   class="${action.button.class} disabled${this.btnDisabled(action, sectionModel)}"
-                  icon="${action.button.icon}" 
-                  title="${action.button.title['label_' + this.lang]}" 
+                  icon="${action.button.icon}"
+                  title="${action.button.title['label_' + this.lang]}"
                   ?disabled=${this.btnDisabled(action, sectionModel)}
                   ?hidden=${this.btnHidden(action)}
                   style="${action.button.style !== undefined ? action.button.style : ''}"
@@ -244,7 +243,7 @@ export function ButtonsFunctions(base) {
                   html`${action.button.img ?
                     html`<mwc-icon-button  id="${action.actionName}"
                   class="${this.btnDisabled(action, sectionModel) === true ? 'disabledtrue' : 'disabledfalse'}"
-                  title="${action.button.title['label_' + this.lang]}" 
+                  title="${action.button.title['label_' + this.lang]}"
                   ?disabled=${this.btnDisabled(action, sectionModel)}
                   ?hidden=${this.btnHidden(action)}
                   style="${action.button.style !== undefined ? action.button.style : ''}"
@@ -252,7 +251,7 @@ export function ButtonsFunctions(base) {
                       <img class="iconBtn" src="images/${this.giveFileName(action, sectionModel)}">
                   </mwc-icon-button>` :
                     html`<mwc-button dense raised id="${action.actionName}"
-                  label="${action.button.title['label_' + this.lang]}" 
+                  label="${action.button.title['label_' + this.lang]}"
                   ?disabled=${this.btnDisabled(action, sectionModel)}
                   ?hidden=${this.btnHidden(action)}
                   style="${action.button.style !== undefined ? action.button.style : ''}"
@@ -265,6 +264,140 @@ export function ButtonsFunctions(base) {
         )}
       `
     }
+	getSmartFilterButton(sectionModel, data, isProcManagement,lang) {
+		let action=sectionModel.smartFilter
+		if(action==undefined){return}
+		if (sectionModel === undefined) { sectionModel = this.viewModelFromProcModel }
+		console.log("getButtondatasectionModel", sectionModel);
+		console.log('getButtondata', data)
+		return html`
+		  <style>
+			mwc-icon-button#lang {
+			  color : rgba(36, 192, 235, 1);
+			  font-family : Montserrat;
+			  font-weight : bold;
+			  font-size : 19px;
+			}
+			mwc-button {
+			  background-color: rgba(36, 192, 235, 1);
+			  font-family: Montserrat;
+			  font-weight: bold;
+			  font-size: 19px;
+			  --mdc-theme-primary:rgba(36, 192, 235, 1);
+			  border-radius: 12px;
+			}
+			mwc-button.button {
+			  color : rgba(36, 192, 235, 1);
+			  font-family : Montserrat;
+			  font-weight : bold;
+			  font-size : 19px;
+			  background: rgb(36, 192, 235) none repeat scroll 0% 0%;
+			  font-family: Montserrat;
+			  font-weight: bold;
+			  font-size: 19px;
+			  color: white;
+			  border-color: transparent !important;
+			  --mdc-button-fill-color: red;
+			  --mdc-button-ink-color: blue;
+			  border-radius: 12px;
+			}
+			mwc-icon-button {
+			  color : rgba(36, 192, 235, 1);
+			  font-family : Montserrat;
+			  font-weight : bold;
+			  font-size : 19px;
+			}
+			mwc-icon-button.disabledtrue{
+			  color : red;
+			  font-family : Montserrat;
+			  font-weight : bold;
+			  font-size : 19px;
+			}
+			mwc-icon-button#video {
+			  color : #FFFFFF;
+			  color : rgba(36, 192, 235, 1);
+			}
+			sp-button {
+			  background : #24C0EB;
+			  background : rgba(36, 192, 235, 1);
+			  border-color : inherit !important;
+			  border-radius : 35px;
+			  -moz-border-radius : 35px;
+			  -webkit-border-radius : 35px;
+			  font-family : Montserrat;
+			  font-weight : bold;
+			  font-size : 19px;
+			  color : #FFFFFF;
+			  color : rgb(255, 255, 255);
+			}
+			mwc-textfield {
+			  border-style : Solid;
+			  border-color : #999999;
+			  border-color : rgba(153, 153, 153, 1);
+			  border-width : 1px;
+			  border-radius : 7px;
+			  -moz-border-radius : 7px;
+			  -webkit-border-radius : 7px;
+			  font-family : Montserrat;
+			  font-weight : bold;
+			  font-size : 19px;
+			  background-color :  #FFFFFF;
+			  background-color : rgb(255, 255, 255);
+			  background: rgba(255, 255, 255, 0) none repeat scroll 0% 0%;
+			}
+			mwc-textfield.mdc-text-field {
+			  background-color :  #FFFFFF;
+			  background-color : rgb(255, 255, 255);
+			}
+			mwc-textfield.mdc-textfield.mdc-floating-label {
+			  color: red;
+			}
+		  </style>
+			${sectionModel !== undefined && sectionModel.viewQuery && sectionModel.viewQuery.addRefreshButton && sectionModel.viewQuery.addRefreshButton === true ?
+			html`
+			<mwc-icon-button
+				class="${sectionModel.viewQuery.button.class}"
+				icon="${sectionModel.viewQuery.button.icon}" id="refresh"
+				title="${sectionModel.viewQuery.button.title['label_' + lang]}"
+				@click=${() => this.GetViewData()}
+				style="${sectionModel.viewQuery.button.style !== undefined ? sectionModel.viewQuery.button.style : ''}">
+			</mwc-icon-button>` : nothing
+		  }
+
+			${this.btnHidden(action) ? nothing :
+				html`${action.button ?
+				  html`${action.button.icon ?
+					html`<mwc-icon-button id="${action.actionName}"
+					class="${action.button.class} disabled${this.btnDisabled(action, sectionModel)}"
+					icon="${action.button.icon}"
+					title="${action.button.title['label_' +lang]}"
+					?disabled=${this.btnDisabled(action, sectionModel)}
+					?hidden=${this.btnHidden(action)}
+					style="${action.button.style !== undefined ? action.button.style : ''}"
+					@click=${(e) => this.trazitButtonsMethod(e, action, sectionModel, null, null, data, isProcManagement)}></mwc-icon-button>` :
+					html`${action.button.img ?
+					  html`<mwc-icon-button  id="${action.actionName}"
+					class="${this.btnDisabled(action, sectionModel) === true ? 'disabledtrue' : 'disabledfalse'}"
+					title="${action.button.title['label_' + lang]}"
+					?disabled=${this.btnDisabled(action, sectionModel)}
+					?hidden=${this.btnHidden(action)}
+					style="${action.button.style !== undefined ? action.button.style : ''}"
+					@click=${(e) => this.trazitButtonsMethod(e, action, sectionModel, null, null, data, isProcManagement)}>
+						<img class="iconBtn" src="images/${this.giveFileName(action, sectionModel)}">
+					</mwc-icon-button>` :
+					  html`<mwc-button dense raised id="${action.actionName}"
+					label="${action.button.title['label_' + lang]}"
+					?disabled=${this.btnDisabled(action, sectionModel)}
+					?hidden=${this.btnHidden(action)}
+					style="${action.button.style !== undefined ? action.button.style : ''}"
+					@click=${(e) => this.trazitButtonsMethod(e, action, sectionModel, null, null, data, isProcManagement)}></mwc-button>`
+					  }`
+					}` :
+				  nothing
+				  }`
+			  }`
+
+	}
     giveFileName(action, sectionModel) {
       const originalExtension = action.button.img.split('.').pop();
       let imgUrl = action.button.img.replace(/\.[^/.]+$/, `_${this.btnDisabled(action, sectionModel) === true ? 'disabledtrue' : 'disabledfalse'}.${originalExtension}`);
@@ -292,7 +425,7 @@ export function ButtonsFunctions(base) {
         return true
       }
 
-      //console.log('btnDisabled', viewModelFromProcModel.viewName, 'action', action)            
+      //console.log('btnDisabled', viewModelFromProcModel.viewName, 'action', action)
       if (viewModelFromProcModel === undefined) { viewModelFromProcModel = this.viewModelFromProcModel }
 
 
@@ -306,10 +439,10 @@ export function ButtonsFunctions(base) {
       //   if (action.button.requiresGridItemSelected!==undefined&&
       //     action.button.requiresGridItemSelected===true){
       //       return false
-      //   }else{          
-      //     return false        
+      //   }else{
+      //     return false
       //   }
-      // }           
+      // }
       if (action.buttonForQuery !== undefined && action.buttonForQuery === true) {
       } else {
         d = this.disabledByCertification(action)
@@ -347,7 +480,7 @@ export function ButtonsFunctions(base) {
       return d
     }
     btnHiddenForRows(action, selRow) {
-      //console.log('btnHiddenForRows', 'action', action, 'selRow', selRow, 'show', action.button.showWhenSelectedItem, 'hide', action.button.hideWhenSelectedItem)    
+      //console.log('btnHiddenForRows', 'action', action, 'selRow', selRow, 'show', action.button.showWhenSelectedItem, 'hide', action.button.hideWhenSelectedItem)
       let d = false
       if (selRow !== undefined && selRow["No Data"] !== undefined) { return true }
       if (action.button.showWhenSelectedItem !== undefined) {
@@ -516,7 +649,7 @@ export function ButtonsFunctions(base) {
       }
       return d
     }
-    
+
 
     getFromMasterData() {
       if (this.procInstanceName === undefined) {
@@ -540,7 +673,7 @@ export function ButtonsFunctions(base) {
       // if (setGrid){
       //   if (entries && !entries.is_error) {
       //     this.setGrid(entries)
-      //   } else {            
+      //   } else {
       //     this.setGrid()
       //   }
       // }
@@ -588,15 +721,15 @@ export function ButtonsFunctions(base) {
       // const stack = new Error().stack;
       // const stackLines = stack.split('\n');
       // if (stackLines!==null&&stackLines[1]!==null){
-      //   const callerName = stackLines[1].match(/at (\w+)/)[0]; // Adjust the index as needed    
+      //   const callerName = stackLines[1].match(/at (\w+)/)[0]; // Adjust the index as needed
       //   console.log("Called from: " + callerName);
-      // }  
+      // }
       if (viewQuery === undefined) {
         viewQuery = this.viewModelFromProcModel.viewQuery
       }
       //console.log('GetViewData', 'this.viewModelFromProcModel.viewQuery', this.viewModelFromProcModel.viewQuery)
       if (viewQuery !== undefined && viewQuery.clientMethod !== undefined) {
-        //alert('Calling '+viewQuery.clientMethod+' from GetViewData')            
+        //alert('Calling '+viewQuery.clientMethod+' from GetViewData')
         if (this[viewQuery.clientMethod] === undefined) {
           alert('not found any clientMethod called ' + viewQuery.clientMethod)
           return
@@ -619,7 +752,7 @@ export function ButtonsFunctions(base) {
           .catch(error => {
             console.error('Error fetching config:', error);
           });
-      }      
+      }
       if (this.config.backendUrl === undefined) {
         this.config.backendUrl="https://platform.trazit.net:8443/TRAZiT-API"
         //this.config.backendUrl = "http://51.75.202.142:8888/TRAZiT-API"
@@ -648,7 +781,7 @@ export function ButtonsFunctions(base) {
       let params = this.config.backendUrl + endPointUrl
         + '?' + new URLSearchParams(APIParams) + '&' + new URLSearchParams(viewParams)
 
-      //console.log('params', params)        
+      //console.log('params', params)
       await this.fetchApi(params, false, queryDefinition).then(j => {
         if (queryDefinition.actionName === 'ONE_PROCEDURE_DEFINITION' || queryDefinition.actionName === 'ALL_PROCEDURES_DEFINITION') {
           if (j.master_data !== undefined) {
@@ -697,7 +830,7 @@ export function ButtonsFunctions(base) {
     }
     async GetAlternativeViewData(queryDefinition, selObject = {}) {
       if (queryDefinition.clientMethod !== undefined) {
-        //alert('Calling '+queryDefinition.clientMethod+' from GetViewData')            
+        //alert('Calling '+queryDefinition.clientMethod+' from GetViewData')
         if (this[queryDefinition.clientMethod] === undefined) {
           alert('not found any clientMethod called ' + queryDefinition.clientMethod)
           return
@@ -712,7 +845,7 @@ export function ButtonsFunctions(base) {
       let params = this.config.backendUrl + endPointUrl
         + '?' + new URLSearchParams(APIParams) + '&' + new URLSearchParams(viewParams)
 
-      //console.log('params', params)        
+      //console.log('params', params)
       await this.fetchApi(params).then(j => {
         if (j && !j.is_error) {
           this.setGrid(j)
@@ -729,7 +862,7 @@ export function ButtonsFunctions(base) {
 
       let currQuery = actionDefinition.dialogQuery
       if (currQuery.clientMethod !== undefined) {
-        //alert('Calling '+currQuery.clientMethod+' from GetViewData')            
+        //alert('Calling '+currQuery.clientMethod+' from GetViewData')
         if (this[currQuery.clientMethod] === undefined) {
           alert('not found any clientMethod called ' + currQuery.clientMethod)
           return
@@ -762,7 +895,7 @@ export function ButtonsFunctions(base) {
       for (i = 0; i < actionDefinition.dialogQueries.length; i++) {
         let currQuery = actionDefinition.dialogQueries[i]
         if (currQuery.clientMethod !== undefined) {
-          //alert('Calling '+currQuery.clientMethod+' from GetViewData')            
+          //alert('Calling '+currQuery.clientMethod+' from GetViewData')
           if (this[currQuery.clientMethod] === undefined) {
             alert('not found any clientMethod called ' + currQuery.clientMethod)
             return
@@ -779,7 +912,7 @@ export function ButtonsFunctions(base) {
           //let params = this.config.backendUrl + (currQuery.endPoint ? currQuery.endPoint : this.config.SampleAPIqueriesUrl)
           + '?' + new URLSearchParams(APIParams) + '&' + new URLSearchParams(viewParams)
 
-        //console.log('params', params)        
+        //console.log('params', params)
         await this.fetchApi(params).then(j => {
           if (j && !j.is_error) {
             //alert(j.length)
@@ -802,7 +935,7 @@ export function ButtonsFunctions(base) {
       }
       // if (dialogInfo.filesListContent!==undefined&&dialogInfo.filesListContent===true){
       //     this.getGenericDialogGridItems(this.actionBeingPerformedModel.dialogInfo)
-      //     return 
+      //     return
       // }
 
 
@@ -837,51 +970,6 @@ export function ButtonsFunctions(base) {
 
     disabledByCertification(action) {
       return false;
-      //console.log('disabledByCertification', 'action', action)      
-      //console.log('viewName', this.viewName, 'procInstanceName', this.procInstanceName)
-      let sopsPassed = false
-      let procList = JSON.parse(sessionStorage.getItem("userSession")).procedures_list.procedures
-
-      if (this.procInstanceName === undefined || procList === undefined) { return true }
-
-      let procInstanceModel = procList.filter(p => p.procInstanceName == this.procInstanceName)
-      if (procInstanceModel.length) {
-
-        if (procInstanceModel.length && procInstanceModel[0].userSopMode === undefined) {
-          return true
-        }
-
-
-        let defView = procInstanceModel[0].new_definition.filter(d => d.lp_frontend_page_name == this.viewName)
-        if (defView === undefined || defView[0] === undefined) {
-          return true
-        }
-        //console.log('disabledByCertification', defView[0].mode)
-        if (defView.length && defView[0].mode !== undefined && defView[0].mode.toString().toUpperCase() === "READONLY") {
-          return true
-        }
-        if (procInstanceModel.length && procInstanceModel[0].userSopMode.toString().toUpperCase().includes("DISAB")) {
-          return false
-        }
-
-        if (defView.length > 0) {
-          // for fake test
-          // sopsPassed = false
-          if (defView[0].icons) {
-            defView = defView[0].icons.filter(i => i.name == this.filterName)
-            //   let sopIcon = defView[0].icons.filter(i => i.name == this.filterName) 
-            //   sopsPassed = sopIcon[0].sops_passed
-            // } else {
-            //   sopsPassed = defView[0].sops_passed
-          }
-
-        } else {
-          return true
-        }
-        sopsPassed = defView[0].sops_passed == true ? true : false
-        return !sopsPassed
-      }
-      return !sopsPassed
     }
   }
 }

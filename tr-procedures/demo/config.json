@@ -1,298 +1,292 @@
 {
-  "dbName": "demo_v0_9_2",
-  "isForTesting": false,
-  "backendUrl": "https://platform.trazit.net:8443/TRAZiT-API",
-  "dbNameDemo2": "demo_v0_9_2",
-  "backendUrlNonSecure": "http://51.75.202.142:8888/TRAZiT-API",
-  "backendUrlhttps": "http://51.75.202.142:8888/TRAZiT-API",
-  "backendUrlLocal": "http://localhost:8080/LabPLANET-API",
-  "backendUrlLabP": "http://platform.trazit.net:8888/LabPLANET-API",
-  "backendUrlLocalLabPLANETAPI": "http://localhost:8080/LabPLANET-API",
+	"dbName": "demo_v0_9_2",
+	"isForTesting": false,
+	"backendUrl": "https://platform.trazit.net:8443/TRAZiT-API",
+	"dbNameDemo2": "demo_v0_9_2",
+	"backendUrlNonSecure": "http://51.75.202.142:8888/TRAZiT-API",
+	"backendUrlhttps": "http://51.75.202.142:8888/TRAZiT-API",
+	"backendUrlLocal": "http://localhost:8080/LabPLANET-API",
+	"backendUrlLabP": "http://platform.trazit.net:8888/LabPLANET-API",
+	"backendUrlLocalLabPLANETAPI": "http://localhost:8080/LabPLANET-API",
 
-  "appAuthenticateApiUrl": "/app/AuthenticationAPIactions",
+	"appAuthenticateApiUrl": "/app/AuthenticationAPIactions",
 
-  "frontEndEnvMonitSampleUrl": "/moduleenvmon/EnvMonSampleAPIqueries",
-  "EnvMonSampleAPIQueriesStats": "/moduleenvmon/EnvMonAPIstats",
-  "ApiEnvMonitSampleUrl": "/moduleenvmon/EnvMonSampleAPIactions",
-  "ApiEnvMonitUrl": "/moduleenvmon/EnvMonAPIactions",
-  "frontEndEnvMonitIncubationUrl": "/moduleenvmon/EnvMonIncubationAPIqueries",
-  "frontEndEnvMonitUrl": "/moduleenvmon/EnvMonAPIqueries",
-  "ApiEnvMonitProdLotUrl": "/moduleenvmon/EnvMonProdLotAPIactions",
+	"frontEndEnvMonitSampleUrl": "/moduleenvmon/EnvMonSampleAPIqueries",
+	"EnvMonSampleAPIQueriesStats": "/moduleenvmon/EnvMonAPIstats",
+	"ApiEnvMonitSampleUrl": "/moduleenvmon/EnvMonSampleAPIactions",
+	"ApiEnvMonitUrl": "/moduleenvmon/EnvMonAPIactions",
+	"frontEndEnvMonitIncubationUrl": "/moduleenvmon/EnvMonIncubationAPIqueries",
+	"frontEndEnvMonitUrl": "/moduleenvmon/EnvMonAPIqueries",
+	"ApiEnvMonitProdLotUrl": "/moduleenvmon/EnvMonProdLotAPIactions",
 
-  "ApiInstrumentsAPIactionsUrl": "/app/procs/InstrumentsAPIactions",
-  "ApiInstrumentsAPIqueriesUrl": "/app/procs/InstrumentsAPIqueries",
-  "PlatformAdminAPIactionsUrl": "/app/PlatformAdminActions",
-  "PlatformAdminAPIqueriesUrl": "/app/PlatformAdminQueries",
+	"ApiInstrumentsAPIactionsUrl": "/app/procs/InstrumentsAPIactions",
+	"ApiInstrumentsAPIqueriesUrl": "/app/procs/InstrumentsAPIqueries",
+	"PlatformAdminAPIactionsUrl": "/app/PlatformAdminActions",
+	"PlatformAdminAPIqueriesUrl": "/app/PlatformAdminQueries",
 
-  "GenomaStudyAPIactionsUrl": "/modulegenoma/GenomaStudyAPIactions",
-  "GenomaStudyAPIqueriesUrl": "/modulegenoma/GenomaStudyAPIqueries",
+	"GenomaStudyAPIactionsUrl": "/modulegenoma/GenomaStudyAPIactions",
+	"GenomaStudyAPIqueriesUrl": "/modulegenoma/GenomaStudyAPIqueries",
 
-  "SampleAPIactionsUrl": "/modulesample/SampleAPIactions",
-  "SampleAPIqueriesUrl": "/modulesample/SampleAPIqueries",
+	"SampleAPIactionsUrl": "/modulesample/SampleAPIactions",
+	"SampleAPIqueriesUrl": "/modulesample/SampleAPIqueries",
 
+	"local": true,
+	"localDefaultView142": {
+		"procName": "proc-deploy",
+		"viewName": "SampleEnterResult",
+		"filterName": "ER-FQ"
+	},
+	"localDefaultView2131231": {
+		"procName": "genoma-1",
+		"viewName": "ProjectManager",
+		"filterName": "ProjectManager"
+	},
+	"localDefaultViewsssssa": {
+		"procName": "app-proc",
+		"viewName": "PlatformInstruments",
+		"filterName": "InstrumentsList"
+	},
+	"localDefaultViewcccccc": {
+		"procName": "app-proc",
+		"viewName": "EventsInProgress",
+		"filterName": "EventsER"
+	},
+	"localDefaultViewrr": {
+		"procName": "app-proc",
+		"viewName": "InstrumentReport",
+		"filterName": "InstrumentReport"
+	},
+	"localDefaultViewxxxxa": {
+		"procName": "app-proc",
+		"viewName": "ConfigInstrumentFamilies",
+		"filterName": "ConfigInstrumentFamilies"
+	},
+	"localDefaultViewxxxxa3": {
+		"procName": "app-proc",
+		"viewName": "Home",
+		"filterName": "Home"
+	},
+	"localDefaultView12312": {
+		"procName": "app-proc",
+		"viewName": "EventsCalendar",
+		"filterName": "EventsCalendar"
+	},
+	"localDefaultView1231": {
+		"procName": "mp-release1",
+		"viewName": "SpecView",
+		"filterName": "SpecView"
+	},
 
-  "local": true,
-  "localDefaultView142": {
-    "procName":  "proc-deploy", 
-    "viewName": "SampleEnterResult", 
-    "filterName" :  "ER-FQ" 
-  },
-  "localDefaultView2131231": {
-    "procName":  "genoma-1", 
-    "viewName": "ProjectManager", 
-    "filterName" :  "ProjectManager" 
-  },  
-  "localDefaultViewsssssa": {
-    "procName":  "app-proc", 
-    "viewName": "PlatformInstruments", 
-    "filterName" :  "InstrumentsList" 
-  },
-  "localDefaultViewcccccc": {
-    "procName":  "app-proc", 
-    "viewName": "EventsInProgress", 
-    "filterName" :  "EventsER" 
-  },
-  "localDefaultViewrr": {
-    "procName":  "app-proc", 
-    "viewName": "InstrumentReport", 
-    "filterName" :  "InstrumentReport" 
-  },
-  "localDefaultViewxxxxa": {
-    "procName":  "app-proc", 
-    "viewName": "ConfigInstrumentFamilies", 
-    "filterName" :  "ConfigInstrumentFamilies" 
-  },
-  "localDefaultViewxxxxa3": {
-    "procName":  "app-proc", 
-    "viewName": "Home", 
-    "filterName" :  "Home" 
-  },
-  "localDefaultView12312": {
-    "procName":  "app-proc", 
-    "viewName": "EventsCalendar", 
-    "filterName" :  "EventsCalendar" 
-  },
-  "localDefaultView1231": {
-    "procName":  "mp-release1", 
-    "viewName": "SpecView", 
-    "filterName" :  "SpecView" 
-  },
-  
-  
-  
-  "localDefaultView3321": {
-    "procName":  "em-demo-a", 
-    "viewName": "Incubators", 
-    "filterName" :  "Incubators" 
-  },
-  "localDefaultViewsasasa": {
-    "procName":  "em-demo-a", 
-    "viewName": "SamplePendingSampling", 
-    "filterName" :  "SamplingSMP" 
-  },
-  "localDefaultViewzzzsaaa": {
-    "procName":  "em-demo-a", 
-    "viewName": "SampleIncubation", 
-    "filterName" :  "Incubation" 
-  },
-  "localDefaultViewsa": {
-    "procName":  "em-demo-a", 
-    "viewName": "SampleIncubation1", 
-    "filterName" :  "Incubation" 
-  },
-  "localDefaultViewzzzs": {
-    "procName":  "em-demo-a", 
-    "viewName": "SampleIncubation2", 
-    "filterName" :  "Incubation" 
-  },
-  "localDefaultViewaaaa": {
-    "procName":  "em-demo-a", 
-    "viewName": "Home", 
-    "filterName" :  "Home" 
-  },
-  
-  "localDefaultViewzxc": {
-    "procName":  "em-demo-a", 
-    "viewName": "SampleMicroorganism", 
-    "filterName" :  "MicroOrganismSMP" 
-  },
-  "localDefaultView111221": {
-    "procName":  "em-demo-a", 
-    "viewName": "SampleMicroorganism", 
-    "filterName" :  "MicroOrganismPERS" 
-  },
-  "localDefaultView11": {
-    "procName":  "em-demo-a", 
-    "viewName": "Deviation", 
-    "filterName" :  "pending" 
-  },
-  "localDefaultView123111s": {
-    "procName":  "em-demo-a", 
-    "viewName": "SamplePlateReading", 
-    "filterName" :  "PlateReadingSMP" 
-  },
-  "localDefaultView1231231231": {
-    "procName":  "em-demo-a", 
-    "viewName": "SamplePlateReading", 
-    "filterName" :  "PlateReadingPERS" 
-  },
-  "localDefaultView1234122": {
-    "procName":  "em-demo-a", 
-    "viewName": "ProductionLots", 
-    "filterName" :  "SampleLot" 
-  },  
-  "localDefaultView3": {
-    "procName":  "sample-coa-rel1", 
-    "viewName": "LogSamplesModuleSamples", 
-    "filterName" :  "SampleLogin" 
-  },
-  "localDefaultViewzzzzzzzz": {
-    "procName":  "em-demo-a", 
-    "viewName": "DataMining", 
-    "filterName" :  "DataMining" 
-  },
-  "localDefaultViewzzzzzz": {
-    "procName":  "em-demo-a", 
-    "viewName": "SchedSamples", 
-    "filterName" :  "SchedSamples" 
-  },
-  "localDefaultViewaa1": {
-    "procName":  "em-demo-a", 
-    "viewName": "SampleStageTimingCapture", 
-    "filterName" :  "SampleStageTimingCapture" 
-  },
-  "localDefaultView12311112333": {
-    "procName":  "app", 
-    "viewName": "WhiteIpList", 
-    "filterName" :  "WhiteIpList" 
-  },  
-   "localDefaultViewzxccccz": {
-    "procName":  "inv-draft", 
-    "viewName": "InventoryLotsGeneral", 
-    "filterName" :  "InventoryLots.1" 
-  },  
-   "localDefaultViewxzc": {
-    "procName":  "inv-draft", 
-    "viewName": "InventoryLotsMediosDeCultivo", 
-    "filterName" :  "InventoryLots.MediosDeCultivo" 
-  },  
-   "localDefaultViewxxxxxxxxx": {
-    "procName":  "inv-draft", 
-    "viewName": "InventoryLotsReactivos", 
-    "filterName" :  "InventoryLotsReactivos.MediosDeCultivo" 
-  },  
-   "localDefaultView1145": {
-    "procName":  "inv-draft", 
-    "viewName": "Deviation", 
-    "filterName" :  "Deviation" 
-  },  
-     "localDefaultViewxxxxxxxxxxx": {
-    "procName":  "inv-draft", 
-    "viewName": "Issues", 
-    "filterName" :  "Issues" 
-  },  
-  
-   "localDefaultView888": {
-    "procName":  "em-demo-a",
-    "viewName": "Programs", 
-    "filterName" :  "Programs" 
-  },
-  "localDefaultViewxxxxs": {
-    "procName":  "em-demo-a", 
-    "viewName": "Browser", 
-    "filterName" :  "Browser" 
-  }, 
-  
-  
-  "localDefaultViewdasda": {
-    "procName":  "mp-release1", 
-    "viewName": "LotCreation", 
-    "filterName" :  "LotCreation" 
-  },
-  "localDefaultViewdasdasda": {
-    "procName":  "mp-release1", 
-    "viewName": "LotView", 
-    "filterName" :  "LotView" 
-  },
-  "localDefaultViewsssss": {
-    "procName":  "mp-release1", 
-    "viewName": "Browser", 
-    "filterName" :  "Browser" 
-  },
-  "localDefaultViewasaaa": {
-    "procName":  "mp-release1", 
-    "viewName": "SampleEnterResult", 
-    "filterName" :  "ER-FQ" 
-  },
+	"localDefaultView3321": {
+		"procName": "em-demo-a",
+		"viewName": "Incubators",
+		"filterName": "Incubators"
+	},
+	"localDefaultViewsasasa": {
+		"procName": "em-demo-a",
+		"viewName": "SamplePendingSampling",
+		"filterName": "SamplingSMP"
+	},
+	"localDefaultViewzzzsaaa": {
+		"procName": "em-demo-a",
+		"viewName": "SampleIncubation",
+		"filterName": "Incubation"
+	},
+	"localDefaultViewsa": {
+		"procName": "em-demo-a",
+		"viewName": "SampleIncubation1",
+		"filterName": "Incubation"
+	},
+	"localDefaultViewzzzs": {
+		"procName": "em-demo-a",
+		"viewName": "SampleIncubation2",
+		"filterName": "Incubation"
+	},
+	"localDefaultViewaaaa": {
+		"procName": "em-demo-a",
+		"viewName": "Home",
+		"filterName": "Home"
+	},
 
-  "localDefaultViewsssssss": {
-    "procName":  "mp-release1", 
-    "viewName": "ReviewTesting", 
-    "filterName" :  "RT-FQ" 
-  },
-  "localDefaultViewadasd": {
-    "procName":  "fake-developers", 
-    "viewName": "culture-medium", 
-    "filterName" :  "culture-medium" 
-  },
-  "localDefaultViewdsssss": {
-    "procName":  "fake-developers", 
-    "viewName": "tree-view", 
-    "filterName" :  "tree-view" 
-  },
-  "localDefaultView111231": {
-    "procName":  "fake-developers", 
-    "viewName": "prototype-elements-view-main", 
-    "filterName" :  "prototype-elements-view-main" 
-  },  
-  
-  "localDefaultView321": {
-    "procName":  "inspection_lot", 
-    "viewName": "SpecDesign", 
-    "filterName" :  "SpecDesign" 
-  },
-  "localDefaultView": {
-    "procName":  "inspection_lot", 
-    "viewName": "analysisDesign", 
-    "filterName" :  "analysisDesign" 
-  },
-  "localDefaultViewzz": {
-    "procName":  "DiseaseStudies", 
-    "viewName": "MyStudies", 
-    "filterName" :  "MyStudies" 
-  },
-  "localDefaultViewzzz": {
-    "procName":  "mb_em", 
-    "viewName": "Home", 
-    "filterName" :  "Home" 
-  },
-  "localDefaultViewzzz": {
-    "procName":  "fake-developers", 
-    "procNameData":  "mb_em",
-    "viewName": "drag-drop", 
-    "filterName" :  "drag-drop" 
-  },  
-  "localDefaultViewzzzzz": {
-    "procName":  "fake-developers", 
-    "procNameData":  "mb_em",
-    "viewName": "drag-box", 
-    "filterName" :  "drag-box" 
-  },  
-  "localDefaultViewsssssssss": {
-    "procName":  "instruments", 
-    "viewName": "Deviation", 
-    "filterName" :  "Deviation" 
-  },
-  "localDefaultViewsss": {
-    "procName":  "instruments", 
-    "viewName": "PlatformInstruments", 
-    "filterName" :  "InstrumentsList" 
-  },
-  "localDefaultView": {
-    "procName":  "fake-developers", 
-    "viewName": "ck-editor", 
-    "filterName" :  "ck-editor" 
-  }
- 
-  
+	"localDefaultViewzxc": {
+		"procName": "em-demo-a",
+		"viewName": "SampleMicroorganism",
+		"filterName": "MicroOrganismSMP"
+	},
+	"localDefaultView111221": {
+		"procName": "em-demo-a",
+		"viewName": "SampleMicroorganism",
+		"filterName": "MicroOrganismPERS"
+	},
+	"localDefaultView11": {
+		"procName": "em-demo-a",
+		"viewName": "Deviation",
+		"filterName": "pending"
+	},
+	"localDefaultView123111s": {
+		"procName": "em-demo-a",
+		"viewName": "SamplePlateReading",
+		"filterName": "PlateReadingSMP"
+	},
+	"localDefaultView1231231231": {
+		"procName": "em-demo-a",
+		"viewName": "SamplePlateReading",
+		"filterName": "PlateReadingPERS"
+	},
+	"localDefaultView1234122": {
+		"procName": "em-demo-a",
+		"viewName": "ProductionLots",
+		"filterName": "SampleLot"
+	},
+	"localDefaultView3": {
+		"procName": "sample-coa-rel1",
+		"viewName": "LogSamplesModuleSamples",
+		"filterName": "SampleLogin"
+	},
+	"localDefaultViewzzzzzzzz": {
+		"procName": "em-demo-a",
+		"viewName": "DataMining",
+		"filterName": "DataMining"
+	},
+	"localDefaultViewzzzzzz": {
+		"procName": "em-demo-a",
+		"viewName": "SchedSamples",
+		"filterName": "SchedSamples"
+	},
+	"localDefaultViewaa1": {
+		"procName": "em-demo-a",
+		"viewName": "SampleStageTimingCapture",
+		"filterName": "SampleStageTimingCapture"
+	},
+	"localDefaultView12311112333": {
+		"procName": "app",
+		"viewName": "WhiteIpList",
+		"filterName": "WhiteIpList"
+	},
+	"localDefaultViewzxccccz": {
+		"procName": "inv-draft",
+		"viewName": "InventoryLotsGeneral",
+		"filterName": "InventoryLots.1"
+	},
+	"localDefaultViewxzc": {
+		"procName": "inv-draft",
+		"viewName": "InventoryLotsMediosDeCultivo",
+		"filterName": "InventoryLots.MediosDeCultivo"
+	},
+	"localDefaultViewxxxxxxxxx": {
+		"procName": "inv-draft",
+		"viewName": "InventoryLotsReactivos",
+		"filterName": "InventoryLotsReactivos.MediosDeCultivo"
+	},
+	"localDefaultView1145": {
+		"procName": "inv-draft",
+		"viewName": "Deviation",
+		"filterName": "Deviation"
+	},
+	"localDefaultViewxxxxxxxxxxx": {
+		"procName": "inv-draft",
+		"viewName": "Issues",
+		"filterName": "Issues"
+	},
+
+	"localDefaultView888": {
+		"procName": "em-demo-a",
+		"viewName": "Programs",
+		"filterName": "Programs"
+	},
+	"localDefaultViewxxxxs": {
+		"procName": "em-demo-a",
+		"viewName": "Browser",
+		"filterName": "Browser"
+	},
+
+	"localDefaultViewdasda": {
+		"procName": "mp-release1",
+		"viewName": "LotCreation",
+		"filterName": "LotCreation"
+	},
+	"localDefaultViewdasdasda": {
+		"procName": "mp-release1",
+		"viewName": "LotView",
+		"filterName": "LotView"
+	},
+	"localDefaultViewsssss": {
+		"procName": "mp-release1",
+		"viewName": "Browser",
+		"filterName": "Browser"
+	},
+	"localDefaultViewasaaa": {
+		"procName": "mp-release1",
+		"viewName": "SampleEnterResult",
+		"filterName": "ER-FQ"
+	},
+
+	"localDefaultViewsssssss": {
+		"procName": "mp-release1",
+		"viewName": "ReviewTesting",
+		"filterName": "RT-FQ"
+	},
+	"localDefaultViewadasd": {
+		"procName": "fake-developers",
+		"viewName": "culture-medium",
+		"filterName": "culture-medium"
+	},
+	"localDefaultViewdsssss": {
+		"procName": "fake-developers",
+		"viewName": "tree-view",
+		"filterName": "tree-view"
+	},
+	"localDefaultView111231": {
+		"procName": "fake-developers",
+		"viewName": "prototype-elements-view-main",
+		"filterName": "prototype-elements-view-main"
+	},
+
+	"localDefaultView321": {
+		"procName": "inspection_lot",
+		"viewName": "SpecDesign",
+		"filterName": "SpecDesign"
+	},
+	"localDefaultView": {
+		"procName": "inspection_lot",
+		"viewName": "analysisDesign",
+		"filterName": "analysisDesign"
+	},
+	"localDefaultViewzz": {
+		"procName": "DiseaseStudies",
+		"viewName": "MyStudies",
+		"filterName": "MyStudies"
+	},
+	"localDefaultViewzzz": {
+		"procName": "mb_em",
+		"viewName": "Home",
+		"filterName": "Home"
+	},
+	"localDefaultView": {
+		"procName": "fake-developers",
+		"procNameData": "mb_em",
+		"viewName": "drag-drop",
+		"filterName": "drag-drop"
+	},
+	"localDefaultViewzzzzz": {
+		"procName": "fake-developers",
+		"procNameData": "mb_em",
+		"viewName": "drag-box",
+		"filterName": "drag-box"
+	},
+	"localDefaultViewsssssssss": {
+		"procName": "instruments",
+		"viewName": "Deviation",
+		"filterName": "Deviation"
+	},
+	"localDefaultViewsss": {
+		"procName": "instruments",
+		"viewName": "PlatformInstruments",
+		"filterName": "InstrumentsList"
+	},
+	"localDefaultViewcc ": {
+		"procName": "fake-developers",
+		"viewName": "ck-editor",
+		"filterName": "ck-editor"
+	}
 }

@@ -5,9 +5,10 @@ import { navigator } from "lit-element-router";
 import { ButtonsFunctions} from '../../components/Buttons/ButtonsFunctions';
 import {DialogsFunctions} from '../GenericDialogs/DialogsFunctions';
 import {GridFunctions} from '../grid_with_buttons/GridFunctions';
+import {TrazitGenericDialogs} from '../GenericDialogs/TrazitGenericDialogs';
 //import {DataViews} from '../../components/Views/DataViews';
 
-export class DragDropTable extends (GridFunctions(DialogsFunctions(ButtonsFunctions(navigator(LitElement))))) {
+export class DragDropTable extends (TrazitGenericDialogs(GridFunctions(DialogsFunctions(ButtonsFunctions(navigator(LitElement)))))) {
   static get styles() {
     return styles;
   }
@@ -19,7 +20,8 @@ export class DragDropTable extends (GridFunctions(DialogsFunctions(ButtonsFuncti
       viewMode: { type: Number},
       selectedIndex1: { type: String },
       selectedIndex2: { type: Number},
-      dragTable: {type: Object}
+      dragTable: {type: Object},
+	  showFilterButton:{type:Boolean}
     };
   }
 
@@ -28,6 +30,7 @@ export class DragDropTable extends (GridFunctions(DialogsFunctions(ButtonsFuncti
     this.selectedTr = undefined;
     this.dragData = undefined;
     this.dragTable={}
+
     this.viewModelFromProcModel={}
     this.data={}
     this.data2 = {
@@ -45,7 +48,7 @@ export class DragDropTable extends (GridFunctions(DialogsFunctions(ButtonsFuncti
           {id: "30", study2:"Study 30", temperature: "30º", "extraField":"demo"},
           {id: "40", study2:"Study 40", temperature: "40º", "extraField":"demo"}
         ],
-      "table3":        
+      "table3":
         [
           {id: "5", study3:"Study 5", temperature: "50º", "extraField":"demo"},
           {id: "6", study3:"Study 6", temperature: "60º", "extraField":"demo"},
@@ -77,7 +80,7 @@ export class DragDropTable extends (GridFunctions(DialogsFunctions(ButtonsFuncti
                 "label_es": "study"
               }
             ]
-          },  
+          },
           { "dragEnable": true,
             "dropEnable": true,
             "theme":"TRAZiT-DefinitionArea",
@@ -100,7 +103,7 @@ export class DragDropTable extends (GridFunctions(DialogsFunctions(ButtonsFuncti
                 "label_es": "study"
               }
             ]
-          }  
+          }
         ],
         "dragEnable": [true, true, false],
         "dropEnable": [false, true, true],
@@ -127,7 +130,7 @@ export class DragDropTable extends (GridFunctions(DialogsFunctions(ButtonsFuncti
             "label_en": "study",
             "label_es": "study"
           }
-        ],        
+        ],
         "row_buttons": [
           {
             "actionName": "REMOVE_ROLE",
@@ -331,21 +334,41 @@ export class DragDropTable extends (GridFunctions(DialogsFunctions(ButtonsFuncti
           }
         ]
       }
-  
-    
+
+
     this.dragElement = undefined;
     this.dragTr = false;
+	this.showFilterButton=false
+	this.filterItems=[]
   }
+  	toggleFilterDialog(){
+		this.showFilterButton=!this.showFilterButton
+	}
+	hideFilters(){
+    	return this.showFilterButton
+  	}
 
+	//Filter From The table
+
+	applyFilter(){
+		this.filterItems=this.filterItems.filter((item,index)=>{
+			if(index==0){
+				return item
+			}
+		})
+		this.data=this.filterItems
+		this.requestUpdate()
+	}
   render() {
     return template({
       definition: this.viewModelFromProcModel.objects,
       dropTableTr: this._dropTableTr,
       allowDropTr: this._allowDropTr,
       dragTableTr: this._dragTableTr,
-      unavaiableToDrop: this._unavaiableToDrop
-    }, this.data, this.lang);
+      unavaiableToDrop: this._unavaiableToDrop,
+    }, this.data, this.lang,this);
   }
+
 
   _unavaiableToDrop = () => {
     alert("Not available to drop");
@@ -374,23 +397,23 @@ export class DragDropTable extends (GridFunctions(DialogsFunctions(ButtonsFuncti
       return
     }
     if (dropTable.acceptEntriesOnlyFromObjects!==undefined){
-      if (!Array.isArray(dropTable.acceptEntriesOnlyFromObjects)) {        
+      if (!Array.isArray(dropTable.acceptEntriesOnlyFromObjects)) {
         if (this.lang==='en'){
           alert('The property called acceptEntriesOnlyFromObjects must be an array of strings, for the table '+dropTable.name);
         }else{
           alert('La propiedad llamada acceptEntriesOnlyFromObjects debe ser un array, para la tabla '+dropTable.name)
         }
         return
-      }    
+      }
       if (!dropTable.acceptEntriesOnlyFromObjects.includes(this.dragTable.name)){
-        
+
         if (this.lang==='en'){
           alert('The table '+dropTable.name+' accept only data from some tables and the table  '+this.dragTable.name+' is not one of those.')
         }else{
           alert('La tabla '+dropTable.name+' sólo accepta datos de ciertas tablas y la tabla '+this.dragTable.name+' no es una de ellas.')
         }
         return
-      }      
+      }
     }
     if (dropTable.dropEnable===undefined||dropTable.dropEnable===false){
       if (this.lang==='en'){
@@ -414,11 +437,11 @@ export class DragDropTable extends (GridFunctions(DialogsFunctions(ButtonsFuncti
     }
     //this.data.tableData[ii].push(this.dragData);
     alert("Success to Drop");
-    this.actionMethod(e, dropTable.dropAction, true, undefined, undefined, this.dragData, false, undefined, this.dragData, dropData)         
+    this.actionMethod(e, dropTable.dropAction, true, undefined, undefined, this.dragData, false, undefined, this.dragData, dropData)
     this.requestUpdate();
   }
 
-  dataIntegrityChecks(dropTable, dropData){ 
+  dataIntegrityChecks(dropTable, dropData){
     if (dropTable===undefined||dropTable.dataIntegrityCheck===undefined){
       return true
     }
@@ -427,7 +450,7 @@ export class DragDropTable extends (GridFunctions(DialogsFunctions(ButtonsFuncti
     }
     //alert('abort by Fran, remove this!')
     //return false;
-    return true; 
+    return true;
   }
 
   dataIntegrityDragElementMandatoryProps(dragTable, dropTable, dropData){
@@ -440,7 +463,7 @@ export class DragDropTable extends (GridFunctions(DialogsFunctions(ButtonsFuncti
           return false; // Property is missing, return false
       }
     }
-    return true; 
+    return true;
   }
 
 }

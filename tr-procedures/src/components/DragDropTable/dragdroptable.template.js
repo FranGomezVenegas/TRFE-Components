@@ -1,50 +1,87 @@
 import { html } from 'lit-element';
 
 import '@material/mwc-icon';
-
-export const template = (props, data, lang) => {    
+import '@material/mwc-button';
+export const template = (props, data, lang,thisComponent) => {
+	let genericDialog = thisComponent.genericFormDialog()
     return html`
         <div style="display:flex; flex-direction:row; gap:12px;">
-        ${props.definition.map((curTable, ii) => 
+		${genericDialog}
+        ${props.definition.map((curTable, ii) =>
         html`
           ${curTable.name===undefined||curTable.type===undefined ? html`The object ${ii} has no name or type attribute, this is mandatory`
           :
-          html` 
-          ${curTable.type==='table'?myTable(curTable, data, lang, props):html``}
+          html`
+          ${curTable.type==='table'?myTable(curTable, data, lang, props,thisComponent):html``}
           ${curTable.type==='cards'?cardSomeElementsRepititiveObjects(curTable, data, lang, props):html``}
           ${curTable.type!=='table'&&curTable.type!=='cards'?html`The type ${curTable.type} is not recognized`:html``}
           `
-          }  
-        `)}        
+          }
+        `)}
+
         </div>
     `;
 }
 
-function myTable(elem, dataArr, lang, props) {
-    dataArr=getDataFromRoot(elem, dataArr)
+function myTable(elem, dataArr, lang, props,thisComponent) {
+	dataArr=thisComponent.filterItems=getDataFromRoot(elem, dataArr)
     return html`
-        <table class="dragdropable TRAZiT-DefinitionArea" style="width: 400px;"> 
-            <thead>
-                ${elem.columns.map((column, i) => html`<th>${column["label_"+lang]}</th>`)}
-            </thead>
-            <tbody>
-                ${dataArr === undefined || !Array.isArray(dataArr) ? html `No Data` : 
-                html`  
-                    ${dataArr.map((p, idx) => { return html `
-                    <tr class="dragdropabletr" draggable="${elem.dragEnable}"  @dragstart=${(e) => props.dragTableTr(e, elem, p)} @dragover=${(e) => props.allowDropTr(e)} @drop=${(e) => props.dropTableTr(e, elem, p)}>
-                        ${elem.columns.map((fld, index) =>         
-                            html`<td>${p[fld.name]}</td>`
-                        )}
-                        ${elem.row_buttons === undefined? html`` : html`
-                        <td><div class="layout horizontal center flex wrap"> ${this.getButtonForRows(elem.row_buttons, p, false, parentData)}</div></td>
-                        `}
-                    </tr>
-              
-                    `})}
-                `}
-            </tr>            
-            </tbody>
-        </table>
+	<div>
+	${
+		elem.smartFilter
+			? html `
+			<div>
+			<span><mwc-button label="${elem.smartFilter?.displayFilterButton?.title["label_" + lang]}" raised @click="${thisComponent.toggleFilterDialog}"></mwc-button></span>
+			</div>
+			<div id="smartFilterDiv" ?hidden="${thisComponent.hideFilters()}">
+			${elem.smartFilter?.dialogInfo?.fields?.map((fld, i) =>
+				html`
+				${!fld ?
+					html``: html`
+					<div class="layout horizontal flex center-center">
+					<mwc-textfield class="layout flex" id="smartFilter_text_${i}" type="text"
+					.value=${fld.default_value ? fld.default_value : ''}
+					label="${fld["label_" + lang]}"
+					@keypress=${e => e.keyCode == 13 && this.genomaSuperDialogClickedAction()}></mwc-textfield>
+					</div>
+				`}
+				`
+			)}
+			<div>
+			<span><mwc-button label="${elem.smartFilter?.applyFilterButton?.title["label_" + lang]}"raised @click="${thisComponent.applyFilter}"></mwc-button></span>
+			<span><mwc-button label="${elem.smartFilter?.clearFilterButton?.title["label_" + lang]}"raised @click="${()=>dataArr=thisComponent.filterItems=getDataFromRoot(elem, dataArr)}"></mwc-button></span>
+
+			</div>
+			</div>
+
+
+			`
+			: undefined
+	}
+	<table class="dragdropable TRAZiT-DefinitionArea" style="width: 400px;">
+		<thead>
+			${elem.columns.map((column, i) => html`<th>${column["label_"+lang]}</th>`)}
+		</thead>
+		<tbody>
+			${thisComponent.filterItems === undefined || !Array.isArray(thisComponent.filterItems) ? html `No Data` :
+			html`
+				${thisComponent.filterItems.map((p, idx) => { return html `
+				<tr class="dragdropabletr" draggable="${elem.dragEnable}"  @dragstart=${(e) => props.dragTableTr(e, elem, p)} @dragover=${(e) => props.allowDropTr(e)} @drop=${(e) => props.dropTableTr(e, elem, p)}>
+					${elem.columns.map((fld, index) =>
+						html`<td>${p[fld.name]}</td>`
+					)}
+					${elem.row_buttons === undefined? html`` : html`
+					<td><div class="layout horizontal center flex wrap"> ${this.getButtonForRows(elem.row_buttons, p, false, parentData)}</div></td>
+					`}
+				</tr>
+
+				`})}
+			`}
+		</tr>
+		</tbody>
+	</table>
+	</div>
+
     `;
 }
 
@@ -101,7 +138,7 @@ function kpiCardSomeElementsMain(elem, curDataForThisCard, lang, props) {
                   html`
                     ${fieldsToDiscard(fld) === true
                       ? html``
-                      : html`                      
+                      : html`
                           ${fld.as_ppt !== undefined &&
                           (fld.as_ppt === true || fld.as_video === true)
                             ? html`
@@ -132,7 +169,7 @@ function kpiCardSomeElementsMain(elem, curDataForThisCard, lang, props) {
                                       </div>
                                     `
                                   : html`
-                       
+
 <!---
                           <video controls type="video/mp4" src=${
                             curDataForThisCard[fld.name]
@@ -140,19 +177,19 @@ function kpiCardSomeElementsMain(elem, curDataForThisCard, lang, props) {
                           <div id="dialog-frame" class="dialog">
                           <mwc-icon-button icon="fullscreen_exit" @click=${
                             this.closeDialogFrame
-                          }></mwc-icon-button> 
+                          }></mwc-icon-button>
                             <video id="video-source" type="video/mp4" controls controlsList="nodownload"oncontextmenu="return false" onselectstart="return false" ondragstart="return false" >
                             </video>-->
                           </div>
                         `}
                               `
                             : html`
-                            ${fld.is_tag_list !== undefined && fld.is_tag_list === true ? html`   
+                            ${fld.is_tag_list !== undefined && fld.is_tag_list === true ? html`
                             <span class="cardLabel">${fieldLabel(fld, lang)}:</span>
-                            <span class="cardValue">                               
+                            <span class="cardValue">
                               <multi-select .label=${this.purpose} .props=${{"readOnly":true, "displayLabel":false}} .activeOptions=${curDataForThisCard[fld.name]} .options=${{}}> </multi-select>
                             </span>
-                            `:html`                                      
+                            `:html`
                                 ${fld.as_progress !== undefined &&
                                 fld.as_progress === true
                                   ? html`
@@ -214,7 +251,7 @@ function kpiCardSomeElementsMain(elem, curDataForThisCard, lang, props) {
                                           font-weight: bold;
                                           color: rgb(41, 137, 216); /* #032bbc; */
                                         }
-                                        span.cardMainValue {            
+                                        span.cardMainValue {
                                           color: rgba(214, 233, 248, 0.37); /* #009879; */
                                         }
                                       </style>
@@ -257,7 +294,7 @@ function kpiCardSomeElementsMain(elem, curDataForThisCard, lang, props) {
                                       </li>
                                     `}
                               `}
-                            `}  
+                            `}
                         `}
                   `
               )}
@@ -279,7 +316,6 @@ function titleLang(colDef) {
   } else {
     return colDef.name;
   }
-  return titleStr;
 }
 function fieldsToDiscard(fld) {
   if (fld.is_translation === undefined || fld.is_translation === false) {
@@ -352,21 +388,6 @@ function getDataFromRoot(elem, curDataForThisCard) {
         }
       }
       return curDataForThisCard;
-      if (typeof subJSON === "undefined") {
-        return undefined;
-      } else if (elem.endPointPropertyArray.length % 2 === 0) {
-        // If the input array has an even number of elements, skip one more object level before recursing
-        return getValueFromNestedJSON(
-          subJSON,
-          elem.endPointPropertyArray.slice(0, numObjectsToSkip)
-        );
-      } else {
-        // Otherwise, recurse on the sub-JSON with the remaining elem.endPointPropertyArray elements
-        return getValueFromNestedJSON(
-          subJSON,
-          elem.endPointPropertyArray.slice(0, numObjectsToSkip)
-        );
-      }
     } else {
       if (
         elem.endPointResponseObject !== undefined &&
@@ -394,10 +415,10 @@ function getDataFromRoot(elem, curDataForThisCard) {
     }
   }
 export const template2 = (props) => {
-    return html`    
+    return html`
         <div style="display:flex; flex-direction:row; gap:12px;">
         ${props.curDataForThisCard.tableData.map((taData, ii) => html`
-            <table class="dragdropable TRAZiT-DefinitionArea" style="width: 400px;"> 
+            <table class="dragdropable TRAZiT-DefinitionArea" style="width: 400px;">
                 <thead>
                         ${props.data.tableDefinition.columns.map((column, i) => html`
                             <th>${column.label_en}</th>
@@ -405,9 +426,9 @@ export const template2 = (props) => {
                     <tr>
                 </thead>
                 <tbody>
-                    ${taData.map((data, index) => 
+                    ${taData.map((data, index) =>
                     props.data.tableDefinition.dragEnable[ii] && props.data.tableDefinition.dropEnable[ii] ? html `
-                    <tr class="dragdropabletr" draggable="true"  @dragstart=${(e) => props.dragTableTr(e, ii, index)} @dragover=${(e) => props.allowDropTr(e)} @drop=${(e) => props.dropTableTr(e, ii, index)}>                    
+                    <tr class="dragdropabletr" draggable="true"  @dragstart=${(e) => props.dragTableTr(e, ii, index)} @dragover=${(e) => props.allowDropTr(e)} @drop=${(e) => props.dropTableTr(e, ii, index)}>
                         <td> ${data.id} </td>
                         <td> ${data.study} </td>
                         <td> ${data.temperature} </td>
@@ -417,7 +438,7 @@ export const template2 = (props) => {
                     <td> ${data.id} </td>
                         <td> ${data.study} </td>
                         <td> ${data.temperature} </td>
-                    </tr> ` : 
+                    </tr> ` :
                     props.data.tableDefinition.dragEnable[ii] ? html `
                     <tr class="dragdropabletr" draggable="true"  @dragstart=${(e) => props.dragTableTr(e, ii, index)}>
                         <td> ${data.id} </td>
