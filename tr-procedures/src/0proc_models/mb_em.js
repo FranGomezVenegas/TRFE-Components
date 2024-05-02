@@ -82,9 +82,8 @@ export const MbEm=
           "icon": "refresh",
           "title": {
             "label_en": "Refresh", "label_es": "Recargar"
-          },
-          "xxxwhenDisabled": "samplesReload"
-      }
+          }          
+        }
     },
 	"actions": [
       { "actionName": "EM_NEW_PRODUCTION_LOT",
@@ -753,6 +752,15 @@ export const MbEm=
         }
       }
     },
+    "isStaged":{
+      "stages":[{ "name": "Sampling", "label_en":"Sampling", "label_es":"Muestreo" }, 
+                { "name": "Incubation", "label_en":"Incubation", "label_es":"Incubación" }, 
+                { "name": "PlateReading", "label_en":"Plate Reading", "label_es":"Lectura de placa" }, 
+                { "name": "PlateReadingSecondEntry", "label_en":"Plate Reading 2nd Entry", "label_es":"2ª Lectura de placa" }, 
+                { "name": "MicroorganismIdentification", "label_en":"Microorganism Identification", "label_es":"Identificación de microorganismos" }, 
+                { "name": "Revision", "label_en":"Revision", "label_es":"Revisión" }],
+      "currentstage": 3
+    },    
     "viewQuery":{ "actionName": "SAMPLES_BY_STAGE",
 	  "endPoint": "/moduleenvmon/EnvMonSampleAPIqueries",
       "addRefreshButton": true,
