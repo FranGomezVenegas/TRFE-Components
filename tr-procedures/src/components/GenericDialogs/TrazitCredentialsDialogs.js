@@ -436,6 +436,12 @@ export function TrazitCredentialsDialogs(base) {
 
 
   addJustificationPhrase(){
+        // const stack = new Error().stack;
+        // const stackLines = stack.split('\n');
+        // if (stackLines!==null&&stackLines[1]!==null){
+        //   const callerName = stackLines[1].match(/at (\w+)/)[0]; // Adjust the index as needed    
+        //   console.log("Called from: " + callerName);
+        // }       
     let actionInfoToAPIcall=JSON.parse(sessionStorage.getItem('actionInfoToAPIcall'));
     this.trazitNextRequest(actionInfoToAPIcall.action, actionInfoToAPIcall.actionParams, 
         this.buildCreadArgumentsObj(), actionInfoToAPIcall.gridSelectedItem, actionInfoToAPIcall.parentData)
@@ -467,30 +473,6 @@ export function TrazitCredentialsDialogs(base) {
       `*** Attempts: ${this.attempt} of 3` : 
       `*** Intentos: ${this.attempt} de ${this.maxFails}`
     return html`<p class=${this.attempt==0?'attemptsphraseblue':'attemptsphrasered'}>${txt}</p>`
-  }
-
-  credsCheckerCommons(actionName, objId, params={}, action) {
-    console.log('credsCheckerCommons', 'actionName', actionName, 'action', action)
-    this.actionObj = action || {}
-    this.reqParams = params
-    if (actionName) {
-      this.actionName = actionName
-      if (objId!==undefined&&objId == -1) {
-        this.credDialog.show()
-      } else {
-        this.objectId = objId
-        let noNeedCreds = this.checkProcList()
-        if (noNeedCreds) {
-          this.nextRequestCommons(action)
-        } else {
-          if (this.type == "confirm") {
-            this.confirmDialog.show()
-          } else {
-            this.credDialog.show()
-          }
-        }
-      }
-    }
   }
 
   nextRequestCommons(action) {

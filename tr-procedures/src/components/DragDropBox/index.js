@@ -5,7 +5,8 @@ import { navigator } from "lit-element-router";
 import { ButtonsFunctions } from '../Buttons/ButtonsFunctions';
 import {DialogsFunctions} from '../GenericDialogs/DialogsFunctions';
 import { GridFunctions } from '../grid_with_buttons/GridFunctions';
-export class DragDropBox extends GridFunctions(DialogsFunctions(ButtonsFunctions(navigator(LitElement)))) {
+import { ActionsFunctions } from '../Actions/ActionsFunctions';
+export class DragDropBox extends ActionsFunctions(GridFunctions(DialogsFunctions(ButtonsFunctions(navigator(LitElement))))) {
 
   static get styles() {
     return styles;
@@ -35,7 +36,7 @@ export class DragDropBox extends GridFunctions(DialogsFunctions(ButtonsFunctions
     this.dragTrData = {id: undefined, temperature:"", study:""};
     this.data = {};
     this.dragElement = undefined;
-    this.viewBoxMode = 0;
+    this.viewContentIndex = 0;
     this.listBoxViewMode = false;
     this.dragTr = false;
     this.dragBackgroundColor = undefined;
@@ -53,7 +54,7 @@ export class DragDropBox extends GridFunctions(DialogsFunctions(ButtonsFunctions
       selectedIndex2: this.selectedIndex2,
       //viewMode: this.viewMode,
       listBoxViewMode: this.listBoxViewMode,
-      viewBoxMode: this.viewBoxMode,
+      viewContentIndex: this.viewContentIndex,
       viewTable: this.viewTable,
       viewTableBox: this.viewTableBox,
       setSelectBoxIndex: this._setSelectBoxIndex,
@@ -119,7 +120,7 @@ export class DragDropBox extends GridFunctions(DialogsFunctions(ButtonsFunctions
     let currentID = currentElement.childNodes[1].childNodes[1].textContent;
     currentID -= 1;
     let str = "";
-    if(this.viewBoxMode == 0) {
+    if(this.viewContentIndex == 0) {
       str =`<div>id: ${this.data.tableData[currentID].id}</div><div> study: ${this.data.tableData[currentID].study}</div>`
     } 
     else {
@@ -133,7 +134,7 @@ export class DragDropBox extends GridFunctions(DialogsFunctions(ButtonsFunctions
 
   _setBoxPosicsViewFilter = (mode) => {
     console.log("viewmode", mode);
-    this.viewBoxMode = mode;
+    this.viewContentIndex = mode;
     this.requestUpdate();
   }
 
@@ -175,7 +176,7 @@ export class DragDropBox extends GridFunctions(DialogsFunctions(ButtonsFunctions
     }
     //this.data.tableData[ii].push(this.dragData);
     alert("Success to Drop");    
-    this.actionMethod(e, this.viewModelFromProcModel.dropAction, true, undefined, undefined, this.selectedBox, false, undefined, this.selectedBox, this.dragElement)
+    this.trazitButtonsMethod(e, this.viewModelFromProcModel.dropAction, true, undefined, undefined, this.selectedBox, false, undefined, this.selectedBox, this.dragElement)
     return
   }
 
