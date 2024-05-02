@@ -383,17 +383,25 @@ function trElementType(elem){
 
 function applyFilterToTheData(curDataForThisCard, filterValues,thisComponent) {
   console.log(filterValues)
-  for (const key in filterValues) {
-      if (filterValues.hasOwnProperty(key)) {
-          const filterValue = filterValues[key];
-          if (Array.isArray(curDataForThisCard)) {
-              const filteredItems = curDataForThisCard.filter(item => {
-                  return item[key] == filterValue;
-              });
-              thisComponent.filteredData = thisComponent.filteredData.concat(filteredItems);
-          }          
-      }
-  }
+   if (Object.keys(filterValues).length > 0) {
+    const uniqueItemsSet = new Set();
+    console.log(filterValues)
+    for (const key in filterValues) {
+        if (filterValues.hasOwnProperty(key)) {
+            const filterValue = filterValues[key];
+            console.log(filterValue)
+            if (Array.isArray(curDataForThisCard)) {
+                const filteredItems = curDataForThisCard.filter(item => {
+                    return item[key] == filterValue;
+                });
+                
+                filteredItems.forEach(item => uniqueItemsSet.add(item));
+            }
+        }
+    }
+    thisComponent.filteredData = Array.from(uniqueItemsSet);
+}
+
   console.log(thisComponent.filteredData)
   return thisComponent.filteredData.length === 0 ? curDataForThisCard : filterValues;
 }
