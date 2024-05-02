@@ -126,8 +126,8 @@
     "viewName": "Deviation", 
     "filterName" :  "pending" 
   },
-  "localDefaultView123111s": {
-    "procName":  "em-demo-a", 
+  "localDefaultView": {
+    "procName":  "mb_em", 
     "viewName": "SamplePlateReading", 
     "filterName" :  "PlateReadingSMP" 
   },
@@ -136,11 +136,7 @@
     "viewName": "SamplePlateReading", 
     "filterName" :  "PlateReadingPERS" 
   },
-  "localDefaultView1234122": {
-    "procName":  "em-demo-a", 
-    "viewName": "ProductionLots", 
-    "filterName" :  "SampleLot" 
-  },  
+  
   "localDefaultView3": {
     "procName":  "sample-coa-rel1", 
     "viewName": "LogSamplesModuleSamples", 
@@ -251,7 +247,7 @@
     "viewName": "SpecDesign", 
     "filterName" :  "SpecDesign" 
   },
-  "localDefaultView": {
+  "localDefaultViewffff": {
     "procName":  "inspection_lot", 
     "viewName": "analysisDesign", 
     "filterName" :  "analysisDesign" 
@@ -272,7 +268,7 @@
     "viewName": "drag-drop", 
     "filterName" :  "drag-drop" 
   },  
-  "localDefaultViewzzzzz": {
+  "localDefaultViefffw": {
     "procName":  "fake-developers", 
     "procNameData":  "mb_em",
     "viewName": "drag-box", 
@@ -288,11 +284,15 @@
     "viewName": "PlatformInstruments", 
     "filterName" :  "InstrumentsList" 
   },
-  "localDefaultView": {
+  "localDefaultViewzzz": {
     "procName":  "fake-developers", 
     "viewName": "ck-editor", 
     "filterName" :  "ck-editor" 
-  }
- 
+  },
+  "localDefaultView111": {
+    "procName":  "mb_em", 
+    "viewName": "ProductionLots", 
+    "filterName" :  "SampleLot" 
+  }  
   
 }
