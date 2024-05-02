@@ -13,7 +13,7 @@ export const template = (props, data, lang,thisComponent) => {
           :
           html`
           ${curTable.type==='table'?myTable(curTable, data, lang, props,thisComponent):html``}
-          ${curTable.type==='cards'?cardSomeElementsRepititiveObjects(curTable, data, lang, props):html``}
+          ${curTable.type==='cards'?cardSomeElementsRepititiveObjects(curTable, data, lang, props,thisComponent):html``}
           ${curTable.type!=='table'&&curTable.type!=='cards'?html`The type ${curTable.type} is not recognized`:html``}
           `
           }
@@ -23,71 +23,109 @@ export const template = (props, data, lang,thisComponent) => {
     `;
 }
 
-function myTable(elem, dataArr, lang, props,thisComponent) {
-	dataArr=thisComponent.filterItems=getDataFromRoot(elem, dataArr)
-    return html`
-	<div>
-	${
-		elem.smartFilter
-			? html `
-			<div>
-			<span><mwc-button label="${elem.smartFilter?.displayFilterButton?.title["label_" + lang]}" raised @click="${thisComponent.toggleFilterDialog}"></mwc-button></span>
-			</div>
-			<div id="smartFilterDiv" ?hidden="${thisComponent.hideFilters()}">
-			${elem.smartFilter?.dialogInfo?.fields?.map((fld, i) =>
-				html`
-				${!fld ?
-					html``: html`
-					<div class="layout horizontal flex center-center">
-					<mwc-textfield class="layout flex" id="smartFilter_text_${i}" type="text"
-					.value=${fld.default_value ? fld.default_value : ''}
-					label="${fld["label_" + lang]}"
-					@keypress=${e => e.keyCode == 13 && this.genomaSuperDialogClickedAction()}></mwc-textfield>
-					</div>
-				`}
-				`
-			)}
-			<div>
-			<span><mwc-button label="${elem.smartFilter?.applyFilterButton?.title["label_" + lang]}"raised @click="${thisComponent.applyFilter}"></mwc-button></span>
-			<span><mwc-button label="${elem.smartFilter?.clearFilterButton?.title["label_" + lang]}"raised @click="${()=>dataArr=thisComponent.filterItems=getDataFromRoot(elem, dataArr)}"></mwc-button></span>
+function myTable(elem, dataArr, lang, props, thisComponent) {
+  console.log(thisComponent.filteredData)
+  dataArr=thisComponent.filterItems=getDataFromRoot(elem, dataArr,{},thisComponent)
+  const handleFilter = () => {
+    thisComponent.filteredData = []
+          let filterDiv = thisComponent.shadowRoot.querySelectorAll('#smartFilterDiv mwc-textfield')
+          let obj = {}
+          filterDiv.forEach((elm,i) => {
+            let value = elm.shadowRoot.querySelector('.mdc-text-field__input').value
+            obj[elem.smartFilter.dialogInfo.fields[i].name] = value            
+          })
+          dataArr=thisComponent.filterItems=getDataFromRoot(elem, dataArr,obj,thisComponent)      
+      thisComponent.requestUpdate(); 
+  };
+  if (thisComponent.filteredData.length > 0) {
+    dataArr=thisComponent.filterItems=thisComponent.filteredData
+  }
+  const handleClear = () => {
+    thisComponent.filteredData = []
+          let filterDiv = thisComponent.shadowRoot.querySelectorAll('#smartFilterDiv mwc-textfield')
+          let obj = {}
+          filterDiv.forEach((elm,i) => {
+            elm.shadowRoot.querySelector('.mdc-text-field__input').value = ''                     
+          })
+      thisComponent.requestUpdate(); 
+  }
+  console.log(thisComponent.filteredData.length)
 
-			</div>
-			</div>
+  const renderTable = () => {
+      return html`
+          <div>
+              <!-- Smart Filter UI -->
+              ${elem.smartFilter ? html`
+                  <div>
+                      <span>
+                          <mwc-button label="${elem.smartFilter?.displayFilterButton?.title["label_" + lang]}" raised @click="${thisComponent.toggleFilterDialog}"></mwc-button>
+                      </span>
+                  </div>
+                  <div id="smartFilterDiv" ?hidden="${thisComponent.hideFilters()}">
+                      ${elem.smartFilter?.dialogInfo?.fields?.map((fld, i) =>
+                          html`
+                              ${!fld ?
+                                  html`` : html`
+                                      <div class="layout horizontal flex center-center">
+                                          <mwc-textfield class="layout flex" id="smartFilter_text_${i}" type="text"
+                                              .value=${fld.default_value ? fld.default_value : ''}
+                                              label="${fld["label_" + lang]}"
+                                              @keypress=${e => e.keyCode == 13 && thisComponent.genomaSuperDialogClickedAction()}>
+                                          </mwc-textfield>
+                                      </div>
+                                  `}
+                          `
+                      )}
+                      <div>
+                          <span>
+                              <mwc-button label="${elem.smartFilter?.applyFilterButton?.title["label_" + lang]}" raised @click="${handleFilter}"></mwc-button>
+                          </span>
+                          <span>
+                              <mwc-button label="${elem.smartFilter?.clearFilterButton?.title["label_" + lang]}" raised @click="${handleClear}"></mwc-button>
+                          </span>
+                      </div>
+                  </div>
+              ` : undefined}
+              <!-- Table -->
+              <table class="dragdropable TRAZiT-DefinitionArea" style="width: 400px;">
+                  <thead>
+                      ${elem.columns.map((column, i) => html`<th>${column["label_" + lang]}</th>`)}
+                  </thead>
+                  <tbody>
+                      ${thisComponent.filterItems === undefined || !Array.isArray(thisComponent.filterItems) ? html `No Data` :
+                          html`
+                              ${thisComponent.filterItems.map((p, idx) => { return html `
+                                  <tr class="dragdropabletr" draggable="${elem.dragEnable}"
+                                      @dragstart=${(e) => props.dragTableTr(e, elem, p)}
+                                      @dragover=${(e) => props.allowDropTr(e)}
+                                      @drop=${(e) => props.dropTableTr(e, elem, p)}>
+                                      ${elem.columns.map((fld, index) =>
+                                          html`<td>${p[fld.name]}</td>`
+                                      )}
+                                      ${elem.row_buttons === undefined ? html`` : html`
+                                          <td>
+                                              <div class="layout horizontal center flex wrap">
+                                                  ${thisComponent.getButtonForRows(elem.row_buttons, p, false, parentData)}
+                                              </div>
+                                          </td>
+                                      `}
+                                  </tr>
+                              `})}
+                          `}
+                  </tbody>
+              </table>
+          </div>
+      `;
+  };
 
-
-			`
-			: undefined
-	}
-	<table class="dragdropable TRAZiT-DefinitionArea" style="width: 400px;">
-		<thead>
-			${elem.columns.map((column, i) => html`<th>${column["label_"+lang]}</th>`)}
-		</thead>
-		<tbody>
-			${thisComponent.filterItems === undefined || !Array.isArray(thisComponent.filterItems) ? html `No Data` :
-			html`
-				${thisComponent.filterItems.map((p, idx) => { return html `
-				<tr class="dragdropabletr" draggable="${elem.dragEnable}"  @dragstart=${(e) => props.dragTableTr(e, elem, p)} @dragover=${(e) => props.allowDropTr(e)} @drop=${(e) => props.dropTableTr(e, elem, p)}>
-					${elem.columns.map((fld, index) =>
-						html`<td>${p[fld.name]}</td>`
-					)}
-					${elem.row_buttons === undefined? html`` : html`
-					<td><div class="layout horizontal center flex wrap"> ${this.getButtonForRows(elem.row_buttons, p, false, parentData)}</div></td>
-					`}
-				</tr>
-
-				`})}
-			`}
-		</tr>
-		</tbody>
-	</table>
-	</div>
-
-    `;
+  return renderTable();
 }
 
-function cardSomeElementsRepititiveObjects(elem, data, lang, props) {
+
+
+function cardSomeElementsRepititiveObjects(elem, data, lang, props,thisComponent) {
   //console.log('cardSomeElementsRepititiveObjects', 'elem', elem, 'data', data)
-  data = getDataFromRoot(elem, data);
+  data = getDataFromRoot(elem, data,{},thisComponent);
   console.log('cardSomeElementsRepititiveObjects >> getDataFromRoot', 'elem', elem, 'data', data)
   return html`
     ${Array.isArray(data) && data.length > 0
@@ -343,77 +381,112 @@ function trElementType(elem){
     `
 }
 
-function getDataFromRoot(elem, curDataForThisCard) {
-    if (elem !== undefined && elem.contextVariableName !== undefined) {
-      if (this[elem.contextVariableName] !== undefined) {
-        curDataForThisCard = this[elem.contextVariableName];
+function applyFilterToTheData(curDataForThisCard, filterValues,thisComponent) {
+  console.log(filterValues)
+  for (const key in filterValues) {
+      if (filterValues.hasOwnProperty(key)) {
+          const filterValue = filterValues[key];
+          if (Array.isArray(curDataForThisCard)) {
+              const filteredItems = curDataForThisCard.filter(item => {
+                  return item[key] == filterValue;
+              });
+              thisComponent.filteredData = thisComponent.filteredData.concat(filteredItems);
+          }          
       }
+  }
+  console.log(thisComponent.filteredData)
+  return thisComponent.filteredData.length === 0 ? curDataForThisCard : filterValues;
+}
+
+
+function getDataFromRoot(elem, curDataForThisCard, filterValues,thisComponent) {
+  if (elem !== undefined && elem.contextVariableName !== undefined) {
+    if (this[elem.contextVariableName] !== undefined) {
+      curDataForThisCard = this[elem.contextVariableName];
     }
-    if (curDataForThisCard === null || curDataForThisCard === undefined) {
-      return undefined;
-    }
-    if (elem.endPointPropertyArray !== undefined) {
-      if (elem.endPointPropertyArray.length === 0) {
-        return curDataForThisCard;
-      }
-      if (
-        elem.endPointPropertyArray.length === 1 &&
-        elem.endPointPropertyArray[0].toUpperCase() === "ROOT"
-      ) {
-        return curDataForThisCard;
-      }
-      //const numObjectsToSkip = elem.endPointPropertyArray.length - 1;
-      //const propertyName = elem.endPointPropertyArray[numObjectsToSkip];
-      let i = 0;
-      let subJSON = {};
-      //curDataForThisCard = curDataForThisCard[elem.endPointPropertyArray[0]][0]
-      for (i = 0; i < elem.endPointPropertyArray.length; i++) {
-        if (curDataForThisCard === null) {
-          return undefined;
-        }
-        let propertyName = elem.endPointPropertyArray[i];
-        if (Array.isArray(curDataForThisCard[propertyName])) {
-          if (i < elem.endPointPropertyArray.length - 1) {
-            subJSON = curDataForThisCard[propertyName][0];
-          } else {
-            return curDataForThisCard[propertyName];
-          }
-        } else {
-          subJSON = curDataForThisCard[propertyName];
-        }
-        if (typeof subJSON === "undefined") {
-          return curDataForThisCard;
-        } else {
-          curDataForThisCard = subJSON;
-        }
-      }
+  }
+  if (curDataForThisCard === null || curDataForThisCard === undefined) {
+    return undefined;
+  }
+  if (elem.endPointPropertyArray !== undefined) {
+    if (elem.endPointPropertyArray.length === 0) {
       return curDataForThisCard;
-    } else {
-      if (
-        elem.endPointResponseObject !== undefined &&
-        elem.endPointResponseObject2 !== undefined
-      ) {
-        let curDataForThisCardToRet = [];
-        curDataForThisCardToRet = curDataForThisCard[elem.endPointResponseObject];
-        if (curDataForThisCardToRet !== undefined) {
-          return curDataForThisCardToRet[elem.endPointResponseObject2];
+    }
+    if (
+      elem.endPointPropertyArray.length === 1 &&
+      elem.endPointPropertyArray[0].toUpperCase() === "ROOT"
+    ) {
+      curDataForThisCard=applyFilterToTheData(curDataForThisCard, filterValues,thisComponent)
+      return curDataForThisCard;
+    }
+    //const numObjectsToSkip = elem.endPointPropertyArray.length - 1;
+    //const propertyName = elem.endPointPropertyArray[numObjectsToSkip];
+    let i = 0;
+    let subJSON = {};
+    //curDataForThisCard = curDataForThisCard[elem.endPointPropertyArray[0]][0]
+    for (i = 0; i < elem.endPointPropertyArray.length; i++) {
+      if (curDataForThisCard === null) {
+        return undefined;
+      }
+      let propertyName = elem.endPointPropertyArray[i];
+      if (Array.isArray(curDataForThisCard[propertyName])) {
+        if (i < elem.endPointPropertyArray.length - 1) {
+          subJSON = curDataForThisCard[propertyName][0];
         } else {
-          return [];
+          return applyFilterToTheData(curDataForThisCard[propertyName], filterValues,thisComponent);
         }
       } else {
-        if (String(elem.endPointResponseObject).toUpperCase() === "ROOT") {
-          if (!Array.isArray(curDataForThisCard)) {
-            let curDataForThisCardArr = [];
-            curDataForThisCardArr.push(curDataForThisCard);
-            return curDataForThisCardArr;
-          }
-          return curDataForThisCard;
-        } else {
-          return curDataForThisCard[elem.endPointResponseObject];
+        subJSON = curDataForThisCard[propertyName];
+      }
+      if (typeof subJSON === "undefined") {
+        return applyFilterToTheData(curDataForThisCard, filterValues,thisComponent);
+      } else {
+        curDataForThisCard = subJSON;
+      }
+    }
+    return applyFilterToTheData(curDataForThisCard, filterValues,thisComponent);
+    if (typeof subJSON === "undefined") {
+      return undefined;
+    } else if (elem.endPointPropertyArray.length % 2 === 0) {
+      // If the input array has an even number of elements, skip one more object level before recursing
+      return getValueFromNestedJSON(
+        subJSON,
+        elem.endPointPropertyArray.slice(0, numObjectsToSkip)
+      );
+    } else {
+      // Otherwise, recurse on the sub-JSON with the remaining elem.endPointPropertyArray elements
+      return getValueFromNestedJSON(
+        subJSON,
+        elem.endPointPropertyArray.slice(0, numObjectsToSkip)
+      );
+    }
+  } else {
+    if (
+      elem.endPointResponseObject !== undefined &&
+      elem.endPointResponseObject2 !== undefined
+    ) {
+      let curDataForThisCardToRet = [];
+      curDataForThisCardToRet = curDataForThisCard[elem.endPointResponseObject];
+      if (curDataForThisCardToRet !== undefined) {
+          
+        return applyFilterToTheData(curDataForThisCardToRet[elem.endPointResponseObject2],  filterValues,thisComponent);
+      } else {
+        return [];
+      }
+    } else {
+      if (String(elem.endPointResponseObject).toUpperCase() === "ROOT") {
+        if (!Array.isArray(curDataForThisCard)) {
+          let curDataForThisCardArr = [];
+          curDataForThisCardArr.push(curDataForThisCard);
+          return applyFilterToTheData(curDataForThisCardArr,  filterValues,thisComponent);
         }
+        return applyFilterToTheData(curDataForThisCard,  filterValues,thisComponent);
+      } else {
+        return applyFilterToTheData(curDataForThisCard[elem.endPointResponseObject],  filterValues,thisComponent);
       }
     }
   }
+}
 export const template2 = (props) => {
     return html`
         <div style="display:flex; flex-direction:row; gap:12px;">

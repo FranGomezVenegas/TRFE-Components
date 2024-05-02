@@ -340,6 +340,7 @@ export class DragDropTable extends (TrazitGenericDialogs(GridFunctions(DialogsFu
     this.dragTr = false;
 	this.showFilterButton=false
 	this.filterItems=[]
+	this.filteredData=[]
   }
   	toggleFilterDialog(){
 		this.showFilterButton=!this.showFilterButton
@@ -437,7 +438,7 @@ export class DragDropTable extends (TrazitGenericDialogs(GridFunctions(DialogsFu
     }
     //this.data.tableData[ii].push(this.dragData);
     alert("Success to Drop");
-    this.actionMethod(e, dropTable.dropAction, true, undefined, undefined, this.dragData, false, undefined, this.dragData, dropData)
+    this.trazitButtonsMethod(e, dropTable.dropAction, true, undefined, undefined, this.dragData, false, undefined, this.dragData, dropData)         
     this.requestUpdate();
   }
 
