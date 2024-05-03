@@ -29,8 +29,7 @@ export class AuditDialog extends ActionsFunctions(TrazitCredentialsDialogs(Butto
         }      
         tr-dialog {
           --mdc-dialog-max-width: 90vw;
-          position: relative;
-          z-index:998;
+          position: relative;          
           transition: opacity 0.2s ease-in-out;
         }
         tr-dialog[open] {
