@@ -23,33 +23,40 @@ export const template = (props, data, lang,thisComponent) => {
     `;
 }
 
-function myTable(elem, dataArr, lang, props, thisComponent) {
-  console.log(thisComponent.filteredData)
+function myTable(elem, dataArr, lang, props, thisComponent) {  
   dataArr=thisComponent.filterItems=getDataFromRoot(elem, dataArr,{},thisComponent)
+  let data = dataArr
   const handleFilter = () => {
     thisComponent.filteredData = []
           let filterDiv = thisComponent.shadowRoot.querySelectorAll('#smartFilterDiv mwc-textfield')
+          let selectFilterDiv = thisComponent.shadowRoot.querySelector('#smartFilterDiv mwc-select')          
           let obj = {}
           filterDiv.forEach((elm,i) => {
             let value = elm.shadowRoot.querySelector('.mdc-text-field__input').value
             obj[elem.smartFilter.dialogInfo.fields[i].name] = value            
           })
-          dataArr=thisComponent.filterItems=getDataFromRoot(elem, dataArr,obj,thisComponent)      
-      thisComponent.requestUpdate(); 
+          if (selectFilterDiv) {
+            let name = selectFilterDiv.getAttribute('name')
+            let value = selectFilterDiv.shadowRoot.querySelector('input').value;
+            obj[name] = value
+          }
+          getDataFromRoot(elem,data,obj,thisComponent)      
+          thisComponent.requestUpdate(); 
   };
+  console.log(thisComponent.filteredData)
   if (thisComponent.filteredData.length > 0) {
     dataArr=thisComponent.filterItems=thisComponent.filteredData
   }
   const handleClear = () => {
     thisComponent.filteredData = []
           let filterDiv = thisComponent.shadowRoot.querySelectorAll('#smartFilterDiv mwc-textfield')
-          let obj = {}
+          let selectFilterDiv = thisComponent.shadowRoot.querySelector('#smartFilterDiv mwc-select')
+          selectFilterDiv.shadowRoot.querySelector('input').value = ''
           filterDiv.forEach((elm,i) => {
             elm.shadowRoot.querySelector('.mdc-text-field__input').value = ''                     
           })
       thisComponent.requestUpdate(); 
   }
-  console.log(thisComponent.filteredData.length)
 
   const renderTable = () => {
       return html`
@@ -66,6 +73,18 @@ function myTable(elem, dataArr, lang, props, thisComponent) {
                           html`
                               ${!fld ?
                                   html`` : html`
+                                      ${fld.type === 'select' ? 
+                                      html`
+                                      <div class="layout horizontal flex center-center">
+                                      <mwc-select id="list1" label="${fld["label_" + lang]}" name="${fld.name}">                                      
+                                      ${fld.select_options.map((c, i) =>
+                                          html`<mwc-list-item value="${c.value}" name="${c.name}">${c["lable_" + lang]}</mwc-list-item>`
+                                      )}
+                                      </mwc-select>
+                                      </div>
+                                      `
+                                      :
+                                      html`
                                       <div class="layout horizontal flex center-center">
                                           <mwc-textfield class="layout flex" id="smartFilter_text_${i}" type="text"
                                               .value=${fld.default_value ? fld.default_value : ''}
@@ -73,6 +92,9 @@ function myTable(elem, dataArr, lang, props, thisComponent) {
                                               @keypress=${e => e.keyCode == 13 && thisComponent.genomaSuperDialogClickedAction()}>
                                           </mwc-textfield>
                                       </div>
+                                      `
+                                    }
+                                      
                                   `}
                           `
                       )}
@@ -382,19 +404,16 @@ function trElementType(elem){
 }
 
 function applyFilterToTheData(curDataForThisCard, filterValues,thisComponent) {
-  console.log(filterValues)
+  console.log(curDataForThisCard)
    if (Object.keys(filterValues).length > 0) {
     const uniqueItemsSet = new Set();
-    console.log(filterValues)
     for (const key in filterValues) {
         if (filterValues.hasOwnProperty(key)) {
             const filterValue = filterValues[key];
-            console.log(filterValue)
             if (Array.isArray(curDataForThisCard)) {
                 const filteredItems = curDataForThisCard.filter(item => {
                     return item[key] == filterValue;
-                });
-                
+                });                           
                 filteredItems.forEach(item => uniqueItemsSet.add(item));
             }
         }
@@ -402,7 +421,6 @@ function applyFilterToTheData(curDataForThisCard, filterValues,thisComponent) {
     thisComponent.filteredData = Array.from(uniqueItemsSet);
 }
 
-  console.log(thisComponent.filteredData)
   return thisComponent.filteredData.length === 0 ? curDataForThisCard : filterValues;
 }
 

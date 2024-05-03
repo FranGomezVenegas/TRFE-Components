@@ -573,17 +573,34 @@ export const FakeDevelopers = {
 					{
 					  "name": "sample_id",
 					  "label_en": "id",
-					  "label_es": "id"
+					  "label_es": "id",
+            "type":"text",
 					},
 					{
 					  "name": "location_name",
 					  "label_en": "location_name",
-					  "label_es": "location_name"
+					  "label_es": "location_name",
+            "type":"text",
 					},
 					{
 					  "name": "pending_incub",
 					  "label_en": "pending_incub",
-					  "label_es": "pending_incub"
+					  "label_es": "pending_incub",
+            "type":"text",
+					},
+          {
+					  "name": "location_name",
+            "type":"select",
+					  "label_en": "location_name",
+					  "label_es": "location_name",
+            "select_options":[
+              {
+                "name":"E02",
+                "lable_en":"E02",
+                "lable_es":"E02",
+                "value":"E02"
+              }
+            ]
 					}
 				  ],
 			}
