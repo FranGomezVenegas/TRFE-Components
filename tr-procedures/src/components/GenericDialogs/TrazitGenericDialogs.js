@@ -213,8 +213,9 @@ export function TrazitGenericDialogs(base) {
                 ${!fld.text2 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="text2" type="text" .value=${fld.text2.default_value ? fld.text2.default_value : ''} label="${this.fieldLabel(fld.text2)}"  ?disabled=${this.isFieldDisabled(fld.text2)} 
-                    @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
+                    <mwc-textfield class="layout flex" id="text2" type="text" .value=${fld.text2.default_value ? fld.text2.default_value : ''} label="${this.fieldLabel(fld.text2)}"  ?disabled=${this.isFieldDisabled(fld.text2)}                    
+                    @keypress=${(e)=>e.keyCode == 13 &&this.actionWhenOtherThanListValueChanged(e, fld.text2, actionModel.dialogInfo, this.genericDialogGridSelectedItems)}  
+                    </mwc-textfield>                  
                     </div>
                 `}          
                 ${!fld.text3 ?
@@ -526,53 +527,53 @@ export function TrazitGenericDialogs(base) {
                 `}
                 ${!fld.list1 ?html``: html`       
                 <div class="layout horizontal flex center-center"> 
-                    <mwc-select id="list1" label="${this.fieldLabel(fld.list1)}" @selected=${this.valueSelected} ?disabled=${this.isFieldDisabled(fld.list1)}                     
+                    <mwc-select id="list1" label="${this.fieldLabel(fld.list1)}" @selected=${(e)=>this.actionWhenListValueSelected(e, fld.list1, actionModel.dialogInfo)} ?disabled=${this.isFieldDisabled(fld.list1)} .definition=${fld.list1}
                         style="width:100%;">
                         ${this.listEntries(fld.list1)}</mwc-select>`}  
                 </div>
                 ${!fld.list2 ?html``: html`        
                     <div class="layout horizontal flex center-center"> 
-                    <mwc-select style="width:100%;" id="list2" label="${this.fieldLabel(fld.list2)}" ?disabled=${this.isFieldDisabled(fld.list2)}>
+                    <mwc-select style="width:100%;" id="list2" label="${this.fieldLabel(fld.list2)}" @selected=${(e)=>this.actionWhenListValueSelected(e, fld.list2, actionModel.dialogInfo)} ?disabled=${this.isFieldDisabled(fld.list2)} .definition=${fld.list2}>
                         ${this.listEntries(fld.list2)}</mwc-select>`}
                 </div>  
                 ${!fld.list3 ?html``: html`        
                     <div class="layout horizontal flex center-center"> 
-                    <mwc-select style="width:100%;" id="list3" label="${this.fieldLabel(fld.list3)}" @input=${this.fldDisabled} ?disabled=${this.isFieldDisabled(fld.list3)}>
+                    <mwc-select style="width:100%;" id="list3" label="${this.fieldLabel(fld.list3)}" @selected=${(e)=>this.actionWhenListValueSelected(e, fld.list3, actionModel.dialogInfo)} @input=${this.fldDisabled} ?disabled=${this.isFieldDisabled(fld.list3)}>
                         ${this.listEntries(fld.list3)}</mwc-select>`}
                 </div>  
                 ${!fld.list4 ?html``: html`        
                     <div class="layout horizontal flex center-center"> 
-                    <mwc-select style="width:100%;" id="list4" label="${this.fieldLabel(fld.list4)}" @input=${this.fldDisabled} ?disabled=${this.isFieldDisabled(fld.list4)}>
+                    <mwc-select style="width:100%;" id="list4" label="${this.fieldLabel(fld.list4)}" @selected=${(e)=>this.actionWhenListValueSelected(e, fld.list4, actionModel.dialogInfo)}  @input=${this.fldDisabled} ?disabled=${this.isFieldDisabled(fld.list4)}>
                         ${this.listEntries(fld.list4)}</mwc-select>`}
                 </div>  
                 ${!fld.list5 ?html``: html`        
                     <div class="layout horizontal flex center-center"> 
-                    <mwc-select style="width:100%;" id="list5" label="${this.fieldLabel(fld.list5)}" @input=${this.fldDisabled} ?disabled=${this.isFieldDisabled(fld.list5)}>
+                    <mwc-select style="width:100%;" id="list5" label="${this.fieldLabel(fld.list5)}" @selected=${(e)=>this.actionWhenListValueSelected(e, fld.list5, actionModel.dialogInfo)}  @input=${this.fldDisabled} ?disabled=${this.isFieldDisabled(fld.list5)}>
                         ${this.listEntries(fld.list5)}</mwc-select>`}
                 </div>  
                 ${!fld.list6 ?html``: html`        
                     <div class="layout horizontal flex center-center"> 
-                    <mwc-select style="width:100%;" id="list6" label="${this.fieldLabel(fld.list6)}" ?disabled=${this.isFieldDisabled(fld.list6)}>
+                    <mwc-select style="width:100%;" id="list6" label="${this.fieldLabel(fld.list6)}" @selected=${(e)=>this.actionWhenListValueSelected(e, fld.list6, actionModel.dialogInfo)} ?disabled=${this.isFieldDisabled(fld.list6)}>
                         ${this.listEntries(fld.list6)}</mwc-select>`}
                 </div>  
                 ${!fld.list7 ?html``: html`        
                     <div class="layout horizontal flex center-center"> 
-                    <mwc-select style="width:100%;" id="list7" label="${this.fieldLabel(fld.list7)}" ?disabled=${this.isFieldDisabled(fld.list7)}>
+                    <mwc-select style="width:100%;" id="list7" label="${this.fieldLabel(fld.list7)}" @selected=${(e)=>this.actionWhenListValueSelected(e, fld.list7, actionModel.dialogInfo)} ?disabled=${this.isFieldDisabled(fld.list7)}>
                         ${this.listEntries(fld.list7)}</mwc-select>`}
                 </div>  
                 ${!fld.list8 ?html``: html`        
                     <div class="layout horizontal flex center-center"> 
-                    <mwc-select style="width:100%;" id="list8" label="${this.fieldLabel(fld.list8)}" ?disabled=${this.isFieldDisabled(fld.list8)}>
+                    <mwc-select style="width:100%;" id="list8" label="${this.fieldLabel(fld.list8)}" @selected=${(e)=>this.actionWhenListValueSelected(e, fld.list8, actionModel.dialogInfo)} ?disabled=${this.isFieldDisabled(fld.list8)}>
                         ${this.listEntries(fld.list8)}</mwc-select>`}
                 </div>  
                 ${!fld.list9 ?html``: html`        
                     <div class="layout horizontal flex center-center"> 
-                    <mwc-select style="width:100%;" id="list9" label="${this.fieldLabel(fld.list9)}" ?disabled=${this.isFieldDisabled(fld.list9)}>
+                    <mwc-select style="width:100%;" id="list9" label="${this.fieldLabel(fld.list9)}" @selected=${(e)=>this.actionWhenListValueSelected(e, fld.list9, actionModel.dialogInfo)} ?disabled=${this.isFieldDisabled(fld.list9)}>
                         ${this.listEntries(fld.list9)}</mwc-select>`}
                 </div>  
                 ${!fld.list10 ?html``: html`        
                     <div class="layout horizontal flex center-center"> 
-                    <mwc-select style="width:100%;" id="list10" label="${this.fieldLabel(fld.list10)}" ?disabled=${this.isFieldDisabled(fld.list10)}>
+                    <mwc-select style="width:100%;" id="list10" label="${this.fieldLabel(fld.list10)}" @selected=${(e)=>this.actionWhenListValueSelected(e, fld.list10, actionModel.dialogInfo)} ?disabled=${this.isFieldDisabled(fld.list10)}>
                         ${this.listEntries(fld.list10)}</mwc-select>`}
                 </div>  
                 ${!fld.multilist1 ?
@@ -726,8 +727,8 @@ export function TrazitGenericDialogs(base) {
     `
     }
     addTheDynamicElement(fld){
-        if (fld.rule===undefined||this.selectedItemInView===undefined){return}
-        let selObj=this.selectedItemInView
+        if (fld.rule===undefined||this.selectedItems[0]===undefined){return}
+        let selObj=this.selectedItems[0]
         let curValue=selObj[fld.rule.field]
         if (curValue===undefined){return}
         if (curValue.length===0){curValue="*NULL*"}
@@ -752,7 +753,7 @@ export function TrazitGenericDialogs(base) {
             fld.items= JSON.parse(selObj[fld.rule.field])
             return html`
             <div class="layout horizontal flex center-center">
-            <mwc-select id="dynamicElement1" label="${this.fieldLabel(fld)}" @selected=${this.valueSelected} ?disabled=${this.isFieldDisabled(fld)}  >
+            <mwc-select id="dynamicElement1" label="${this.fieldLabel(fld)}" @selected=${()=>this.actionWhenListValueSelected(fld)} ?disab, actionModel.dialogInfoled=${this.isFieldDisabled(fld)}  >
             ${this.listEntries(fld)}</mwc-select>
             </div>
             `
@@ -826,6 +827,7 @@ export function TrazitGenericDialogs(base) {
         let dlgFlds=undefined
         if (this.actionBeingPerformedModel!==undefined&&this.actionBeingPerformedModel.dialogInfo!==undefined&&this.actionBeingPerformedModel.dialogInfo.fields!==undefined){
             this.actionBeingPerformedModel.dialogInfo.fields
+            dlgFlds=this.actionBeingPerformedModel.dialogInfo.fields
         }
         if (dlgFlds===undefined){
             //alert('The dialog '+this.actionBeingPerformedModel.dialogInfo.name+' has no fields property for adding the fields, please review.')
@@ -844,11 +846,14 @@ export function TrazitGenericDialogs(base) {
             }
             if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].selObjectPropertyName!==undefined&&fldObj[keyName].selObjectPropertyName!==null&&this[keyName]!==null){
                 this[keyName].value=this.selectedItems[0][fldObj[keyName].selObjectPropertyName]
-            }
+            }            
+            if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj.selObjectPropertyName!==undefined&&fldObj[keyName].selObjectPropertyName!==null&&this[keyName]!==null){
+                this[keyName].value=this.selectedItems[0][fldObj.selObjectPropertyName]
+            }            
             if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].internalVariableObjName!==undefined&&fldObj[keyName].internalVariableObjName!==null&&
                 fldObj[keyName].internalVariableObjProperty!==undefined&&fldObj[keyName].internalVariableObjProperty!==null){
                 this[keyName].value=this[fldObj[keyName].internalVariableObjName][0][fldObj[keyName].internalVariableObjProperty]
-            }
+            }            
         }
     }    
     resetFields(e){           
@@ -876,30 +881,8 @@ export function TrazitGenericDialogs(base) {
                     }
                 }
             }
+            //this.actionWhenOtherThanListValueChanged(e, element, this.actionBeingPerformedModel.dialogInfo, this.selectedItems[0]);
         }
-    }
-    valueSelected(e){
-        return // The code below is there only for trying to make lists depending on another list, does not work yet
-        //alert('ds '+ e.target.id+this[e.target.id].value)
-
-        // let triggeredElem=this.actionBeingPerformedModel.dialogInfo.fields.filter(p => p == e.target.id)
-
-        let cleanParams = {}
-        // Object.entries(this.actionBeingPerformedModel.dialogInfo.fields).map(([key, value]) => {
-        //   if (value != null || value != undefined) {
-        //     cleanParams[key] = value
-        //   }
-        // })
-        // console.log('cleanParams', cleanParams)
-        let fld =this.actionBeingPerformedModel.dialogInfo.fields[1].list2//(([key, value]) =>{
-            //cleanParams=value
-        //})
-        console.log('fld', fld)
-        let thisNewList2=[]
-        thisNewList2=this.listEntries(fld)
-        console.log('thisNewList2', thisNewList2)
-        //alert(this.actionBeingPerformedModel.dialogInfo.fields[e.target.id].valuesFromMasterData.recalculateObjectOnEntrySelected)
-        //console.log(e.targetValue)
     }
 
     
