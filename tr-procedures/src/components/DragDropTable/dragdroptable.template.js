@@ -30,17 +30,21 @@ function myTable(elem, dataArr, lang, props, thisComponent) {
     thisComponent.filteredData = []
           let filterDiv = thisComponent.shadowRoot.querySelectorAll('#smartFilterDiv mwc-textfield')
           let selectFilterDiv = thisComponent.shadowRoot.querySelector('#smartFilterDiv mwc-select')          
-          let obj = {}
           filterDiv.forEach((elm,i) => {
             let value = elm.shadowRoot.querySelector('.mdc-text-field__input').value
-            obj[elem.smartFilter.dialogInfo.fields[i].name] = value            
+            if (elem.smartFilter.dialogInfo.fields[i]?.name) {
+              elem.smartFilter.filterValues[elem.smartFilter.dialogInfo.fields[i].name] = value
+            } else {
+              console.log(elem.smartFilter.dialogInfo.fields[i])
+            }                        
           })
           if (selectFilterDiv) {
             let name = selectFilterDiv.getAttribute('name')
             let value = selectFilterDiv.shadowRoot.querySelector('input').value;
-            obj[name] = value
+            elem.smartFilter.filterValues[name] = value
           }
-          getDataFromRoot(elem,data,obj,thisComponent)      
+          console.log(elem.smartFilter.filterValues)
+          getDataFromRoot(elem,data,elem.smartFilter.filterValues,thisComponent)      
           thisComponent.requestUpdate(); 
   };
   console.log(thisComponent.filteredData)
@@ -404,7 +408,7 @@ function trElementType(elem){
 }
 
 function applyFilterToTheData(curDataForThisCard, filterValues,thisComponent) {
-  console.log(curDataForThisCard)
+  console.log(filterValues)
    if (Object.keys(filterValues).length > 0) {
     const uniqueItemsSet = new Set();
     for (const key in filterValues) {
