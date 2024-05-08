@@ -30,7 +30,7 @@ import {TrazitInvestigationsDialog} from '../GenericDialogs/TrazitInvestigations
 
 import {TrazitCredentialsDialogs} from '../GenericDialogs/TrazitCredentialsDialogs';
 import { TrazitTakePictureDialog } from '../GenericDialogs/TrazitTakePictureDialog';
-
+import '../StagesView/index';
 
 import '../Audit/audit-dialog';
 export class GridWithButtons extends 
@@ -222,6 +222,29 @@ TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestiga
     }
 
   }
+  getTitleElement(sectionModel = this.viewModelFromProcModel){      
+    let stageData={}
+    if (sectionModel.langConfig && sectionModel.langConfig.isStaged) {
+      // Find the object in the array that matches filterName
+      const filteredStageData = sectionModel.langConfig.isStaged.find(obj => obj.hasOwnProperty(this.filterName));
+      
+      // If found, assign it to stageData
+      if (filteredStageData) {
+        stageData = filteredStageData[this.filterName];
+      } else {
+        // If not found, assign the first object in the array to stageData
+        stageData = sectionModel.langConfig.isStaged[0];
+      }
+    }
+    if (Object.keys(stageData).length !== 0){
+      return html`<stages-view style="margin:17.6779px;"
+      .stages="${stageData.stages}"
+      .currentstage="${stageData.currentstage}" .lang="${this.lang}"></stages-view>`  
+    } else {
+      return html`${this.getTitle()}`
+    }
+  }
+
   abstractBlock(){
     //console.log('abstractBlock')
     let addContextMenu=this.addContextMenu()    
@@ -230,8 +253,9 @@ TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestiga
   ${this.abstract ? 
       nothing :
       html`
-        ${this.viewModelFromProcModel.topCompositions!==undefined ? nothing: html`${this.getTitle()}`}
-      
+        
+        <!-- ${this.viewModelFromProcModel.topCompositions!==undefined ? nothing: html`${this.getTitle()}`}-->
+        ${this.getTitleElement()}
         <div class="layout horizontal flex wrap">
             <div class="layout flex">          
             <div class="layout horizontal center flex wrap">
