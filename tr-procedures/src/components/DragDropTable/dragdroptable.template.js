@@ -24,55 +24,23 @@ export const template = (props, data, lang,thisComponent) => {
 }
 
 function myTable(elem, dataArr, lang, props, thisComponent) {  
-  dataArr=thisComponent.filterItems=getDataFromRoot(elem, dataArr,{},thisComponent)
-  let data = dataArr
-  const handleFilter = () => {
-    thisComponent.filteredData = []
-          let filterDiv = thisComponent.shadowRoot.querySelectorAll('#smartFilterDiv mwc-textfield')
-          let selectFilterDiv = thisComponent.shadowRoot.querySelector('#smartFilterDiv mwc-select')          
-          filterDiv.forEach((elm,i) => {
-            let value = elm.shadowRoot.querySelector('.mdc-text-field__input').value
-            if (elem.smartFilter.dialogInfo.fields[i]?.name) {
-              elem.smartFilter.filterValues[elem.smartFilter.dialogInfo.fields[i].name] = value
-            } else {
-              console.log(elem.smartFilter.dialogInfo.fields[i])
-            }                        
-          })
-          if (selectFilterDiv) {
-            let name = selectFilterDiv.getAttribute('name')
-            let value = selectFilterDiv.shadowRoot.querySelector('input').value;
-            elem.smartFilter.filterValues[name] = value
-          }
-          console.log(elem.smartFilter.filterValues)
-          getDataFromRoot(elem,data,elem.smartFilter.filterValues,thisComponent)      
-          thisComponent.requestUpdate(); 
-  };
-  console.log(thisComponent.filteredData)
-  if (thisComponent.filteredData.length > 0) {
-    dataArr=thisComponent.filterItems=thisComponent.filteredData
-  }
-  const handleClear = () => {
-    thisComponent.filteredData = []
-          let filterDiv = thisComponent.shadowRoot.querySelectorAll('#smartFilterDiv mwc-textfield')
-          let selectFilterDiv = thisComponent.shadowRoot.querySelector('#smartFilterDiv mwc-select')
-          selectFilterDiv.shadowRoot.querySelector('input').value = ''
-          filterDiv.forEach((elm,i) => {
-            elm.shadowRoot.querySelector('.mdc-text-field__input').value = ''                     
-          })
-      thisComponent.requestUpdate(); 
-  }
+  dataArr=getDataFromRoot(elem, dataArr)
+ if(dataArr && Object.keys(elem.smartFilter.filterValues).length != 0){
+    dataArr=applyFilterToTheData(dataArr,elem.smartFilter.filterValues);
+ }
+ 
 
   const renderTable = () => {
       return html`
-          <div>
+          <div style="flex:1;">
               <!-- Smart Filter UI -->
               ${elem.smartFilter ? html`
                   <div>
                       <span>
-                          <mwc-button label="${elem.smartFilter?.displayFilterButton?.title["label_" + lang]}" raised @click="${thisComponent.toggleFilterDialog}"></mwc-button>
+                          <mwc-button label="${elem.smartFilter?.displayFilterButton?.title["label_" + lang]}" raised @click="${()=>{thisComponent.toggleFilterDialog(elem.name)}}"></mwc-button>
                       </span>
                   </div>
-                  <div id="smartFilterDiv" ?hidden="${thisComponent.hideFilters()}">
+                  <div id="smartFilterDiv_${elem.name}" ?hidden="${thisComponent.hideFilters(elem.name)}">
                       ${elem.smartFilter?.dialogInfo?.fields?.map((fld, i) =>
                           html`
                               ${!fld ?
@@ -80,7 +48,8 @@ function myTable(elem, dataArr, lang, props, thisComponent) {
                                       ${fld.type === 'select' ? 
                                       html`
                                       <div class="layout horizontal flex center-center">
-                                      <mwc-select id="list1" label="${fld["label_" + lang]}" name="${fld.name}">                                      
+                                      <mwc-select id="list1" name="${fld.name}">  
+                                      <mwc-list-item value="" name="">Select</mwc-list-item>                       
                                       ${fld.select_options.map((c, i) =>
                                           html`<mwc-list-item value="${c.value}" name="${c.name}">${c["lable_" + lang]}</mwc-list-item>`
                                       )}
@@ -91,7 +60,7 @@ function myTable(elem, dataArr, lang, props, thisComponent) {
                                       html`
                                       <div class="layout horizontal flex center-center">
                                           <mwc-textfield class="layout flex" id="smartFilter_text_${i}" type="text"
-                                              .value=${fld.default_value ? fld.default_value : ''}
+                                              value=${fld.default_value ? fld.default_value : ''}
                                               label="${fld["label_" + lang]}"
                                               @keypress=${e => e.keyCode == 13 && thisComponent.genomaSuperDialogClickedAction()}>
                                           </mwc-textfield>
@@ -104,10 +73,10 @@ function myTable(elem, dataArr, lang, props, thisComponent) {
                       )}
                       <div>
                           <span>
-                              <mwc-button label="${elem.smartFilter?.applyFilterButton?.title["label_" + lang]}" raised @click="${handleFilter}"></mwc-button>
+                              <mwc-button label="${elem.smartFilter?.applyFilterButton?.title["label_" + lang]}" raised @click="${()=>handleFilter(elem,thisComponent)}"></mwc-button>
                           </span>
                           <span>
-                              <mwc-button label="${elem.smartFilter?.clearFilterButton?.title["label_" + lang]}" raised @click="${handleClear}"></mwc-button>
+                              <mwc-button label="${elem.smartFilter?.clearFilterButton?.title["label_" + lang]}" raised @click="${()=>handleClear(elem,thisComponent)}"></mwc-button>
                           </span>
                       </div>
                   </div>
@@ -118,9 +87,9 @@ function myTable(elem, dataArr, lang, props, thisComponent) {
                       ${elem.columns.map((column, i) => html`<th>${column["label_" + lang]}</th>`)}
                   </thead>
                   <tbody>
-                      ${thisComponent.filterItems === undefined || !Array.isArray(thisComponent.filterItems) ? html `No Data` :
+                      ${dataArr=== undefined || !Array.isArray(dataArr) ? html `No Data` :
                           html`
-                              ${thisComponent.filterItems.map((p, idx) => { return html `
+                              ${dataArr.map((p, idx) => { return html `
                                   <tr class="dragdropabletr" draggable="${elem.dragEnable}"
                                       @dragstart=${(e) => props.dragTableTr(e, elem, p)}
                                       @dragover=${(e) => props.allowDropTr(e)}
@@ -148,23 +117,107 @@ function myTable(elem, dataArr, lang, props, thisComponent) {
 }
 
 
+function handleFilter(elem,thisComponent){
+  let filterDiv = thisComponent.shadowRoot.querySelectorAll(`#smartFilterDiv_${elem.name} mwc-textfield`)
+  console.log(filterDiv)
+  let selectFilterDiv = thisComponent.shadowRoot.querySelector(`#smartFilterDiv_${elem.name} mwc-select`)          
+  filterDiv.forEach((elm,i) => {
+    let value = elm.shadowRoot.querySelector('.mdc-text-field__input').value
+    if (elem.smartFilter.dialogInfo.fields[i]?.name) {
+      elem.smartFilter.filterValues[elem.smartFilter.dialogInfo.fields[i].name] = value
+    }                      
+  })
+  if (selectFilterDiv) {
+    let name = selectFilterDiv.getAttribute('name')
+    let value = selectFilterDiv.shadowRoot.querySelector('input').value;
+    console.log(selectFilterDiv.shadowRoot.querySelector('input'))
+    elem.smartFilter.filterValues[name] = value
+  }            
+  thisComponent.requestUpdate(); 
+}
 
+
+function handleClear(elem,thisComponent){
+  elem.smartFilter.filterValues = {}
+      let filterDiv = thisComponent.shadowRoot.querySelectorAll(`#smartFilterDiv_${elem.name} mwc-textfield`)
+      let selectFilterDiv = thisComponent.shadowRoot.querySelector(`#smartFilterDiv_${elem.name} mwc-select`)    
+      if (selectFilterDiv) {
+        selectFilterDiv.shadowRoot.querySelector('input').value = 'null'
+      }
+     
+      filterDiv.forEach((elm, i) => {
+        const input = elm.shadowRoot.querySelector('.mdc-text-field__input');
+        if (input) {
+            input.value = '';
+        }
+    });       
+    thisComponent.requestUpdate()
+}
 function cardSomeElementsRepititiveObjects(elem, data, lang, props,thisComponent) {
   //console.log('cardSomeElementsRepititiveObjects', 'elem', elem, 'data', data)
-  data = getDataFromRoot(elem, data,{},thisComponent);
+  
+  data = getDataFromRoot(elem, data);
+  if(data && Object.keys(elem.smartFilter.filterValues).length != 0){
+    data=applyFilterToTheData(data,elem.smartFilter.filterValues);
+ }
   console.log('cardSomeElementsRepititiveObjects >> getDataFromRoot', 'elem', elem, 'data', data)
   return html`
-    ${Array.isArray(data) && data.length > 0
-      ? html`
+      <div style="flex:1;">
+      <!-- Smart Filter UI -->
+      ${elem.smartFilter ? html`
+          <div>
+              <span>
+                  <mwc-button label="${elem.smartFilter?.displayFilterButton?.title["label_" + lang]}" raised @click="${()=>{thisComponent.toggleFilterDialog(elem.name)}}"></mwc-button>
+              </span>
+          </div>
+          <div id="smartFilterDiv_${elem.name}" ?hidden="${thisComponent.hideFilters(elem.name)}">
+              ${elem.smartFilter?.dialogInfo?.fields?.map((fld, i) =>
+                  html`
+                      ${!fld ?
+                          html`` : html`
+                              ${fld.type === 'select' ? 
+                              html`
+                              <div class="layout horizontal flex center-center">
+                              <mwc-select id="list1" label="${fld["label_" + lang]}" name="${fld.name}">                                      
+                              ${fld.select_options.map((c, i) =>
+                                  html`<mwc-list-item value="${c.value}" name="${c.name}">${c["lable_" + lang]}</mwc-list-item>`
+                              )}
+                              </mwc-select>
+                              </div>
+                              `
+                              :
+                              html`
+                              <div class="layout horizontal flex center-center">
+                                  <mwc-textfield class="layout flex" id="smartFilter_text_${i}" type="text"
+                                      .value=${fld.default_value ? fld.default_value : ''}
+                                      label="${fld["label_" + lang]}"
+                                      @keypress=${e => e.keyCode == 13 && thisComponent.genomaSuperDialogClickedAction()}>
+                                  </mwc-textfield>
+                              </div>
+                              `
+                            }
+                              
+                          `}
+                  `
+              )}
+              <div>
+                  <span>
+                      <mwc-button label="${elem.smartFilter?.applyFilterButton?.title["label_" + lang]}" raised @click="${()=>handleFilter(elem,thisComponent)}"></mwc-button>
+                  </span>
+                  <span>
+                      <mwc-button label="${elem.smartFilter?.clearFilterButton?.title["label_" + lang]}" raised @click="${()=>handleClear(elem,thisComponent)}"></mwc-button>
+                  </span>
+              </div>
+          </div>
+      ` : undefined}
           ${data.map(
-            (d, i) => html` ${kpiCardSomeElementsMain(elem, d, lang, props)} `
+            (d, i) => html` ${kpiCardSomeElementsMain(elem, d, lang, props,thisComponent)} `
           )}
-        `
-      : html``}
+          </div>        
   `;
 }
-function kpiCardSomeElementsMain(elem, curDataForThisCard, lang, props) {
-  //console.log('kpiCardSomeElementsMain', 'elem', elem, 'curDataForThisCard', curDataForThisCard)
+function kpiCardSomeElementsMain(elem, curDataForThisCard, lang, props,thisComponent) {
+  //console.log('kpiCardSomeElementsMain', 'elem', elem, 'curDataForThisCard', curDataForThisCard)  
   return html`
     ${elem === undefined || elem.title === undefined
       ? html``
@@ -177,7 +230,7 @@ function kpiCardSomeElementsMain(elem, curDataForThisCard, lang, props) {
         elem.hideNoDataMessage
           ? ""
           : "No columns defined"}`
-      : html`
+      : html`     
           <div
             id="main${elem.add_border !== undefined &&
             elem.add_border == true
@@ -407,29 +460,28 @@ function trElementType(elem){
     `
 }
 
-function applyFilterToTheData(curDataForThisCard, filterValues,thisComponent) {
-  console.log(filterValues)
-   if (Object.keys(filterValues).length > 0) {
+function applyFilterToTheData(curDataForThisCard, filterValues) {
+   
     const uniqueItemsSet = new Set();
     for (const key in filterValues) {
-        if (filterValues.hasOwnProperty(key)) {
             const filterValue = filterValues[key];
             if (Array.isArray(curDataForThisCard)) {
                 const filteredItems = curDataForThisCard.filter(item => {
-                    return item[key] == filterValue;
-                });                           
-                filteredItems.forEach(item => uniqueItemsSet.add(item));
-            }
+                    if (item[key] && filterValue) {
+                      return item[key] == filterValue;
+                    }
+                    return false
+                });  
+                console.log(filteredItems)                         
+                filteredItems.forEach(item => uniqueItemsSet.add(item));            
         }
     }
-    thisComponent.filteredData = Array.from(uniqueItemsSet);
+    return Array.from(uniqueItemsSet);
+
 }
 
-  return thisComponent.filteredData.length === 0 ? curDataForThisCard : filterValues;
-}
 
-
-function getDataFromRoot(elem, curDataForThisCard, filterValues,thisComponent) {
+function getDataFromRoot(elem, curDataForThisCard) {
   if (elem !== undefined && elem.contextVariableName !== undefined) {
     if (this[elem.contextVariableName] !== undefined) {
       curDataForThisCard = this[elem.contextVariableName];
@@ -446,7 +498,6 @@ function getDataFromRoot(elem, curDataForThisCard, filterValues,thisComponent) {
       elem.endPointPropertyArray.length === 1 &&
       elem.endPointPropertyArray[0].toUpperCase() === "ROOT"
     ) {
-      curDataForThisCard=applyFilterToTheData(curDataForThisCard, filterValues,thisComponent)
       return curDataForThisCard;
     }
     //const numObjectsToSkip = elem.endPointPropertyArray.length - 1;
@@ -463,18 +514,18 @@ function getDataFromRoot(elem, curDataForThisCard, filterValues,thisComponent) {
         if (i < elem.endPointPropertyArray.length - 1) {
           subJSON = curDataForThisCard[propertyName][0];
         } else {
-          return applyFilterToTheData(curDataForThisCard[propertyName], filterValues,thisComponent);
+          return curDataForThisCard[propertyName];
         }
       } else {
         subJSON = curDataForThisCard[propertyName];
       }
       if (typeof subJSON === "undefined") {
-        return applyFilterToTheData(curDataForThisCard, filterValues,thisComponent);
+        return curDataForThisCard;
       } else {
         curDataForThisCard = subJSON;
       }
     }
-    return applyFilterToTheData(curDataForThisCard, filterValues,thisComponent);
+    return curDataForThisCard;
     if (typeof subJSON === "undefined") {
       return undefined;
     } else if (elem.endPointPropertyArray.length % 2 === 0) {
@@ -498,8 +549,7 @@ function getDataFromRoot(elem, curDataForThisCard, filterValues,thisComponent) {
       let curDataForThisCardToRet = [];
       curDataForThisCardToRet = curDataForThisCard[elem.endPointResponseObject];
       if (curDataForThisCardToRet !== undefined) {
-          
-        return applyFilterToTheData(curDataForThisCardToRet[elem.endPointResponseObject2],  filterValues,thisComponent);
+        return curDataForThisCardToRet[elem.endPointResponseObject2];
       } else {
         return [];
       }
@@ -508,15 +558,15 @@ function getDataFromRoot(elem, curDataForThisCard, filterValues,thisComponent) {
         if (!Array.isArray(curDataForThisCard)) {
           let curDataForThisCardArr = [];
           curDataForThisCardArr.push(curDataForThisCard);
-          return applyFilterToTheData(curDataForThisCardArr,  filterValues,thisComponent);
+          return curDataForThisCardArr;
         }
-        return applyFilterToTheData(curDataForThisCard,  filterValues,thisComponent);
+        return curDataForThisCard;
       } else {
-        return applyFilterToTheData(curDataForThisCard[elem.endPointResponseObject],  filterValues,thisComponent);
+        return curDataForThisCard[elem.endPointResponseObject];
       }
     }
   }
-}
+} 
 export const template2 = (props) => {
     return html`
         <div style="display:flex; flex-direction:row; gap:12px;">

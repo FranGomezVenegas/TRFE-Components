@@ -338,28 +338,23 @@ export class DragDropTable extends (TrazitGenericDialogs(GridFunctions(DialogsFu
 
     this.dragElement = undefined;
     this.dragTr = false;
-	this.showFilterButton=false
-	this.filterItems=[]
-	this.filteredData=[]
+	this.showFilterButton={
+    '1':false,
+    '2':false,
+    '3':false
   }
-  	toggleFilterDialog(){
-		this.showFilterButton=!this.showFilterButton
+	
+	
+  }
+  	toggleFilterDialog(name){
+		this.showFilterButton[name]=!this.showFilterButton[name]
+    this.requestUpdate()
 	}
-	hideFilters(){
-    	return this.showFilterButton
+	hideFilters(name){
+    	return this.showFilterButton[name]
   	}
 
 	//Filter From The table
-
-	applyFilter(){
-		this.filterItems=this.filterItems.filter((item,index)=>{
-			if(index==0){
-				return item
-			}
-		})
-		this.data=this.filterItems
-		this.requestUpdate()
-	}
   render() {
     return template({
       definition: this.viewModelFromProcModel.objects,
