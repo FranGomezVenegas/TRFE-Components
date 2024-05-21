@@ -3,6 +3,7 @@ import '@material/mwc-icon';
 import '../MultiSelect';
 import '../grid_with_buttons/gridCellTooltip'
 import '../grid_with_buttons/tableRowDetail';
+import '@material/mwc-button';
 
 export const template = (tmpLogic, selectedBox, viewModel, lang, componentRef) => {
     //console.log('tmpLogic', tmpLogic, 'selectedBox', selectedBox, 'viewModel', viewModel)
@@ -27,12 +28,17 @@ export const template = (tmpLogic, selectedBox, viewModel, lang, componentRef) =
             totalStr="Total: "+String(occupied)
         }
     }
+    const printCard = (selectbox) => {
+        const content = document.getElementById('mainBox');
+        console.log(content)
+    }
     return html` 
     <div style="display:flex; flex-direction:column; gap:12px;">    
     <div style="display:flex; flex-direction:row; gap:12px;">    
         <div style="width: 100%; gap: 4px; display: flex; flex-direction: column;">        
             <div style="display:flex; justify-content: space-between; align-items: center;"> 
                 <div style="display:flex; flex-direction:row; gap: 4px; align-items: center;"> 
+                <mwc-icon-button icon="print" @click=${() => { printCard(selectedBox!==undefined) }}></mwc-icon-button>
                 ${selectedBox===undefined ? html``: html `
                     <mwc-icon @click=${() => tmpLogic.setBoxView()} style="color:#54CCEF; cursor:pointer;"> home </mwc-icon>
                     <div class="view-btn ${viewModel.viewMode == 1 ? "active" : ""}" @click=${() => tmpLogic.setViewMode(1)}> Box View </div>
@@ -85,7 +91,7 @@ function boxNotStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, 
         boxPosicsViews=viewModel.boxPosicsViews
     }
     return  html`
-            <div class="box-content_allowmove_${boxAllowMoveObject}" >
+            <div class="box-content_allowmove_${boxAllowMoveObject}" id='mainBox'>
                 ${viewModel.viewMode == 1 ? html `
                 <div draggable="true" class="draggable-box" @dragover=${(e) => tmpLogic.allowDrop(e)} @drop=${(e) => tmpLogic.dropBox(e, 0, 0)}>
                 ${selectedBox.datas.length > 0 ?
@@ -135,7 +141,7 @@ function boxStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, box
     }
     return html`
         ${selectedBox!==undefined ? html `
-        <div class="box-content_allowmove_${boxAllowMoveObject}">
+        <div class="box-content_allowmove_${boxAllowMoveObject}" id='mainBox'>
             ${viewModel.viewMode == 1 ? html `
             <div> 
                 <div class="row-content"> 
