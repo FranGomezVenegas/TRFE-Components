@@ -90,7 +90,6 @@ export function CardMultipleElementsView(base) {
       }, 500);
     }
     collectCardData(elem) {
-      console.log(elem)
       let cardElement = ``;
       let cardStyles = `
       #mainaddborder {
@@ -121,26 +120,27 @@ export function CardMultipleElementsView(base) {
 
       cardElement += divElement.querySelector('div').outerHTML;
 
-      let chartElement = elem.querySelector('google-chart').shadowRoot;
-      let chartAllStyles = chartElement.querySelector('#styles');
-      let chartDiv= chartElement.querySelector('#chartdiv');
-      let chartDivStr = '';
-      // chartDivStr += chartAllStyles.outerHTML;
-      chartDivStr += chartDiv.innerHTML;
-      console.log(chartDivStr)
-      cardElement += chartDivStr
-
+      let chartElement = elem.querySelector('google-chart');
+      if (chartElement) {
+        let chartElementShadowRoot = chartElement.shadowRoot
+        let chartDiv= chartElementShadowRoot.querySelector('#chartdiv');
+        let chartDivStr = '';
+        chartDivStr += chartDiv.innerHTML;
+        console.log(chartDivStr)
+        cardElement += chartDivStr
+      }
 
 
       let lastDiv = elem.querySelector('table');
-      cardElement += lastDiv.outerHTML;      
+      if (lastDiv) {
+        cardElement += lastDiv.outerHTML; 
+      }     
 
 
       const clonedDiv = elem.cloneNode(false);
       const divString = clonedDiv.outerHTML;
       let position = divString.indexOf('</div>');
       let mainDivSkeleton = divString.slice(0, position) + cardElement + divString.slice(position);
-      // console.log(mainDivSkeleton)
 
       const cardDivContent = `
         <!DOCTYPE html>

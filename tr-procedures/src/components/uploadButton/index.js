@@ -20,12 +20,14 @@ export class UploadButton extends ApiFunctions(LitElement) {
     super();
     this.name = "";
     this.label = "";
+    this.selectedfile = null;
   }
 
   render() {
     return template({
       name: this.name,
       label: this.label,
+      this: this,
       handleUpload: this._upload
     });
   }
