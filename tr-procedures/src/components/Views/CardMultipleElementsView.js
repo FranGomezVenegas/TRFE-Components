@@ -142,27 +142,6 @@ export function CardMultipleElementsView(base) {
       let position = divString.indexOf('</div>');
       let mainDivSkeleton = divString.slice(0, position) + cardElement + divString.slice(position);
 
-      const cardDivContent = `
-        <!DOCTYPE html>
-        <html lang="en">
-          <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <meta http-equiv="X-UA-Compatible" content="ie=edge">
-            <title>${title}</title>
-            <link rel="stylesheet" type="text/css" href="https://www.gstatic.com/charts/51/css/core/tooltip.css">
-            <link rel="stylesheet" type="text/css" href="https://www.gstatic.com/charts/51/css/util/util.css">
-            <style>
-              ${cardStyles}
-            </style>
-         </head>
-          <body>
-          ${mainDivSkeleton}
-        </body>
-        </html>
-        
-        `;
-
       return {title,cardStyles,mainDivSkeleton};
     }
     cardController(elem, data, i) {

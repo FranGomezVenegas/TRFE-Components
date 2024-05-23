@@ -4,6 +4,7 @@ import '../MultiSelect';
 import '../grid_with_buttons/gridCellTooltip'
 import '../grid_with_buttons/tableRowDetail';
 import '@material/mwc-button';
+import print from './dragdropboxprint';
 
 export const template = (tmpLogic, selectedBox, viewModel, lang, componentRef) => {
     //console.log('tmpLogic', tmpLogic, 'selectedBox', selectedBox, 'viewModel', viewModel)
@@ -28,17 +29,13 @@ export const template = (tmpLogic, selectedBox, viewModel, lang, componentRef) =
             totalStr="Total: "+String(occupied)
         }
     }
-    const printCard = (selectbox) => {
-        const content = document.getElementById('mainBox');
-        console.log(content)
-    }
     return html` 
     <div style="display:flex; flex-direction:column; gap:12px;">    
     <div style="display:flex; flex-direction:row; gap:12px;">    
         <div style="width: 100%; gap: 4px; display: flex; flex-direction: column;">        
             <div style="display:flex; justify-content: space-between; align-items: center;"> 
                 <div style="display:flex; flex-direction:row; gap: 4px; align-items: center;"> 
-                <mwc-icon-button icon="print" @click=${() => { printCard(selectedBox!==undefined) }}></mwc-icon-button>
+                <mwc-icon-button icon="print" @click=${() => { print(selectedBox!==undefined, componentRef) }}></mwc-icon-button>
                 ${selectedBox===undefined ? html``: html `
                     <mwc-icon @click=${() => tmpLogic.setBoxView()} style="color:#54CCEF; cursor:pointer;"> home </mwc-icon>
                     <div class="view-btn ${viewModel.viewMode == 1 ? "active" : ""}" @click=${() => tmpLogic.setViewMode(1)}> Box View </div>
