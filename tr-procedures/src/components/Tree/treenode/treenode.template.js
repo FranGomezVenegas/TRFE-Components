@@ -17,7 +17,7 @@ export const template = (props) => {
     level,
     handleClickItem    
   } = props;
-  const entity = data;
+  // const entity = data;
   const children = data[specification[level].children]
   const key = data[specification[level].key];
   const label = data[specification[level].label];
@@ -43,19 +43,21 @@ export const template = (props) => {
   
 
   return html`
-  <vaadin-accordion-panel summary=${label} @click=${handleShowChildrenItem}
+  
+  <vaadin-accordion-panel @dragstart=${handleDragStart} summary=${label} 
   draggable="true"      
   >
     <vaadin-vertical-layout>
     <ul>
-      ${showChildren && children
+      ${children
         ? html`<tree-view
             .data=${children}
             .selectedItems=${selectedItems}
             .handleSelectItem=${handleSelectItem}
             .specification=${specification}
             .level=${level + 1}
-          ></tree-view>`
+          ></tree-view>
+          `
         : ''}
     </ul>
     </vaadin-vertical-layout>

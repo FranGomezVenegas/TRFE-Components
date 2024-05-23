@@ -9,6 +9,7 @@ import '@material/mwc-formfield';
 import '../MultiSelect';
 import '../Tree/treeview/index';
 import { ListsFunctions } from '../../form_fields/lists-functions';
+import '@vaadin/accordion';
 
 import {DialogsFunctions} from './DialogsFunctions';
 export function TrazitGenericDialogs(base) {
@@ -209,8 +210,10 @@ export function TrazitGenericDialogs(base) {
             ${actionModel.dialogInfo.fields.map((fld, i) =>             
                 html`   
                 ${!fld.tree1 ?
-                    html``: html`        
-                        <tree-view id="tree1" .data=${fld.tree1.treeElementData} .specification=${fld.tree1.treeElementSpecification} @item-selected=${fld.tree1.treeSelection}></tree-view>         
+                    html``: html` 
+                    <vaadin-accordion>       
+                        <tree-view id="tree1" .data=${fld.tree1.treeElementData} .specification=${fld.tree1.treeElementSpecification} @item-selected=${fld.tree1.treeSelection}></tree-view>  
+                        </vaadin-accordion>       
                 `}          
                 ${!fld.text1 ?
                     html``: html`        
