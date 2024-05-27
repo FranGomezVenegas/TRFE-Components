@@ -2,19 +2,26 @@ import { html, nothing } from "lit";
 import '@material/mwc-button';
 
 export function CardMultipleElementsView(base) {
-  return class extends base {
-    cardMultipleElementsView(elem, data) {
-      //console.log('cardSomeElementsRepititiveObjects', 'elem', elem, 'data', data)
-      //data = this.getDataFromRoot(elem, data);
-      console.log('CardMultipleElementsView >> getDataFromRoot', 'elem', elem, 'data', data)
-      return html`
+    return class extends base{
+        cardMultipleElementsView(elem, data) {
+          
+            //console.log('cardSomeElementsRepititiveObjects', 'elem', elem, 'data', data)
+            //data = this.getDataFromRoot(elem, data);
+            console.log('CardMultipleElementsView >> getDataFromRoot', 'elem', elem, 'data', data)
+            return html`
               ${Array.isArray(data) && data.length > 0
           ? html`
                 <mwc-icon-button icon="print" @click=${this.printAllCard}></mwc-icon-button>  
                 <div style="display: flex; flex-wrap: wrap; padding-left:30px; gap: 10px">                 
                     ${data.map(
-            (d, i) => html` ${this.cardController(elem, d, i)} `
-          )}                                    
+                        (d) =>html`
+                          ${d.json_model===undefined?
+                            html` ${this.cardController(elem, d)} `
+                          :
+                            html` ${this.cardController(d.json_model, d)} `
+                          }
+                        `
+                    )}                                    
                 </div>
                 `
           : nothing}
@@ -200,11 +207,13 @@ export function CardMultipleElementsView(base) {
                 html`
                           ${this.kpiCardSomeElementsChild(elem2, data, true)}
                     `}              
-                    ${elem2.type === "Report" ? this.ReportController(elem2, true) : nothing}
-                    ${elem2.type === "testScripts" ? this.scripts(elem2, true) : nothing}
-                    ${elem2.type === "spectestScripts" ? this.specScripts(elem, true) : nothing}
-                    ${elem2.type === "buttonsOnly" ? this.buttonsOnly(elem2, data[elem.endPointResponseObject]) : nothing}
-                    ${elem2.type === "tree" ? this.treeElement(elem2, data) : nothing}
+                    ${elem2.type==="Report" ? this.ReportController(elem2, true) : nothing}
+                    ${elem2.type==="testScripts" ? this.scripts(elem2, true) : nothing}
+                    ${elem2.type==="spectestScripts" ? this.specScripts(elem, true) : nothing}
+                    ${elem2.type==="buttonsOnly" ? 
+                    
+                      this.buttonsOnly(elem2, elem2.endPointResponseObject=="ROOT"? data: data[elem2.endPointResponseObject]) : nothing}
+                    ${elem2.type==="tree" ? this.treeElement(elem2, data)   : nothing}
         
                   `: nothing}
                 `
