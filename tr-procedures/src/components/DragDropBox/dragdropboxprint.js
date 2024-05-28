@@ -271,7 +271,7 @@ function setPrintContentCoa(selectbox, thisComponent) {
     if (selectbox) {
         console.log(thisComponent)
         let mainBoxDiv = thisComponent.shadowRoot.querySelector('#mainBox')
-        cardElement += mainBoxDiv.outerHTML;
+        cardElement += mainBoxDiv?.outerHTML;
     } else {
         console.log(thisComponent)
         let tableDiv = thisComponent.shadowRoot.querySelector('table')

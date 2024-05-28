@@ -14,11 +14,11 @@ export function CardMultipleElementsView(base) {
                 <mwc-icon-button icon="print" @click=${this.printAllCard}></mwc-icon-button>  
                 <div style="display: flex; flex-wrap: wrap; padding-left:30px; gap: 10px">                 
                     ${data.map(
-                        (d) =>html`
+                        (d, i) =>html`
                           ${d.json_model===undefined?
-                            html` ${this.cardController(elem, d)} `
+                            html` ${this.cardController(elem, d, i)} `
                           :
-                            html` ${this.cardController(d.json_model, d)} `
+                            html` ${this.cardController(d.json_model, d, i)} `
                           }
                         `
                     )}                                    
@@ -124,8 +124,9 @@ export function CardMultipleElementsView(base) {
       });
       const allStyles = styleContents.join('');
       cardStyles += allStyles;
-
-      cardElement += divElement.querySelector('div').outerHTML;
+      if (divElement?.querySelector('div')?.outerHTML) { 
+        cardElement += divElement?.querySelector('div')?.outerHTML;
+      }
 
       let chartElement = elem.querySelector('google-chart');
       if (chartElement) {

@@ -163,7 +163,7 @@ function boxStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, box
                     
                     </div>
                     ${selectedBox!==undefined ? html `
-                    <div class="box-content_allowmove_${boxAllowMoveObject}">
+                    <div class="box-content_allowmove_${boxAllowMoveObject}" id='mainBox'>
                         ${viewModel.viewMode == 1 ? html `
                         <div> 
                             <div class="row-content"> 
