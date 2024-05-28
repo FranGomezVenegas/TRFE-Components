@@ -93,4 +93,26 @@ export const styles = css`
     text-align: center;
     color: #ff3030;
   }
+.file-preview {
+  margin: 20px 0;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.file-preview figcaption {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.file-preview img,
+.file-preview canvas,
+.file-preview pre,
+.file-preview a {
+  display: block;
+  margin: 10px 0;
+}
+
 `
