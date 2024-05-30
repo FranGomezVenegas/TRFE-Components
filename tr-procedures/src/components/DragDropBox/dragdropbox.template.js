@@ -146,6 +146,7 @@ function boxStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, box
         <div style="display:flex; flex-direction:column; gap:12px;">
             <div style="display:flex; flex-direction:row; gap:12px;">
                 <div style="width: fit-content; gap: 4px; display: flex; flex-direction: column;">
+                    <!--
                     <div style="display:flex; justify-content: space-between; align-items: center;"> 
                     
                         <div style="display:flex; flex-direction:row; gap: 4px; align-items: center;"> 
@@ -162,6 +163,7 @@ function boxStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, box
                         </div>
                     
                     </div>
+                    -->
                     ${selectedBox!==undefined ? html `
                     <div class="box-content_allowmove_${boxAllowMoveObject}" id='mainBox'>
                         ${viewModel.viewMode == 1 ? html `
@@ -228,7 +230,7 @@ function boxStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, box
                     `: null}
                 </div>
                 ${viewModel.boxPosicsViews===undefined||viewModel.boxPosicsViews.length==1? html``:html`
-                <div >
+                <!--<div >
                     <mwc-icon style="color:#54CCEF; cursor:pointer; margin-top:42px;" @click=${() => tmpLogic.setShowBoxViewModeList()}> view_agenda </mwc-icon>
                     ${tmpLogic.listBoxViewMode ? html `
                         ${boxPosicsViews.map((view, i) => html `
@@ -242,7 +244,7 @@ function boxStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, box
                         `)}
                     `: 
                     html ``}
-                </div>
+                </div> -->
                 `}
                 ${viewModel.objectsToDragColumns===undefined? html``:html`${dragObjectsTable(tmpLogic, viewModel.objectsToDragColumns, tmpLogic.data, componentRef)}`}
             </div>
