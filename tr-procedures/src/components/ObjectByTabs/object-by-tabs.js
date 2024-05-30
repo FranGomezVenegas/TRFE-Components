@@ -23,7 +23,7 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
         margin-right: 3px;
         background-color: #03a9f4;
       }
-      mwc-button.tabBtn {
+      mwc-button.tabBtnOrig {
         background-color: #24C0EB;
         font-family : Myriad Pro;
         border-radius : 11px;        
@@ -36,7 +36,7 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
         --mdc-typography-button-font-size: 14px;
         --mdc-theme-primary: rgb(3, 169, 244);       
       }
-      .tabBtn.selected {
+      .tabBtnOrig.selected {
         --mdc-theme-primary: #1062c5; /* Darker blue for the selected tab */
         background-color: #1062c5; /* Ensure the background is also set */
         color: white; /* Adjust text color for better contrast */
@@ -143,7 +143,7 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
       mwc-textfield {
         width: 100%;
       }
-      mwc-button.tabBtn {
+      mwc-button.tabBtnOrig {
         background-color: #24C0EB; /* Light blue background */
         font-family: 'Myriad Pro', sans-serif; /* Font family */
         border-radius: 11px; /* Rounded corners */
@@ -155,25 +155,25 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
         transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transitions */
       }
       
-      .tabBtn:hover {
+      .tabBtnOrig:hover {
         background-color: #1aa7d9; /* Slightly darker blue on hover */
         box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
       }
       
-      .tabBtn.selected {
+      .tabBtnOrig.selected {
         --mdc-theme-primary: #1062c5; /* Darker blue for the selected tab */
         background-color: #1062c5; /* Ensure the background is also set */
         color: white; /* Adjust text color for better contrast */
         box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Slightly deeper shadow */
       }
       
-      .tabBtn:active {
+      .tabBtnOrig:active { 
         background-color: #0d5aa7; /* Darker blue on active/pressed */
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Reduce shadow on active */
       }
       #leftSplit {
         padding: 10px;
-        background-color: #148cfa24; /* Base color */
+        background-color: #95c3eeb0; /* Base color */
         background-image: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
                           radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
         background-size: 20px 20px; /* Adjust size to create a subtle pattern */
@@ -184,6 +184,68 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
         flex-direction: column;
         align-items: end;
       }
+      mwc-button.tabBtn {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        min-width: 64px;
+        padding: 12px 24px;
+        border: none;
+        outline: none;
+        line-height: inherit;
+        user-select: none;
+        appearance: none;
+        overflow: hidden;
+        vertical-align: middle;
+        background: linear-gradient(79deg, #4668db, #9d70cd); /* Gradient background */
+        color: #fff; /* White text */
+        font-size: 16px; /* Font size */
+        font-weight: 600; /* Font weight */
+        border-radius: 50px; /* Rounded corners */
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        cursor: pointer; /* Pointer cursor */
+        transition: transform 0.3s, box-shadow 0.3s; /* Smooth transitions */
+        --mdc-theme-primary: transparent;
+    }
+    
+    mwc-button.tabBtn:hover {
+        transform: translateY(-3px); /* Slight lift effect on hover */
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2); /* Deeper shadow on hover */
+        --mdc-theme-primary: transparent;
+    }
+    
+    mwc-button.tabBtn.selected {
+        transform: translateY(0); /* Reset lift effect */
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Reduced shadow on active */
+        background: linear-gradient(79deg, #384c8e, #29064e); /* Gradient background */
+        --mdc-theme-primary: transparent;
+       
+    }
+    
+    mwc-button.tabBtn:focus {
+        outline: none; /* Remove default focus outline */
+        box-shadow: 0 0 0 3px rgba(110, 142, 251, 0.5); /* Custom focus outline */
+    }
+    
+    mwc-button.tabBtn::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 300%;
+        height: 300%;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        transition: transform 0.5s;
+    }
+    
+    mwc-button.tabBtn:active::before {
+        transform: translate(-50%, -50%) scale(1);
+        transition: transform 0s;
+    }
     `;
   }
     static get properties() {
@@ -213,7 +275,8 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
             procedureName: { type: String },
             showDivider: { type: Boolean },
             selectedTab: { type: Object },
-            isLeftPaneExpanded: { type: Boolean }     
+            isLeftPaneExpanded: { type: Boolean },
+            selectedItemInView: { type: Object },
         }
     }
     constructor() {
@@ -236,6 +299,7 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
         this.showDivider=true
         this.leftSplitDisplayed=true
         this.filterCurrentData={}
+        this.selectedItemInView={}
         this.lotDefault='Testing 2023-03-15T21:20:55.962273'//'demo 2023-03-11T22:40:27.243529300'//'demo 2023-03-11T22:29:16.300048300'//'demo 2023-03-11T11:03:06.643535700'//'demo 2023-03-11T21:33:16.786665'
     }
 
@@ -582,7 +646,9 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
                       .lang=${this.lang} .procedureName=${this.procedureName} .procedureVersion=${this.procedureVersion} .procInstanceName=${this.procInstanceName} .config=${this.config}     
                       .selectedItem=${this.selectedItem}  .viewName=${this.viewName} .filterName=${this.filterName} .viewModelFromProcModel=${this.viewModelFromProcModel}
                       .moduleName=${this.moduleName} .moduleVersion=${this.moduleVersion} ?isProcManagement=${this.isProcManagement}
-                      .filterCurrentData=${this.filterCurrentData} @tab-selected="${(e) => { alert("test") }}"> 
+                      .filterCurrentData=${this.filterCurrentData} @tab-selected="${(e) => { alert("test") }}"
+                      .selectedItemInView=${this.selectedItemInView}
+                      > 
                       </objecttabs-composition>              
       
                     `: nothing}
@@ -656,6 +722,7 @@ export class ObjectByTabs extends (ViewReport(ViewDownloadable(LeftPaneFilterVie
           .moduleVersion=${this.moduleVersion} 
           ?isProcManagement=${this.isProcManagement} 
           .filterCurrentData=${this.filterCurrentData}
+          .selectedItemInView=${this.selectedItemInView}
           @tab-selected="${(e) => { alert("test") }}"></objecttabs-composition>     
       `
     }

@@ -100,7 +100,7 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
     super()
     this.viewModelFromProcModel={}
     this.selectedItem = {}
-    this.selectedItemInView ={}
+    this.selectedItemInView ={}    
     this.selectedTabModelFromProcModel = {}
     this.config = {}
     this.sopsPassed=false    
@@ -122,7 +122,7 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
     return html`
       <div id="mainDiv">
         ${this.selectedTabModelFromProcModel===undefined?nothing:html`
-          ${this.kpiElementsController(this.selectedTabModelFromProcModel.view_definition, this.selectedItem)}
+          ${this.kpiElementsController(this.selectedTabModelFromProcModel.view_definition, this.selectedItemInView)}
         `}
       </div>
       ${this.genericFormDialog()}
@@ -351,14 +351,14 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
     return html`<tree-view .specification=${elem.view_definition} .data=${dataArr}></tree-view>`
   }
 
-  kpiElementsController(elemDef = this.selectedTabModelFromProcModel, data = this.selectedItem) {
+  kpiElementsController(elemDef = this.selectedTabModelFromProcModel, data = this.selectedItemInView) {
     if (data===undefined||elemDef===undefined){return}
     // if (this.selectedItem!==undefined){
     //   console.log(this.selectedItem.procInstanceName, 'kpiElementsController', 'data', data, 'elemDef', elemDef)
     // }    
     //console.log('elemDef', elemDef)
     return  html`
-        <div style="display:block">
+        <div style="display:block; padding-left:5px;">
           ${elemDef!==undefined&&Array.isArray(elemDef)?
           html`    
             ${elemDef.map((elem, i) =>           
