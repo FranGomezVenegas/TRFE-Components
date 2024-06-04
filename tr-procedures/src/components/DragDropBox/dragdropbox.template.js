@@ -102,7 +102,7 @@ function boxNotStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, 
                 selectedBox.datas.length > 0 ?
                 html `
                     <div style="width: min-width: 556px;">
-                        ${boxContentTable(viewModel.boxesContentColumns, selectedBox)}
+                        ${boxContentTable(tmpLogic,viewModel.boxesContentColumns, selectedBox)}
                     </div>
                 ` : 
                 null}
@@ -218,7 +218,7 @@ function boxStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, box
                         selectedBox.datas.length > 0 ?
                         html `
                         <div style="width: min-width: 556px;">
-                            ${boxContentTable(viewModel.boxesContentColumns, selectedBox)}
+                            ${boxContentTable(tmpLogic,viewModel.boxesContentColumns, selectedBox)}
                         </div>
                         ` : 
                         null}
@@ -303,7 +303,7 @@ function dragObjectsTable20240405(tmpLogic, elem, data){
             selectedBox.datas.length > 0 ?
             html `
             <div style="width: min-width: 556px;">
-                ${boxContentTable(viewModel.boxesContentColumns, selectedBox)}
+                ${boxContentTable(tmpLogic,viewModel.boxesContentColumns, selectedBox)}
             </div>
             ` : 
             null}
@@ -378,7 +378,7 @@ function dragObjectsTable(tmpLogic, elem, data, componentRef){
     `
   }
   
-function boxContentTable(elem, selectedBox){
+function boxContentTable(tmpLogic,elem, selectedBox){
     return html`
     <table class="TRAZiT-DefinitionArea dragdropable">
     <thead>
