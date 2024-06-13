@@ -35,9 +35,11 @@ export class Dropzone extends ApiFunctions(LitElement) {
     this.errorContent = this.shadowRoot.querySelector('#error');
     this.previewContent = this.shadowRoot.querySelector('#preview');
     this._init();
-    this.addEventListener('success', (event) => {
-      this.shadowRoot.querySelector('upload-notification').show(event.detail.message);
-  });
+    this.addEventListener('upload-success', (event) => {
+      const upload = this.shadowRoot.querySelector('upload-notification')
+      upload.show(event.detail.message);
+    });
+    this.requestUpdate()
   }
 
   render() {
@@ -178,15 +180,17 @@ export class Dropzone extends ApiFunctions(LitElement) {
       method: 'POST',
       body: form,
       credentials: 'same-origin'
-    })
-      .then(response => response.json())
-      .catch(error => console.error(error));
+    }).then(response => {
+      this.dispatchEvent(new CustomEvent('upload-success', {
+        detail: { message: 'Upload successful!' },
+        bubbles: true,
+        composed: true
+      }));
+      return response.json();
+    });
 
-    if (response.status === 200) {
-      // Handle successful upload
-    } else {
-      // Handle upload error
-    }
+
+
   };
 }
 
