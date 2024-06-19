@@ -15,7 +15,7 @@ export function ApiFunctions(base) {
         urlParams += "&isForTesting="+ this.config.isForTesting
         this.dispatchEvent(new CustomEvent('set-activity', {bubbles: true, composed: true}))
         return fetch(urlParams).then(async r => {
-          if (r.status == 200) {
+          if (r.status == 200) {             
             return r.json()
           } else {
             let err = await r.json()
@@ -30,7 +30,7 @@ export function ApiFunctions(base) {
             }))
           }
           if (actionModel!==undefined){
-            this.refreshMasterData(j, actionModel)
+           this.refreshMasterData(j, actionModel)
           }
           return j
         }).catch(e => {
@@ -117,7 +117,9 @@ export function ApiFunctions(base) {
             this.procInstanceName=currentTabView.procInstanceName
           }
         }
-        if ( (actionModel.area===undefined)&&(endPointResponse===undefined||endPointResponse.master_data===undefined)) {
+        console.log(endPointResponse.master_data)
+        if ( endPointResponse===undefined||endPointResponse.master_data===undefined) {
+         // alert('master Data no se va a refrescar!')
           return
         } 
        // console.log('refreshMasterDataaaa', 'procInstanceName', this.procInstanceName, 'actionModel.area', actionModel.area,  'endPointResponse', endPointResponse)        
@@ -153,7 +155,7 @@ export function ApiFunctions(base) {
           let userSession = JSON.parse(sessionStorage.getItem("userSession"))
           extraParams.dbName = userSession.dbName
         }   
-        if (excludeProcInstanceName!==undefined&&excludeProcInstanceName===false){
+        if (this.procInstanceName!==undefined&&excludeProcInstanceName!==undefined&&excludeProcInstanceName===false){
           extraParams.procInstanceName = this.procInstanceName
         }
         extraParams.finalToken= JSON.parse(sessionStorage.getItem("userSession")).finalToken

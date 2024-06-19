@@ -28,7 +28,11 @@ v0.2.5 readOnlyTable, let cell be edited directly having one action linked and m
 v0.2.6 Fix for tables disappearing when clicking on it and for tabs
 v0.2.7 Styling, thin padding for th and td
 v0.2.8 Styling applied same style from specLimitsQuantitative to cell edit for tables and Enter Results dialog
-
+v0.2.9 avoid is_locked when undefined in grid_with_buttons and button to display/hide cards
+v0.2.10 lock/unlock action for procedures
+v0.2.11 Disabledd jsonDiffViewer
+v0.2.12 Run the refreshMasterData just in case of request status 200 and the response contains master_data property
+v0.2.13 [- #369. Reset Fields one action performed](https://github.com/FranGomezVenegas/FrontE-Issues/issues/369)
 ## Requirements Tracking
 
 This area want to track the requirements that made this web component to become a reality.

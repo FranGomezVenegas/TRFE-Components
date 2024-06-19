@@ -2,6 +2,8 @@ import { html, css, nothing } from "lit";
 import { classMap } from "lit/directives/class-map.js";
 import { ApiFunctions } from "../Api/ApiFunctions";
 import { ProceduresManagement } from "../../0proc_models/ProceduresManagement";
+import { ButtonsFunctions } from '../Buttons/ButtonsFunctions';
+
 import "@spectrum-web-components/split-view/sp-split-view";
 import "../../components/ObjectByTabs/objecttabs-composition";
 import "../../components/ObjectByTabs/object-by-tabs";
@@ -10,7 +12,11 @@ import { TrazitFormsElements } from "../GenericDialogs/TrazitFormsElements";
 import { ProcManagementMethods } from "./ProcManagementMethods";
 import {TrazitTestScriptNewStepDialog} from "../GenericDialogs/TrazitTestScriptNewStepDialog";
 import { PrintViews } from "./procManagementPrint";
-export class ProcManagementHome extends PrintViews(TrazitTestScriptNewStepDialog(ProcManagementMethods(ApiFunctions(TrazitFormsElements(CommonCore))))) {
+
+import { CredDialog } from '@trazit/cred-dialog';
+import { TrazitCredentialsDialogs } from "../GenericDialogs/TrazitCredentialsDialogs";
+
+export class ProcManagementHome extends TrazitCredentialsDialogs(ButtonsFunctions(PrintViews(TrazitTestScriptNewStepDialog(ProcManagementMethods(ApiFunctions(TrazitFormsElements(CredDialog))))))) {
   static get properties() {
     return {
       config: { type: Object },
@@ -392,6 +398,7 @@ export class ProcManagementHome extends PrintViews(TrazitTestScriptNewStepDialog
 
   render() {
     return html`
+     ${this.credentialsDialog()}
       ${this.selectedProcInstance === undefined
         ? html`
             <style>
@@ -590,6 +597,7 @@ export class ProcManagementHome extends PrintViews(TrazitTestScriptNewStepDialog
                           subheading="'this[elem.subheadingObj].value'"
                           @click=${this.selectedProcedureInstance}
                         >
+                                                
                           <div class="procCard" style="background:url(${p.navigation_icon_name ===undefined ? "trazit-logo.jpg"
                               : p.navigation_icon_name}) no-repeat center; 
                               height: 150px;
@@ -602,6 +610,7 @@ export class ProcManagementHome extends PrintViews(TrazitTestScriptNewStepDialog
                             ${p.cardData === undefined
                               ? nothing
                               : html`
+                              ${this.getButtonForRows(this.cardActions, p, true, undefined)}
                                   ${p.cardData.title === undefined
                                     ? nothing
                                     : html`<p class='isLocked_${p.locked_for_actions}'><span  style="font-weight: bold; font-size:18px;">

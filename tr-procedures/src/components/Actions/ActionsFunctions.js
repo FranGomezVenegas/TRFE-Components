@@ -149,16 +149,18 @@ export function ActionsFunctions(base) {
      trazitCheckProcList(isProcManagement) {
       if (this.procInstanceName===undefined){
         let currentTabView=JSON.parse(sessionStorage.getItem("currentOpenView"))
-        this.procInstanceName=currentTabView.procInstanceName
+        if (currentTabView!==null&&currentTabView!==undefined){
+          this.procInstanceName=currentTabView.procInstanceName
+        }
       }        
       if (isProcManagement===undefined){
         let userSession=JSON.parse(sessionStorage.getItem("userSession"))
         isProcManagement=userSession.isProcManagement
       }        
 
-      if (this.area!==undefined&&this.area==="app"){
-        return true
-      }
+      // if (this.area!==undefined&&this.area==="app"){
+      //   return true
+      // }
       let bypass = true
       this.justificationType = null
       this.justificationList = null
