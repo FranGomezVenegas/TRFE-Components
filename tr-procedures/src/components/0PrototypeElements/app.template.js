@@ -7,6 +7,9 @@ import "../qrcode-scanner/index";
 import '../Calendar/index';
 import '../Tree/treeview/index'
 import '../MolecularEditor/molecular-editor';
+//import '../jsonDiffViewer/jsondiffviewermain';
+import '../serialPort/serial-port';
+//import '../LabelPrinter/label-printer-main';
 export const template = (props) => {
   const { selectedItems, handleSelectItem, getSelectedItems } = props;
 
@@ -20,8 +23,16 @@ export const template = (props) => {
     const item = JSON.parse(itemStr);
     console.log(item);
   }
-
+  let oldVersion={}
+  oldVersion={"name": "old version", "description": "This is the old version"}
+  let newVersion={}
+  newVersion={"name": "new version", "description": "This is the new version"}
   return html`
+  <!-- <zebra-printer-component></zebra-printer-component> -->
+  <serial-port-component lang=${props.lang} .sendEnabled="${true}" .isTimeoutEditable="${false}" .showAlert="${false}"></serial-port-component>
+ <!-- <json-diff-viewer old-version=${oldVersion} 
+  new-version=${newVersion}>
+  </json-diff-viewer> -->
   <molecular-editor></molecular-editor>
   <tree-view id="mytree" .data=${props.treeElementData} .specification=${props.treeElementSpecification} @item-selected=${props.treeSelection}></tree-view>
   <calendar-component></calendar-component>
