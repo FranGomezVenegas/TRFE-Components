@@ -10,16 +10,16 @@ export const styles = css`
   .box-content {
     width: fit-content;
     border-radius: 4px;
-    background-color: #42BFF7;
+    background-color: #24c0eb1a;
     padding: 4px;
     display: flex;
     flex-direction: column;
     gap: 2px;
-    border: 2px solid #03A9F4;
+    border: 2px solid #0465fb;
   }
 
   .box-content_allowmove_false {
-    width: fit-content;
+    width: 100%;
     border-radius: 4px;
     background-color: #aca2a2;
     padding: 4px;
@@ -27,6 +27,7 @@ export const styles = css`
     flex-direction: column;
     gap: 2px;
     border: 2px solid #03A9F4;
+    height:100%;
   }
   .box-content_allowmove_true {
     width: fit-content;
@@ -42,11 +43,12 @@ export const styles = css`
   .box {
     width: 80px;
     height: 80px;
-    background-color: #42BFF7;  
-    border: 2px solid #03A9F4;
+    background-color: rgb(191 231 241); 
+    border: 2px solid rgb(119 206 230);
     padding: 2px;
     color: white;
     cursor: pointer;
+    flex:1;
   }
 
   .row-num {
@@ -62,6 +64,7 @@ export const styles = css`
     width: 80px;
     height: 20px;
     text-align: center;
+    flex:1;
   }
 
   .row-content {
@@ -104,7 +107,7 @@ export const styles = css`
   }
 
   .accept-btn {
-    background-color: #24C0EB;
+    background-color: rgba(36, 192, 235, 1);
     border-radius: 4px;
     padding: 8px 12px;
     color: white;
@@ -114,7 +117,7 @@ export const styles = css`
   }
 
   .view-btn {
-    border: 2px solid #24C0EB;
+    border: 2px solid rgba(36, 192, 235, 1);
     background-color: #54CCEF;
     border-radius: 4px;
     padding: 8px 12px;  

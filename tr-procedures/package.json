@@ -3,17 +3,21 @@
   "description": "Component core for procedures elements with dynamic model",
   "license": "MIT",
   "author": "Trazit Team",
-  "version": "0.2.0",
+  "version": "0.2.13",
   "main": "index.js",
   "module": "index.js",
   "scripts": {
-    "start": "web-dev-server --root-dir demo --node-resolve --open --watch --app-index demo/index.html"
+    "start": "web-dev-server --root-dir demo --node-resolve --open --watch --app-index demo/index.html",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@alenaksu/json-viewer": "^0.3.4",
     "@collaborne/lit-flexbox-literals": "^0.2.2",
     "@doubletrade/lit-datatable": "^2.0.0",
-    "@google-web-components/google-chart": "^5.0.3",
+    "@google-web-components/google-chart": "^5.1.0",
+    "@lrnwebcomponents/lrndesign-diff-2-html": "^0.0.23",
+    "@material/line-ripple": "^14.0.0",
     "@material/mwc-button": "^0.27.0",
     "@material/mwc-formfield": "^0.27.0",
     "@material/mwc-icon": "^0.27.0",
@@ -21,6 +25,7 @@
     "@material/mwc-list": "^0.27.0",
     "@material/mwc-select": "^0.27.0",
     "@material/mwc-switch": "^0.27.0",
+    "@material/mwc-textarea": "^0.27.0",
     "@material/mwc-textfield": "^0.27.0",
     "@mpachnis/mp-calendar": "^3.1.1",
     "@spectrum-web-components/card": "^0.10.11",
@@ -28,14 +33,28 @@
     "@spectrum-web-components/tabs": "^0.8.1",
     "@spectrum-web-components/tooltip": "^0.9.0",
     "@trazit/cred-dialog": "file:.yalc/@trazit/cred-dialog",
+    "@vaadin/accordion": "^24.3.13",
+    "@vaadin/vaadin-accordion": "^23.5.1",
     "@vaadin/vaadin-context-menu": "^21.0.5",
     "@vaadin/vaadin-grid": "^21.0.3",
+    "@vaadin/vertical-layout": "^24.3.13",
+    "chart.js": "^4.4.2",
+    "diff2html": "^3.4.48",
     "lit": "^2.0.2",
     "lit-element-router": "^2.0.3",
     "lit-vaadin-helpers": "^0.2.1"
   },
   "devDependencies": {
+    "@chromatic-com/storybook": "^1.3.5",
     "@spectrum-web-components/theme": "^0.8.15",
-    "@web/dev-server": "^0.1.26"
+    "@storybook/addon-essentials": "^8.1.0",
+    "@storybook/addon-links": "^8.1.0",
+    "@storybook/addon-webpack5-compiler-swc": "^1.0.2",
+    "@storybook/blocks": "^8.1.0",
+    "@storybook/test": "^8.1.0",
+    "@storybook/web-components": "^8.1.0",
+    "@storybook/web-components-webpack5": "^8.1.0",
+    "@web/dev-server": "^0.1.26",
+    "storybook": "^8.1.0"
   }
 }

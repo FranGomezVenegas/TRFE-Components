@@ -3,7 +3,8 @@ import '@material/mwc-icon';
 import '../MultiSelect';
 import '../grid_with_buttons/gridCellTooltip'
 import '../grid_with_buttons/tableRowDetail';
-
+import '@material/mwc-button';
+import print from './dragdropboxprint';
 export const template = (tmpLogic, selectedBox, viewModel, lang, componentRef) => {
     //console.log('tmpLogic', tmpLogic, 'selectedBox', selectedBox, 'viewModel', viewModel)
     if (viewModel.boxPosicsViews===undefined){
@@ -30,9 +31,10 @@ export const template = (tmpLogic, selectedBox, viewModel, lang, componentRef) =
     return html` 
     <div style="display:flex; flex-direction:column; gap:12px;">    
     <div style="display:flex; flex-direction:row; gap:12px;">    
-        <div style="width: fit-content; gap: 4px; display: flex; flex-direction: column;">        
+        <div style="width: 100%; gap: 4px; display: flex; flex-direction: column;">        
             <div style="display:flex; justify-content: space-between; align-items: center;"> 
                 <div style="display:flex; flex-direction:row; gap: 4px; align-items: center;"> 
+                <mwc-icon-button icon="print" @click=${() => { print(selectedBox!==undefined, componentRef) }}></mwc-icon-button>
                 ${selectedBox===undefined ? html``: html `
                     <mwc-icon @click=${() => tmpLogic.setBoxView()} style="color:#54CCEF; cursor:pointer;"> home </mwc-icon>
                     <div class="view-btn ${viewModel.viewMode == 1 ? "active" : ""}" @click=${() => tmpLogic.setViewMode(1)}> Box View </div>
@@ -55,7 +57,7 @@ export const template = (tmpLogic, selectedBox, viewModel, lang, componentRef) =
         </div>  
         ${viewModel.boxPosicsViews===undefined||viewModel.boxPosicsViews.length==1? html``:html`
         <div >
-            <mwc-icon style="color:#54CCEF; cursor:pointer; margin-top:42px;" @click=${() => tmpLogic.setShowBoxViewModeList()}> view_agenda </mwc-icon>
+            <mwc-icon style="color:#54CCEF; cursor:pointer;" @click=${() => tmpLogic.setShowBoxViewModeList()}> view_agenda </mwc-icon>
             ${tmpLogic.listBoxViewMode ? html `
                 ${viewModel.boxPosicsViews.map((view, i) => html `
                 <div style="display:flex;">
@@ -83,7 +85,7 @@ function boxNotStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, 
         boxPosicsViews=viewModel.boxPosicsViews
     }
     return  html`
-            <div class="box-content_allowmove_${boxAllowMoveObject}" style="min-width: 200px; min-height: 200px">
+            <div class="box-content_allowmove_${boxAllowMoveObject}" id='mainBox'>
                 ${viewModel.viewMode == 1 ? html `
                 <div draggable="true" class="draggable-box" @dragover=${(e) => tmpLogic.allowDrop(e)} @drop=${(e) => tmpLogic.dropBox(e, 0, 0)}>
                 ${selectedBox.datas.length > 0 ?
@@ -97,7 +99,7 @@ function boxNotStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, 
                 selectedBox.datas.length > 0 ?
                 html `
                     <div style="width: min-width: 556px;">
-                        ${boxContentTable(viewModel.boxesContentColumns, selectedBox)}
+                    ${boxContentTable(tmpLogic,viewModel.boxesContentColumns, selectedBox)}
                     </div>
                 ` : 
                 null}
@@ -110,11 +112,19 @@ function boxStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, box
     if (selectedBox!==undefined){
     
         for(let i = 0; i < selectedBox.cols; i++) {
-            axisCols.push(i);
+            if (selectedBox.axisLabels===undefined||selectedBox.axisLabels.posicX===undefined||selectedBox.axisLabels.posicX.length<=i){
+                axisCols.push(i);
+            }else{
+                axisCols.push(selectedBox.axisLabels.posicX[i])
+            }
         }
         let letter = "A";
         for(let i = 0; i < selectedBox.rows; i++) {
-            axisRows.push(String.fromCharCode(letter.charCodeAt(0) + (i)));
+            if (selectedBox.axisLabels===undefined||selectedBox.axisLabels.posicY===undefined||selectedBox.axisLabels.posicY.length<=i){
+                axisRows.push(String.fromCharCode(letter.charCodeAt(0) + (i)));
+            }else{
+                axisRows.push(selectedBox.axisLabels.posicY[i])
+            }
         }
     }
     let boxPosicsViews=[]
@@ -125,7 +135,7 @@ function boxStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, box
     }
     return html`
         ${selectedBox!==undefined ? html `
-        <div class="box-content_allowmove_${boxAllowMoveObject}">
+        <div class="box-content_allowmove_${boxAllowMoveObject}" id='mainBox'>
             ${viewModel.viewMode == 1 ? html `
             <div> 
                 <div class="row-content"> 
@@ -172,7 +182,7 @@ function boxStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, box
             selectedBox.datas.length > 0 ?
             html `
             <div style="width: min-width: 556px;">
-                ${boxContentTable(viewModel.boxesContentColumns, selectedBox)}
+                ${boxContentTable(tmpLogic,viewModel.boxesContentColumns, selectedBox)}
             </div>
             ` : 
             null}
@@ -247,7 +257,7 @@ function dragObjectsTable(tmpLogic, elem, data, componentRef){
     `
   }
   
-function boxContentTable(elem, selectedBox){
+function boxContentTable(tmpLogic,elem, selectedBox){
     return html`
     <table class="TRAZiT-DefinitionArea dragdropable">
     <thead>

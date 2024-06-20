@@ -6,9 +6,11 @@ import '@material/mwc-list/mwc-list-item';
 import '@material/mwc-select';
 import '@material/mwc-checkbox';
 import '@material/mwc-formfield';
+import '../uploadButton/index';
+import { ActionsFunctions } from '../Actions/ActionsFunctions';
 
 export function TrazitEnterResultWithSpec(LitElement) {
-return class extends LitElement {
+return class extends ActionsFunctions(LitElement) {
 
   static get styles() {
     return [
@@ -78,6 +80,30 @@ return class extends LitElement {
             --mdc-dialog-min-width: 100vw;
           }
         }
+<style>
+            input {
+              border-style: solid;
+              border-color: #999999;
+              border-width: 1px;
+              border-radius: 7px;
+              font-family: Montserrat;
+              font-weight: bold;
+              /* font-size: 19px; */
+              background-color: #FFFFFF;
+              padding: 8px;
+              flex: 1;
+            }
+            .input-container {
+              display: flex;
+              align-items: center;
+            }
+            .input-container span {
+              font-family: Montserrat;
+              font-weight: bold;
+              /* font-size: 19px; */
+              margin: 0 4px;
+            }          
+          </style>          
       `
     ];
   }  
@@ -85,7 +111,8 @@ return class extends LitElement {
         return {
           enterResults: { type: Array },
           selectedItems: { type: Array },
-          actionBeingPerformedModel: {type: Object}
+          actionBeingPerformedModel: {type: Object},
+          procInstanceName: { type:String}
         }
     }
     constructor() {
@@ -100,8 +127,10 @@ return class extends LitElement {
     get rowTooltipEnterResults() {return this.shadowRoot.querySelector("#rowTooltipenterresults")}
     get uomDialog() {return this.shadowRoot.querySelector("tr-dialog#uomConvertionDialog")}
 
-    resultTemplate() {
-       console.log('resultTemplate', 'this.actionBeingPerformedModel', this.actionBeingPerformedModel)
+    resultTemplate(procInstanceName) {
+      //alert(procInstanceName)
+      this.procInstanceName=procInstanceName
+      // console.log('resultTemplate', 'this.actionBeingPerformedModel', this.actionBeingPerformedModel)
       // if(this.actionBeingPerformedModel===undefined||this.actionBeingPerformedModel.dialogInfo===undefined||this.actionBeingPerformedModel.dialogInfo.name===undefined){return nothing}
       // if (this.actionBeingPerformedModel.dialogInfo.name !== "resultDialog"&&
       // this.actionBeingPerformedModel.dialogInfo.name !== "uomConvertionDialog") {return nothing}
@@ -470,6 +499,14 @@ return class extends LitElement {
           return html`<input class="enterResultVal" type="text" .value=${rawValue} 
             disabled>
           `
+        } else if (result.param_type.toUpperCase() == "FILE") {
+          return html` 
+          <upload-button procInstanceName="${this.procInstanceName}" .config="${this.config}" .action="${this.actionBeingPerformedModel}" .selectedItem="${result}" 
+            name="upload"  label="File"></upload-button>
+<!--          <mwc-icon-button icon="print" @click=${this.printCoa}></mwc-icon-button>   
+          <mwc-icon-button icon="print" @click=${() => {this.openFile(result)}}></mwc-icon-button>   
+          -->
+          `
         } else if (result.param_type.toUpperCase() == "TEXT" || result.param_type.toUpperCase() == "QUALITATIVE") {
           return html`<input class="enterResultVal" type="text" .value=${rawValue} 
             ?disabled=${this.actionBeingPerformedModel.dialogInfo.readOnly}
@@ -535,6 +572,7 @@ return class extends LitElement {
     }
 
     valRendererInstrument(result) {
+      //alert(result.param_type)
       //console.log('valRendererInstrument', 'result', result)
       if (result.is_locked) {
         return html`
@@ -548,9 +586,12 @@ return class extends LitElement {
             disabled>
           `
         } else if (result.param_type.toUpperCase() == "FILE") {
-          return html`
-          <mwc-icon-button icon="print" @click=${this.printCoa}></mwc-icon-button>   
+          return html` 
+          <upload-button procInstanceName="${this.procInstanceName}" .config="${this.config}" .action="${this.actionBeingPerformedModel}" .selectedItem="${result}" 
+            name="upload"  label="File"></upload-button>
+<!--          <mwc-icon-button icon="print" @click=${this.printCoa}></mwc-icon-button>   
           <mwc-icon-button icon="print" @click=${() => {this.openFile(result)}}></mwc-icon-button>   
+          -->
           `
         }else if (result.param_type.toUpperCase() == "TEXT" || result.param_type == "qualitative") {
           return html`<input class="enterResultVal" type="text" .value=${result.value} 
@@ -951,15 +992,15 @@ return class extends LitElement {
       //console.log('setResult Before', 'resId', resId, 'selectedDialogAction', this.selectedDialogAction, 'this.selectedItems', this.selectedItems)
       if (rawValue) {
         this.selectedDialogAction.actionName = "RE" + this.selectedDialogAction.actionName
-        this.actionMethodResults(this.selectedDialogAction, this.selectedItems, result.sample_number)
+        this.actionMethodResults(this.selectedDialogAction, this.selectedItems, result.sample_number, this.selectedItems, this.targetValue)
       } else {
         this.selectedItems[0]=result;
-        this.actionMethodResults(this.selectedDialogAction, this.selectedItems, result.sample_number)
+        this.actionMethodResults(this.selectedDialogAction, this.selectedItems, result.sample_number, this.selectedItems, this.targetValue)
       }
       console.log('setResult After', 'resId', resId, 'selectedDialogAction', this.selectedDialogAction, 'this.selectedItems', this.selectedItems)
     }
 
-    actionMethodResults(action, selObject, sampleId, resultRow) {
+    actionMethodResults(action, selObject, sampleId, resultRow, targetValue) {
       //this.loadDialogs()  
       //console.log('actionMethodResults', 'action', action, 'sampleId', sampleId, 'resultRow', resultRow)
           if(action===undefined){
@@ -973,7 +1014,12 @@ return class extends LitElement {
               return
           }
           if(action.requiresDialog===false){
-              this.actionWhenRequiresNoDialog(action, selObject[0], undefined, undefined, resultRow, undefined)
+            //trazitNoDialogRequired(action, selectedItem, targetValue, isProcManagement, gridSelectedRow, parentData, dragEntry, dropEntry) {
+            this.trazitNoDialogRequired(action, 
+              selObject[0], targetValue, false, selObject[0], null, null, null)
+            //this.performActionRequestHavingDialogOrNot(this.actionBeingPerformedModel, 
+            //  this.selectedItems[0], targetValue)            
+            //  this.actionWhenRequiresNoDialog(action, selObject[0], undefined, undefined, resultRow, undefined)
               return
           }  
           if ( action.requiresGridItemSelected!==undefined&&action.requiresGridItemSelected===true&&
@@ -1015,9 +1061,9 @@ return class extends LitElement {
       this.selectedDialogAction = JSON.parse(act)
       if (resultRow.raw_value || resultRow.value) {
         this.selectedDialogAction.actionName = "RE" + this.selectedDialogAction.actionName
-        this.actionMethodResults(this.selectedDialogAction, this.selectedItems, resultRow.event_id, resultRow)
+        this.actionMethodResults(this.selectedDialogAction, this.selectedItems, resultRow.event_id, resultRow, this.targetValue)
       } else {
-        this.actionMethodResults(this.selectedDialogAction, this.selectedItems, resultRow.event_id, resultRow)
+        this.actionMethodResults(this.selectedDialogAction, this.selectedItems, resultRow.event_id, resultRow, this.targetValue)
       }
     }
 

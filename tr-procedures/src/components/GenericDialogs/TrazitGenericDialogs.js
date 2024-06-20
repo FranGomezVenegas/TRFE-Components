@@ -1,12 +1,15 @@
 import { html, nothing } from 'lit';
 import { commonLangConfig } from '@trazit/common-core';
 import {GridFunctions} from '../grid_with_buttons/GridFunctions';
+import '@material/mwc-textarea';
 
 import '@material/mwc-list/mwc-list-item';
 import '@material/mwc-select';
 import '@material/mwc-checkbox';
 import '@material/mwc-formfield';
 import '../MultiSelect';
+import '../Tree/treeview/index';
+import '../speclimitquantitative/index';
 import { ListsFunctions } from '../../form_fields/lists-functions';
 
 import {DialogsFunctions} from './DialogsFunctions';
@@ -57,6 +60,18 @@ export function TrazitGenericDialogs(base) {
     }
     openGenericDialog(actionModel = this.actionBeingPerformedModel){
         //alert('openGenericDialog')
+        if (actionModel===undefined||actionModel.dialogInfo===undefined){
+            return false
+        }    
+        if (actionModel.dialogInfo.gridContent!==undefined&&actionModel.dialogInfo.gridContent===true){
+            this.getGenericDialogGridItems(actionModel.dialogInfo)
+            return true
+        }
+        if (actionModel.dialogInfo.filesListContent!==undefined&&actionModel.dialogInfo.filesListContent===true){
+            this.getGenericDialogGridItems(actionModel.dialogInfo)
+            return true
+        }
+
         this.defaultValue()
         if (actionModel.dialogInfo===undefined||actionModel.dialogInfo.name===undefined||actionModel.dialogInfo.name.toString().toUpperCase()!=="GENERICDIALOG"){
             return false
@@ -69,14 +84,6 @@ export function TrazitGenericDialogs(base) {
        // alert(true)
        //this.defaultValue()
        //this.resetFields()
-    //    if (this.actionBeingPerformedModel.dialogInfo.gridContent!==undefined&&this.actionBeingPerformedModel.dialogInfo.gridContent===true){
-    //     this.getGenericDialogGridItems(this.actionBeingPerformedModel.dialogInfo)
-    //     return 
-    // }
-    // if (this.actionBeingPerformedModel.dialogInfo.filesListContent!==undefined&&this.actionBeingPerformedModel.dialogInfo.filesListContent===true){
-    //     this.getGenericDialogGridItems(this.actionBeingPerformedModel.dialogInfo)
-    //     return 
-    // }
        return true 
     }
 
@@ -162,7 +169,33 @@ export function TrazitGenericDialogs(base) {
         font-weight : bold;
         font-size : 19px;
         background-color: 4fcad029;
-      }       
+      }  
+      
+    .file-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 auto;
+      max-width: 600px;
+    }
+
+    /* Style for each list item */
+    .file-list-item {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    /* Style for the icon button */
+    .file-list-item mwc-icon-button {
+      margin-right: 10px;
+    }
+
+    /* Style for the file name */
+    .file-name {
+      font-size: 14px;
+      color: #333;
+    }            
     </style>
         <tr-dialog id="genericDialog"  
             @opened=${() => {this.defaultValue()}}  ?open=${this.openGenericDialog(actionModel)}  heading="" hideActions="" scrimClickAction="">
@@ -178,7 +211,7 @@ export function TrazitGenericDialogs(base) {
             ${this.genericDialogGridItems==undefined||this.genericDialogGridItems.length==0?
                 html`${this.lang==="en"?'No items to display':'No hay elementos para ver'}`
             :html`
-                <vaadin-grid .items=${this.genericDialogGridItems} id="investigationGrid" theme="row-dividers" column-reordering-allowed multi-sort 
+                <vaadin-grid .items=${this.genericDialogGridItems} id="genericDialogGrid" theme="row-dividers" column-reordering-allowed multi-sort 
                 @active-item-changed=${e => this.genericDialogGridSelectedItems = e.detail.value ? [e.detail.value] : []}
                 .selectedItems="${this.genericDialogGridSelectedItems}" all-rows-visible>
                 ${actionModel.dialogInfo.langConfig.gridHeader.map(fld =>
@@ -193,16 +226,32 @@ export function TrazitGenericDialogs(base) {
                 html`
                     ${this.genericDialogGridItems==undefined||this.genericDialogGridItems.length==0?html`${this.lang==="en"?'No items to display':'No hay elementos para ver'}`
                     :html`
+                    <ul class="file-list">
                         ${this.genericDialogGridItems.map((fld, i) =>
                         html`
-                        <mwc-icon-button title="${fld.brief_summary!==undefined&&fld.brief_summary.length>0? fld.brief_summary: fld.file_link}" icon="picture_as_pdf" @click=${()=>window.open(fld.file_link!==undefined?fld.file_link:fld.report_url, '_blank').focus()} ?disabled=${!fld.file_link}></mwc-icon-button>
+                        <li class="file-list-item">
+                            <mwc-icon-button title="${fld.brief_summary!==undefined&&fld.brief_summary.length>0? fld.brief_summary: fld.file_link}" icon="picture_as_pdf" 
+                                @click=${()=>window.open(fld.file_link!==undefined&&fld.file_link.length?fld.file_link:fld.report_url, '_blank').focus()} 
+                                ?disabled=${!fld.file_link} style="--mdc-icon-size: 40px;"></mwc-icon-button>
+                            <div class="file-name">${fld.file_link!==undefined&&fld.file_link.length?fld.file_link:fld.original_file_name}</div>
+                        </li>                            
                         `
                         )}
+                    </ul>
                     `}
                 `:nothing}    
             `: html`              
             ${actionModel.dialogInfo.fields.map((fld, i) =>             
-                html`            
+                html`   
+                ${!fld.acceptancecriteria ?
+                    html``: html`        
+                        <speclimit-quantitative id="acceptancecriteria" .fld=${fld.acceptancecriteria} ></speclimit-quantitative>         
+                `}          
+
+                ${!fld.tree1 ?
+                    html``: html`        
+                        <tree-view id="tree1" .data=${fld.tree1.treeElementData} .specification=${fld.tree1.treeElementSpecification} @item-selected=${fld.tree1.treeSelection}></tree-view>         
+                `}          
                 ${!fld.text1 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
@@ -273,25 +322,33 @@ export function TrazitGenericDialogs(base) {
                     <mwc-textfield class="layout flex" id="text10" type="text" .value=${fld.text10.default_value ? fld.text10.default_value : ''} label="${this.fieldLabel(fld.text10)}" ?disabled=${this.isFieldDisabled(fld.text10)} 
                     @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
                     </div>
-                `}             
-                ${!fld.number1 ?
+                `} 
+                ${!fld.textarea1 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="number1" type="number" 
-                    .value=${this.numDays} @change=${e => this.numDays = e.target.value}
-                    @input=${e=>this.setNumberMask(e, fld.number1)}
-                    label="${this.fieldLabel(fld.number1)}"
+                    <mwc-textarea id="textarea1" label="${this.fieldLabel(fld.textarea1)}" rows=10 cols=100></mwc-textarea>            
+                    </div>
+                `} 
+                ${!fld.number111 ?
+                    html``: html`        
+                    <div class="layout horizontal flex center-center">
+                    <mwc-textfield class="layout flex" id="number111" type="number" 
+                    .value=${this.fldDefaultValue(fld.number111)}                      
+                    @input=${e=>this.setNumberMask(e, fld.number111)}
+                    label="${this.fieldLabel(fld.number111)}"
                     @keypress=${e => e.keyCode == 13}></mwc-textfield>                 
                     </div>
                 `}   
 
-                ${!fld.number12 ?
+                ${!fld.number1 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center">
-                    <mwc-textfield class="layout flex" id="number1" type="number" 
-                    @input=${e=>this.setValidVal(e, fld)} label="${this.fieldLabel(fld.number1)}" ?disabled=${this.isFieldDisabled(fld.number1)} 
-                    .value=${this.fldDefaultValue(fld.number1)} 
-                    @keypress=${e => e.keyCode == 13 && this.acceptedGenericDialog}></mwc-textfield>
+                        <mwc-textfield class="layout flex" id="number1" type="number"
+                            .value=${String(this.fldDefaultValue(fld.number1))}
+                            @input=${e => this.setValidVal(e, fld)}
+                            label="${this.fieldLabel(fld.number1)}"
+                            ?disabled=${this.isFieldDisabled(fld.number1)}
+                            @keypress=${e => e.keyCode === 13 && this.acceptedGenericDialog()}></mwc-textfield>
                     </div>
                 `}   
                 ${!fld.number2 ?
@@ -579,70 +636,70 @@ export function TrazitGenericDialogs(base) {
                 ${!fld.multilist1 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center" style="margin-top: 4px;">
-                      <multi-select style="width: 100%;" id="multilist1" .props=${fld.multilist1.properties!==undefined?fld.multilist1.properties:{}} .activeOptions=${fld.multilist1.default_value ? fld.multilist1.default_value : {}} .options=${this.listEntries(fld.multilist1, true)}
+                      <multi-select style="width: 100%;" id="multilist1" .props=${fld.multilist1.properties!==undefined?fld.multilist1.properties:{}} .activeOptions=${fld.multilist1.defaultValue ? this.selectedItem[fld.multilist1.defaultValue] : {}} .options=${this.listEntries(fld.multilist1, true)}
                       .label="${fld.multilist1["label_" + this.lang]}"> </multi-select> 
                     </div>
                 `}                   
                 ${!fld.multilist2 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center" style="margin-top: 4px;">
-                      <multi-select style="width: 100%;" id="multilist2" .props=${fld.multilist2.properties!==undefined?fld.multilist2.properties:{}} .activeOptions=${fld.multilist2.default_value ? fld.multilist2.default_value : {}} .options=${this.listEntries(fld.multilist2, true)}
+                      <multi-select style="width: 100%;" id="multilist2" .props=${fld.multilist2.properties!==undefined?fld.multilist2.properties:{}} .activeOptions=${fld.multilist2.defaultValue ? this.selectedItem[fld.multilist2.defaultValue] : {}} .options=${this.listEntries(fld.multilist2, true)}
                       .label="${fld.multilist2["label_" + this.lang]}"> </multi-select> 
                     </div>
                 `}                   
                 ${!fld.multilist3 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center" style="margin-top: 4px;">
-                      <multi-select style="width: 100%;" id="multilist3" .props=${fld.multilist3.properties!==undefined?fld.multilist3.properties:{}} .activeOptions=${fld.multilist3.default_value ? fld.multilist3.default_value : {}} .options=${this.listEntries(fld.multilist3, true)}
+                      <multi-select style="width: 100%;" id="multilist3" .props=${fld.multilist3.properties!==undefined?fld.multilist3.properties:{}} .activeOptions=${fld.multilist3.defaultValue ? this.selectedItem[fld.multilist3.defaultValue] : {}} .options=${this.listEntries(fld.multilist3, true)}
                       .label="${fld.multilist3["label_" + this.lang]}"> </multi-select> 
                     </div>
                 `}                   
                 ${!fld.multilist4 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center" style="margin-top: 4px;">
-                      <multi-select style="width: 100%;" id="multilist4" .props=${fld.multilist4.properties!==undefined?fld.multilist4.properties:{}} .activeOptions=${fld.multilist4.default_value ? fld.multilist4.default_value : {}} .options=${this.listEntries(fld.multilist4, true)}
+                      <multi-select style="width: 100%;" id="multilist4" .props=${fld.multilist4.properties!==undefined?fld.multilist4.properties:{}} .activeOptions=${fld.multilist4.defaultValue ? this.selectedItem[fld.multilist4.defaultValue] : {}} .options=${this.listEntries(fld.multilist4, true)}
                       .label="${fld.multilist4["label_" + this.lang]}"> </multi-select> 
                     </div>
                 `}                   
                 ${!fld.multilist5 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center" style="margin-top: 4px;">
-                      <multi-select style="width: 100%;" id="multilist5" .props=${fld.multilist5.properties!==undefined?fld.multilist5.properties:{}} .activeOptions=${fld.multilist5.default_value ? fld.multilist5.default_value : {}} .options=${this.listEntries(fld.multilist5, true)}
+                      <multi-select style="width: 100%;" id="multilist5" .props=${fld.multilist5.properties!==undefined?fld.multilist5.properties:{}} .activeOptions=${fld.multilist5.defaultValue ? this.selectedItem[fld.multilist5.defaultValue] : {}} .options=${this.listEntries(fld.multilist5, true)}
                       .label="${fld.multilist5["label_" + this.lang]}"> </multi-select> 
                     </div>
                 `}                   
                 ${!fld.multilist6 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center" style="margin-top: 4px;">
-                      <multi-select style="width: 100%;" id="multilist6" .props=${fld.multilist6.properties!==undefined?fld.multilist6.properties:{}} .activeOptions=${fld.multilist6.default_value ? fld.multilist6.default_value : {}} .options=${this.listEntries(fld.multilist6, true)}
+                      <multi-select style="width: 100%;" id="multilist6" .props=${fld.multilist6.properties!==undefined?fld.multilist6.properties:{}} .activeOptions=${fld.multilist6.defaultValue ? this.selectedItem[fld.multilist6.defaultValue] : {}} .options=${this.listEntries(fld.multilist6, true)}
                       .label="${fld.multilist6["label_" + this.lang]}"> </multi-select> 
                     </div>
                 `}                   
                 ${!fld.multilist7 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center" style="margin-top: 4px;">
-                      <multi-select style="width: 100%;" id="multilist7" .props=${fld.multilist7.properties!==undefined?fld.multilist7.properties:{}} .activeOptions=${fld.multilist7.default_value ? fld.multilist7.default_value : {}} .options=${this.listEntries(fld.multilist7, true)}
+                      <multi-select style="width: 100%;" id="multilist7" .props=${fld.multilist7.properties!==undefined?fld.multilist7.properties:{}} .activeOptions=${fld.multilist7.defaultValue ? this.selectedItem[fld.multilist7.defaultValue] : {}} .options=${this.listEntries(fld.multilist7, true)}
                       .label="${fld.multilist7["label_" + this.lang]}"> </multi-select> 
                     </div>
                 `}                   
                 ${!fld.multilist8 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center" style="margin-top: 4px;">
-                      <multi-select style="width: 100%;" id="multilist8" .props=${fld.multilist8.properties!==undefined?fld.multilist8.properties:{}} .activeOptions=${fld.multilist8.default_value ? fld.multilist8.default_value : {}} .options=${this.listEntries(fld.multilist8, true)}
+                      <multi-select style="width: 100%;" id="multilist8" .props=${fld.multilist8.properties!==undefined?fld.multilist8.properties:{}} .activeOptions=${fld.multilist8.defaultValue ? this.selectedItem[fld.multilist8.defaultValue] : {}} .options=${this.listEntries(fld.multilist8, true)}
                       .label="${fld.multilist8["label_" + this.lang]}"> </multi-select> 
                     </div>
                 `}                   
                 ${!fld.multilist9 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center" style="margin-top: 4px;">
-                      <multi-select style="width: 100%;" id="multilist9" .props=${fld.multilist9.properties!==undefined?fld.multilist9.properties:{}} .activeOptions=${fld.multilist9.default_value ? fld.multilist9.default_value : {}} .options=${this.listEntries(fld.multilist9, true)}
+                      <multi-select style="width: 100%;" id="multilist9" .props=${fld.multilist9.properties!==undefined?fld.multilist9.properties:{}} .activeOptions=${fld.multilist9.defaultValue ? this.selectedItem[fld.multilist9.defaultValue] : {}} .options=${this.listEntries(fld.multilist9, true)}
                       .label="${fld.multilist9["label_" + this.lang]}"> </multi-select> 
                     </div>
                 `}                   
                 ${!fld.multilist10 ?
                     html``: html`        
                     <div class="layout horizontal flex center-center" style="margin-top: 4px;">
-                      <multi-select style="width: 100%;" id="multilist10" .props=${fld.multilist10.properties!==undefined?fld.multilist10.properties:{}} .activeOptions=${fld.multilist10.default_value ? fld.multilist10.default_value : {}} .options=${this.listEntries(fld.multilist10, true)}
+                      <multi-select style="width: 100%;" id="multilist10" .props=${fld.multilist10.properties!==undefined?fld.multilist10.properties:{}} .activeOptions=${fld.multilist10.defaultValue ? this.selectedItem[fld.multilist10.defaultValue] : {}} .options=${this.listEntries(fld.multilist10, true)}
                       .label="${fld.multilist10["label_" + this.lang]}"> </multi-select> 
                     </div>
                 `}                   
@@ -734,7 +791,7 @@ export function TrazitGenericDialogs(base) {
         if (curValue.length===0){curValue="*NULL*"}
         let matchingEntry = fld.rule.logic.find(entry => entry.value === curValue);
         
-        if (matchingEntry===undefined){
+        if (matchingEntry===undefined){            
             if (curValue.length>0){curValue="*NOT_NULL*"}
             matchingEntry = fld.rule.logic.find(entry => entry.value === curValue);
         }
@@ -811,6 +868,7 @@ export function TrazitGenericDialogs(base) {
     }
 
     defaultValue(e){
+        
         //alert('open defaultValue')
         // if (this.actionBeingPerformedModel.dialogInfo.gridContent!==undefined&&this.actionBeingPerformedModel.dialogInfo.gridContent===true){
         //     this.getGenericDialogGridItems(this.actionBeingPerformedModel.dialogInfo)
@@ -820,10 +878,11 @@ export function TrazitGenericDialogs(base) {
         //     this.getGenericDialogGridItems(this.actionBeingPerformedModel.dialogInfo)
         //     return 
         // }
-        if (this.fieldsShouldBeReset===true){
+       
+        //if (this.fieldsShouldBeReset===true){
             this.resetFields()
             this.fieldsShouldBeReset=false
-        }
+        //}
         let dlgFlds=undefined
         if (this.actionBeingPerformedModel!==undefined&&this.actionBeingPerformedModel.dialogInfo!==undefined&&this.actionBeingPerformedModel.dialogInfo.fields!==undefined){
             this.actionBeingPerformedModel.dialogInfo.fields
@@ -837,21 +896,24 @@ export function TrazitGenericDialogs(base) {
             let fldObj=element
             let keyName=Object.keys(fldObj)
             
-            //if (==null){        
-            if (this[keyName]!==null&&this[keyName].defval!==undefined&&this[keyName].defval!==null){
-                alert(this[keyName].defval)
-            }    
+            ////if (==null){        
+            // if (this[keyName]!==null&&this[keyName].defval!==undefined&&this[keyName].defval!==null){
+            //     alert(this[keyName].defval)
+            // }    
             if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].default_value!==undefined&&fldObj[keyName].default_value!==null){
                 this[keyName].value=fldObj[keyName].default_value
             }
             if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].selObjectPropertyName!==undefined&&fldObj[keyName].selObjectPropertyName!==null&&this[keyName]!==null){
+                if (this.selectedItems[0]===undefined){return}
                 this[keyName].value=this.selectedItems[0][fldObj[keyName].selObjectPropertyName]
             }            
             if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj.selObjectPropertyName!==undefined&&fldObj[keyName].selObjectPropertyName!==null&&this[keyName]!==null){
+                if (this.selectedItems[0]===undefined){return}
                 this[keyName].value=this.selectedItems[0][fldObj.selObjectPropertyName]
             }            
-            if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].internalVariableObjName!==undefined&&fldObj[keyName].internalVariableObjName!==null&&
+            if (this[keyName]!==null&&fldObj[keyName]!==undefined&&fldObj[keyName].internalVariableObjName!==undefined&&fldObj[keyName].internalVariableObjName!==null&&                
                 fldObj[keyName].internalVariableObjProperty!==undefined&&fldObj[keyName].internalVariableObjProperty!==null){
+                if (this[fldObj[keyName].internalVariableObjName]===undefined||this[fldObj[keyName].internalVariableObjName][0]===undefined){return}                    
                 this[keyName].value=this[fldObj[keyName].internalVariableObjName][0][fldObj[keyName].internalVariableObjProperty]
             }            
         }
@@ -860,7 +922,7 @@ export function TrazitGenericDialogs(base) {
         //alert('reset Fields now')   
         let dlgFlds=undefined
         if (this.actionBeingPerformedModel!==undefined&&this.actionBeingPerformedModel.dialogInfo!==undefined&&this.actionBeingPerformedModel.dialogInfo.fields!==undefined){
-            this.actionBeingPerformedModel.dialogInfo.fields
+            dlgFlds=this.actionBeingPerformedModel.dialogInfo.fields
         }
         if (dlgFlds===undefined){
             //alert('The dialog '+this.actionBeingPerformedModel.dialogInfo.name+' has no fields property for adding the fields, please review.')
@@ -875,11 +937,15 @@ export function TrazitGenericDialogs(base) {
                     if (!keyName[0].includes('SelectedRow')){
                         this[keyName[0]].value=[]
                     }
+                }else if (keyName[0].includes('multi')){
+                    fldObj.defaultValue ? this[keyName[0]].activeOptions=this.selectedItem[fldObj.defaultValue] : this[keyName[0]].activeOptions={}
+                    this[keyName[0]].setClosed()                    
                 }else{
                     if (this[keyName]!==undefined&&this[keyName[0]]!==undefined){
                         this[keyName[0]].value=""
                     }
                 }
+
             }
             //this.actionWhenOtherThanListValueChanged(e, element, this.actionBeingPerformedModel.dialogInfo, this.selectedItems[0]);
         }
@@ -897,7 +963,9 @@ export function TrazitGenericDialogs(base) {
         }
         return fldLbl
     }
-
+     
+    get acceptancecriteria() {return this.shadowRoot.querySelector("speclimit-quantitative#acceptancecriteria")    }        
+    get tree1() {    return this.shadowRoot.querySelector("tree-view#tree1")    }        
     get text1() {    return this.shadowRoot.querySelector("mwc-textfield#text1")    }        
     get text2() {    return this.shadowRoot.querySelector("mwc-textfield#text2")    }        
     get text3() {    return this.shadowRoot.querySelector("mwc-textfield#text3")    }        
@@ -907,7 +975,10 @@ export function TrazitGenericDialogs(base) {
     get text7() {    return this.shadowRoot.querySelector("mwc-textfield#text7")    }        
     get text8() {    return this.shadowRoot.querySelector("mwc-textfield#text8")    }        
     get text9() {    return this.shadowRoot.querySelector("mwc-textfield#text9")    }        
-    get text10() {    return this.shadowRoot.querySelector("mwc-textfield#text10")    }        
+    get text10() {    return this.shadowRoot.querySelector("mwc-textfield#text10")    } 
+
+    get textarea1() {    return this.shadowRoot.querySelector("mwc-textarea#textarea1")    } 
+    
     get checkbox1() {    return this.shadowRoot.querySelector("mwc-checkbox#checkbox1")    }        
     get checkbox2() {    return this.shadowRoot.querySelector("mwc-checkbox#checkbox2")    }        
     get checkbox3() {    return this.shadowRoot.querySelector("mwc-checkbox#checkbox3")    }        
@@ -1018,11 +1089,14 @@ export function TrazitGenericDialogs(base) {
       }
     }        
 
-    fldDefaultValue(fldDef){
+    async fldDefaultValue(fldDef){
         let curArgName=""
         //console.log('fldDefaultValue', fldDef)
         if (fldDef.default_value){
             return fldDef.default_value
+        } else if (fldDef.getNextId!==undefined&&fldDef.getNextId===true&&fldDef.internalVariableObjName!==undefined){
+            console.log(this[fldDef.internalVariableObjName].length+1)
+            return String(this[fldDef.internalVariableObjName].length+1)
         } else if (fldDef.internalVariableSimpleObjName&&fldDef.internalVariableSimpleObjProperty) {          
             if (this[fldDef.internalVariableSimpleObjName]===undefined||this[fldDef.internalVariableSimpleObjName][fldDef.internalVariableSimpleObjProperty]===undefined){
               let msg=""

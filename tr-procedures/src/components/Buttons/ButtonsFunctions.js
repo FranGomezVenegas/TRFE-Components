@@ -14,22 +14,22 @@ export function ButtonsFunctions(base) {
       if (actions === undefined) { actions = this.viewModelFromProcModel }
       return html`
         <style>
-          mwc-icon-button#lang {
-            color : rgba(36, 192, 235, 1);
+          mwc-icon-button#lang {        
+            color : #1473e6; /* rgba(36, 192, 235, 1); */
             font-family : Montserrat;
             font-weight : bold;
             font-size : 19px;
           }
           mwc-button {
-            background-color: rgba(36, 192, 235, 1);
+            background-color: #1473e6; /* rgba(36, 192, 235, 1); */
             font-family: Montserrat;
             font-weight: bold;
             font-size: 19px;
-            --mdc-theme-primary:rgba(36, 192, 235, 1);
+            --mdc-theme-primary:#1473e6; /* rgba(36, 192, 235, 1); */
             border-radius: 12px;
           }
-          mwc-button.button {
-            color : rgba(36, 192, 235, 1);
+          mwc-button.button {        
+            color : #1473e6; /* rgba(36, 192, 235, 1); */
             font-family : Montserrat;
             font-weight : bold;
             font-size : 19px;
@@ -42,9 +42,9 @@ export function ButtonsFunctions(base) {
             --mdc-button-fill-color: red;
             --mdc-button-ink-color: blue;
             border-radius: 12px;
-          }
-          mwc-icon-button {
-            color : rgba(36, 192, 235, 1);
+          }            
+          mwc-icon-button {        
+            color : #1473e6; /* rgba(36, 192, 235, 1); */
             font-family : Montserrat;
             font-weight : bold;
             font-size : 19px;
@@ -57,7 +57,7 @@ export function ButtonsFunctions(base) {
           }
           mwc-icon-button#video {
             color : #FFFFFF;
-            color : rgba(36, 192, 235, 1);
+            color : #1473e6; /* rgba(36, 192, 235, 1); */
           }
           sp-button {
             background : #24C0EB;
@@ -133,26 +133,35 @@ export function ButtonsFunctions(base) {
 
     getButton(sectionModel, data, isProcManagement) {
       if (sectionModel === undefined) { sectionModel = this.viewModelFromProcModel }
-      console.log("getButtondatasectionModel", sectionModel);
-      console.log('getButtondata', data)
+      //console.log("getButtondatasectionModel", sectionModel);
+      //console.log('getButtondata', data)
+							  
+						   
+																																											 
+															
+									 
+			   
+											  
+						   
+		  
       return html`
         <style>
-          mwc-icon-button#lang {
-            color : rgba(36, 192, 235, 1);
+          mwc-icon-button#lang {        
+            color : #1473e6; /* rgba(36, 192, 235, 1); */
             font-family : Montserrat;
             font-weight : bold;
             font-size : 19px;
           }
           mwc-button {
-            background-color: rgba(36, 192, 235, 1);
+            background-color: #1473e6; /* rgba(36, 192, 235, 1); */
             font-family: Montserrat;
             font-weight: bold;
             font-size: 19px;
-            --mdc-theme-primary:rgba(36, 192, 235, 1);
+            --mdc-theme-primary:#1473e6; /* rgba(36, 192, 235, 1); */
             border-radius: 12px;
           }
-          mwc-button.button {
-            color : rgba(36, 192, 235, 1);
+          mwc-button.button {        
+            color : #1473e6; /* rgba(36, 192, 235, 1); */
             font-family : Montserrat;
             font-weight : bold;
             font-size : 19px;
@@ -165,9 +174,9 @@ export function ButtonsFunctions(base) {
             --mdc-button-fill-color: red;
             --mdc-button-ink-color: blue;
             border-radius: 12px;
-          }
-          mwc-icon-button {
-            color : rgba(36, 192, 235, 1);
+          }            
+          mwc-icon-button {        
+            color : #1473e6; /* rgba(36, 192, 235, 1); */
             font-family : Montserrat;
             font-weight : bold;
             font-size : 19px;
@@ -180,11 +189,11 @@ export function ButtonsFunctions(base) {
           }
           mwc-icon-button#video {
             color : #FFFFFF;
-            color : rgba(36, 192, 235, 1);
+            color : #1473e6; /* rgba(36, 192, 235, 1); */
           }
           sp-button {
             background : #24C0EB;
-            background : rgba(36, 192, 235, 1);
+            background : #1473e6; /* rgba(36, 192, 235, 1); */
             border-color : inherit !important;
             border-radius : 35px;
             -moz-border-radius : 35px;
@@ -231,57 +240,63 @@ export function ButtonsFunctions(base) {
         ${sectionModel !== undefined && sectionModel.viewQuery && sectionModel.viewQuery.printable && sectionModel.viewQuery.printable.enable && sectionModel.viewQuery.printable.enable === true ?
           html`
           <mwc-icon-button 
-              class="${sectionModel.viewQuery.button.class}"
+              ${sectionModel.viewQuery.button===undefined||sectionModel.viewQuery.button.class===undefined?'':html`class="${sectionModel.viewQuery.button.class}"`}
               icon="${sectionModel.viewQuery.printable.icon}" id="printable" 
               title="${sectionModel.viewQuery.printable.title['label_' + this.lang]}"             
               @click=${() => this.printTable()}
-              style="${sectionModel.viewQuery.button.style !== undefined ? sectionModel.viewQuery.button.style : ''}">
+              style="${sectionModel.viewQuery.button!==undefined&&sectionModel.viewQuery.button.style !== undefined ? sectionModel.viewQuery.button.style : ''}">
           </mwc-icon-button>` : nothing
         }
         ${sectionModel !== undefined && sectionModel.viewQuery && sectionModel.viewQuery.downloadable && sectionModel.viewQuery.downloadable.enable && sectionModel.viewQuery.downloadable.enable === true ?
           html`
           <mwc-icon-button 
-              class="${sectionModel.viewQuery.button.class}"
+          ${sectionModel.viewQuery.button===undefined||sectionModel.viewQuery.button.class===undefined?'':html`class="${sectionModel.viewQuery.button.class}"`}
               icon="${sectionModel.viewQuery.downloadable.icon}" id="downloadable" 
               title="${sectionModel.viewQuery.downloadable.title['label_' + this.lang]}"             
-              @click=${() => this.downloadDataTableToCSV(sectionModel.langConfig.gridHeader, this.gridItems)}
-              style="${sectionModel.viewQuery.button.style !== undefined ? sectionModel.viewQuery.button.style : ''}">
+              @click=${() => this.downloadDataTableToCSV(gridDefinition, gridAllData, sectionModel.viewQuery.downloadable)}
+              style="${sectionModel.viewQuery.button!==undefined&&sectionModel.viewQuery.button.style !== undefined ? sectionModel.viewQuery.button.style : ''}">
           </mwc-icon-button>` : nothing
         }                
           ${sectionModel !== undefined && sectionModel.actions && sectionModel.actions.map(action =>
           html`
-          ${this.btnHidden(action) ? nothing :
-              html`${action.button ?
-                html`${action.button.icon ?
-                  html`<mwc-icon-button id="${action.actionName}"
-                  class="${action.button.class} disabled${this.btnDisabled(action, sectionModel)}"
-                  icon="${action.button.icon}"
-                  title="${action.button.title['label_' + this.lang]}"
-                  ?disabled=${this.btnDisabled(action, sectionModel)}
-                  ?hidden=${this.btnHidden(action)}
-                  style="${action.button.style !== undefined ? action.button.style : ''}"
-                  @click=${(e) => this.trazitButtonsMethod(e, action, sectionModel, null, null, data, isProcManagement)}></mwc-icon-button>` :
-                  html`${action.button.img ?
-                    html`<mwc-icon-button  id="${action.actionName}"
-                  class="${this.btnDisabled(action, sectionModel) === true ? 'disabledtrue' : 'disabledfalse'}"
-                  title="${action.button.title['label_' + this.lang]}"
-                  ?disabled=${this.btnDisabled(action, sectionModel)}
-                  ?hidden=${this.btnHidden(action)}
-                  style="${action.button.style !== undefined ? action.button.style : ''}"
-                  @click=${(e) => this.trazitButtonsMethod(e, action, sectionModel, null, null, data, isProcManagement)}>
-                      <img class="iconBtn" src="images/${this.giveFileName(action, sectionModel)}">
-                  </mwc-icon-button>` :
-                    html`<mwc-button dense raised id="${action.actionName}"
-                  label="${action.button.title['label_' + this.lang]}"
-                  ?disabled=${this.btnDisabled(action, sectionModel)}
-                  ?hidden=${this.btnHidden(action)}
-                  style="${action.button.style !== undefined ? action.button.style : ''}"
-                  @click=${(e) => this.trazitButtonsMethod(e, action, sectionModel, null, null, data, isProcManagement)}></mwc-button>`
+
+              ${this.btnHidden(action, data) ? nothing :
+                  html`${action.button ?
+                    html`${action.button.icon ?
+                      html`<mwc-icon-button id="${action.actionName}"
+                                                                                      
+                      class="${action.button.class} disabled${this.btnDisabled(action, sectionModel)}"
+                      icon="${action.button.icon}" 
+                      title="${action.button.title['label_' + this.lang]}" 
+                      ?disabled=${this.btnDisabled(action, sectionModel)}
+                      ?hidden=${this.btnHidden(action, data)}
+                      style="${action.button.style !== undefined ? action.button.style : ''}"
+                      .data=${data}
+                      @click=${(e) => this.trazitButtonsMethod(e, action, sectionModel, null, null, data, isProcManagement)}></mwc-icon-button>` :
+                      html`${action.button.img ?
+                        html`<mwc-icon-button  id="${action.actionName}"
+                      class="${this.btnDisabled(action, sectionModel) === true ? 'disabledtrue' : 'disabledfalse'}"
+                      title="${action.button.title['label_' + this.lang]}" 
+                      ?disabled=${this.btnDisabled(action, sectionModel)}
+                      ?hidden=${this.btnHidden(action, data)}
+                      style="${action.button.style !== undefined ? action.button.style : ''}"
+                      .data=${data}
+                      @click=${(e) => this.trazitButtonsMethod(e, action, sectionModel, null, null, data, isProcManagement)}>
+                          <img class="iconBtn" src="images/${this.giveFileName(action, sectionModel)}">
+                      </mwc-icon-button>` :
+                        html`<mwc-button dense raised id="${action.actionName}"
+                      label="${action.button.title['label_' + this.lang]}" 
+                      ?disabled=${this.btnDisabled(action, sectionModel)}
+                      ?hidden=${this.btnHidden(action , data)}
+                      style="${action.button.style !== undefined ? action.button.style : ''}"
+                      .data=${data}
+                      @click=${(e) => this.trazitButtonsMethod(e, action, sectionModel, null, null, data, isProcManagement)}></mwc-button>`
+                        }`
+                      }` :
+                    nothing
                     }`
-                  }` :
-                nothing
-                }`
-            }`
+                }
+          `
         )}
       `
     }
@@ -517,7 +532,8 @@ export function ButtonsFunctions(base) {
               if (selRow[rowArray.column].length == 0) {
                 d = false
               }
-            } else if (rowArray.value === "*NOT_NULL*") {
+            } else if ( String(rowArray.value).toUpperCase().includes("*NOT")&&
+                        String(rowArray.value).toUpperCase().includes("NULL*")) {                          
               if (selRow[rowArray.column].length > 0) {
                 d = false
               }
@@ -535,7 +551,8 @@ export function ButtonsFunctions(base) {
             if (selRow[action.button.showWhenSelectedItem.column].length == 0) {
               return false
             } else { return true }
-          } else if (action.button.showWhenSelectedItem.value === "*NOT_NULL*") {
+          } else if ( String(action.button.showWhenSelectedItem.value).toUpperCase().includes("*NOT")&&
+                      String(action.button.showWhenSelectedItem.value).toUpperCase().includes("NULL*")) {                          
             if (selRow[action.button.showWhenSelectedItem.column].length > 0) {
               return false
             } else { return true }
@@ -553,7 +570,8 @@ export function ButtonsFunctions(base) {
               if (selRow[rowArray.column].length == 0) {
                 d = true
               } else { d = false }
-            } else if (rowArray.value === "*NOT_NULL*") {
+            } else if ( String(rowArray.value).toUpperCase().includes("*NOT")&&
+                        String(rowArray.value).toUpperCase().includes("NULL*")) {                          
               if (selRow[rowArray.column].length > 0) {
                 d = true
               } else { d = false }
@@ -571,7 +589,8 @@ export function ButtonsFunctions(base) {
             } else {
               return false
             }
-          } else if (action.button.hideWhenSelectedItem.value === "*NOT_NULL*") {
+          } else if ( String(action.button.hideWhenSelectedItem.value).toUpperCase().includes("*NOT")&&
+                      String(action.button.hideWhenSelectedItem.value).toUpperCase().includes("NULL*")) {                          
             if (selRow[action.button.hideWhenSelectedItem.column].length > 0) {
               return true
             } else {
@@ -588,7 +607,10 @@ export function ButtonsFunctions(base) {
       }
       return d
     }
-    btnHidden(action) {
+    btnHidden(action, data) {
+      if (data!==undefined){
+        return this.btnHiddenForRows(action, data)
+      }
       let d = false
       if (action===undefined||action.button===undefined){return d}
       if (action.button.showWhenSelectedItem !== undefined) {
@@ -603,7 +625,8 @@ export function ButtonsFunctions(base) {
               if (this.selectedItems[0][rowArray.column].length == 0) {
                 d = true
               }
-            } else if (rowArray.value === "*NOT_NULL*") {
+            } else if ( String(rowArray.value).toUpperCase().includes("*NOT")&&
+                        String(rowArray.value).toUpperCase().includes("NULL*")) {                          
               if (this.selectedItems[0][rowArray.column].length > 0) {
                 d = true
               }
@@ -621,7 +644,8 @@ export function ButtonsFunctions(base) {
             if (this.selectedItems[0][action.button.showWhenSelectedItem.column].length == 0) {
               d = true
             }
-          } else if (action.button.showWhenSelectedItem.value === "*NOT_NULL*") {
+          } else if ( String(action.button.showWhenSelectedItem.value).toUpperCase().includes("*NOT")&&
+                      String(action.button.showWhenSelectedItem.value).toUpperCase().includes("NULL*")) {
             if (this.selectedItems[0][action.button.showWhenSelectedItem.column].length > 0) {
               d = true
             }
@@ -639,7 +663,8 @@ export function ButtonsFunctions(base) {
               if (this.selectedItems[0][rowArray.column].length == 0) {
                 d = true
               }
-            } else if (rowArray.value === "*NOT_NULL*") {
+            } else if ( String(rowArray.value).toUpperCase().includes("*NOT")&&
+                        String(rowArray.value).toUpperCase().includes("NULL*")) {                          
               if (this.selectedItems[0][rowArray.column].length > 0) {
                 d = true
               }
@@ -655,7 +680,8 @@ export function ButtonsFunctions(base) {
             if (this.selectedItems[0][action.button.hideWhenSelectedItem.column].length == 0) {
               d = true
             }
-          } else if (action.button.hideWhenSelectedItem.value === "*NOT_NULL*") {
+          } else if ( String(action.button.hideWhenSelectedItem.value).toUpperCase().includes("*NOT")&&
+                      String(action.button.hideWhenSelectedItem.value).toUpperCase().includes("NULL*")) {                          
             if (this.selectedItems[0][action.button.hideWhenSelectedItem.column].length > 0) {
               d = true
             }
@@ -748,61 +774,82 @@ export function ButtonsFunctions(base) {
       if (viewQuery === undefined) {
         viewQuery = this.viewModelFromProcModel.viewQuery
       }
-      //console.log('GetViewData', 'this.viewModelFromProcModel.viewQuery', this.viewModelFromProcModel.viewQuery)
-      if (viewQuery !== undefined && viewQuery.clientMethod !== undefined) {
-        //alert('Calling '+viewQuery.clientMethod+' from GetViewData')
-        if (this[viewQuery.clientMethod] === undefined) {
-          alert('not found any clientMethod called ' + viewQuery.clientMethod)
-          return
-        }
-        let j = this[viewQuery.clientMethod]()
-        this.setTheValues(viewQuery, j)
-        return
-      }
-      if (this.config === undefined || this.config.backendUrl === undefined) {
-        fetch('../../../demo/config.json')
-          .then(response => {
-            if (!response.ok) {
-              throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-          })
-          .then(json => {
-            this.config = json;
-          })
-          .catch(error => {
-            console.error('Error fetching config:', error);
-          });
-      }
-      if (this.config.backendUrl === undefined) {
-        this.config.backendUrl="https://platform.trazit.net:8443/TRAZiT-API"
-        //this.config.backendUrl = "http://51.75.202.142:8888/TRAZiT-API"
-        console.log('this.config.backendUrl is undefined!!! url assigned manually!', this.config.backendUrl)
-        let sessionDbName = JSON.parse(sessionStorage.getItem("userSession")).dbName
-        if (sessionDbName !== undefined) {
-          this.config.dbName = sessionDbName
-        }
-        if (this.config.dbName === undefined) {
-          this.config.dbName = "labplanet"
-          this.config.isForTesting = false
-        }
-      }
       let queryDefinition = viewQuery
       if (queryDefinition === undefined) { return }
-      //console.log('GetViewData', 'queryDefinition', queryDefinition)
-      this.samplesReload = true
-      this.selectedItems = []
-      let APIParams = this.getAPICommonParams(queryDefinition)
-      let viewParams = this.jsonParam(queryDefinition)
-      let endPointUrl = this.getQueryAPIUrl(queryDefinition)
-      if (String(endPointUrl).toUpperCase().includes("ERROR")) {
-        alert(endPointUrl)
-        return
-      }
-      let params = this.config.backendUrl + endPointUrl
-        + '?' + new URLSearchParams(APIParams) + '&' + new URLSearchParams(viewParams)
-
-      //console.log('params', params)
+      let params = {}
+//      sessionStorage.setItem("viewFilterForQuery", undefined)
+//      let urlParams=sessionStorage.getItem("viewFilterForQuery")
+//      if (urlParams==="undefined"){
+        //console.log('GetViewData', 'this.viewModelFromProcModel.viewQuery', this.viewModelFromProcModel.viewQuery)
+        if (viewQuery !== undefined && viewQuery.clientMethod !== undefined) {
+          //alert('Calling '+viewQuery.clientMethod+' from GetViewData')            
+          if (this[viewQuery.clientMethod] === undefined) {
+            alert('not found any clientMethod called ' + viewQuery.clientMethod)
+            return
+          }
+          let j = this[viewQuery.clientMethod]()
+          this.setTheValues(viewQuery, j)
+          return
+        }
+											  
+									   
+			  
+	   
+        if (this.config === undefined || this.config.backendUrl === undefined) {
+          fetch('../../../demo/config.json')
+            .then(response => {
+              if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+              }
+              return response.json();
+            })
+            .then(json => {
+              this.config = json;
+            })
+            .catch(error => {
+              console.error('Error fetching config:', error);
+            });
+        }      
+        if (this.config.backendUrl === undefined) {
+          this.config.backendUrl="https://platform.trazit.net:8443/TRAZiT-API"
+          //this.config.backendUrl = "http://51.75.202.142:8888/TRAZiT-API"
+          console.log('this.config.backendUrl is undefined!!! url assigned manually!', this.config.backendUrl)
+          let sessionDbName = JSON.parse(sessionStorage.getItem("userSession")).dbName
+          if (sessionDbName !== undefined) {
+            this.config.dbName = sessionDbName
+          }
+          if (this.config.dbName === undefined) {
+            this.config.dbName = "labplanet"
+            this.config.isForTesting = false
+          }
+        }
+        //console.log('GetViewData', 'queryDefinition', queryDefinition)
+        this.samplesReload = true
+        this.selectedItems = []
+        let APIParams = this.getAPICommonParams(queryDefinition)
+        let viewParams = this.jsonParam(queryDefinition)
+        let endPointUrl = this.getQueryAPIUrl(queryDefinition)
+        if (String(endPointUrl).toUpperCase().includes("ERROR")) {
+          alert(endPointUrl)
+          return
+        }
+	   
+									 
+												   
+																	  
+							   
+							 
+															  
+													  
+															
+																
+						  
+			  
+	   
+        params = this.config.backendUrl + endPointUrl
+          + '?' + new URLSearchParams(APIParams) + '&' + new URLSearchParams(viewParams)
+//      }
+      //console.log('params', params)          
       await this.fetchApi(params, false, queryDefinition).then(j => {
         if (queryDefinition.actionName === 'ONE_PROCEDURE_DEFINITION' || queryDefinition.actionName === 'ALL_PROCEDURES_DEFINITION') {
           if (j.master_data !== undefined) {
@@ -824,6 +871,8 @@ export function ButtonsFunctions(base) {
             this.selectedItems = j
             if (this.selectedItems[0]!==undefined&&this.selectedItems[0]!==null){
               this.selectedItem = this.selectedItems[0]
+              this.selectedItemInView = this.selectedItems[0]
+              this.render()
             }
             console.log('this.selectedItems', this.selectedItems)
             if (j && !j.is_error) {
@@ -847,6 +896,7 @@ export function ButtonsFunctions(base) {
           }
         }
       })
+      this.requestUpdate()
       this.samplesReload = false
     }
     async GetAlternativeViewData(queryDefinition, selObject = {}) {

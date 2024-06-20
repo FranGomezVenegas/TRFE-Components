@@ -2,7 +2,7 @@ export function PrintableTable(base) {
     return class extends (base) {
       
           printTable() {            
-            this.setPrintContentCoa()
+            this.setPrintContentTable()
             let printWindow = window.open('', '_blank');
             printWindow.document.write(this.printObj.contentWithFooter);
             printWindow.document.title = 'Title Hear';
@@ -11,7 +11,7 @@ export function PrintableTable(base) {
               printWindow.close();
             }, 500);
           }
-          documentFooter(data) {
+          documentFooterTable(data) {
             let coaData = data
             let session = JSON.parse(sessionStorage.getItem("userSession"))
             let sessionDate = session.appSessionStartDate
@@ -23,7 +23,7 @@ export function PrintableTable(base) {
             return footerText
           }
       
-          setPrintContentCoa() {
+          setPrintContentTable() {
             let headerData = ''
             // let headerDataDiv = this.shadowRoot.querySelectorAll(".title-banner .title")
             // if (headerDataDiv !== undefined) {
@@ -148,12 +148,12 @@ export function PrintableTable(base) {
                         }
               
                         table.TRAZiT-DefinitionArea th {
-                          padding: 16px 20px;
+                          padding: 5px 5px;
                           border: 1px solid #dddddd !important;
                         }
               
                         td, th {
-                          padding: 16px 20px;
+                          padding: 5px 5px;
                           border: 1px solid #dddddd !important;
                         }
               

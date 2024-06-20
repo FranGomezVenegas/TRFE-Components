@@ -35,6 +35,8 @@ export function ListsFunctions(base) {
             return 
         }
         dependencyFieldBehaviorForAll(dependencyFieldBehaviorForAll, fldName, itemData, dialogInfo, isList, itemKeyName){
+            
+            if (itemKeyName.length>0&&dependencyFieldBehaviorForAll.rule==='whenEmpty'&&dependencyFieldBehaviorForAll.resetValue===true){return}
             const fields = dialogInfo.fields;
             const exceptionFields = dependencyFieldBehaviorForAll.exceptionFields || []; // Default to an empty array if not present
         
@@ -90,68 +92,174 @@ export function ListsFunctions(base) {
             })
             return
         }
+
         dependencyFieldBehavior(fieldsList, itemData, isList, itemKeyName){
-            fieldsList.map((curFld, index)=>{
-                if (curFld.field!==undefined&&curFld.rule!==undefined){
+            fieldsList.map((curFld, index) => {
+                if (curFld.field !== undefined && curFld.rule !== undefined && this[curFld.field] !== undefined) {
                     const fieldElement = this[curFld.field];
-                    switch(curFld.rule){
+                    switch(curFld.rule) {
                         case "whenEmpty":
-                            // let currentFldValue=""
-                            // if (isList===true){
-                            //     currentFldValue=itemKeyName
-                            // }else{
-                            //     currentFldValue=fieldElement.value
-                            // }
-                            if (itemKeyName.length==0){
-                                
-                                if (curFld.resetValue!==undefined&&curFld.resetValue===true){
-                                    this[curFld.field].value=""                                    
+                            if (itemKeyName.length == 0) {
+                                if (curFld.resetValue !== undefined && curFld.resetValue === true) {
+                                    this[curFld.field].value = "";
                                 }
-                                switch(curFld.action){
+                                switch(curFld.action) {
                                     case "disable":
-                                        this[curFld.field].disabled=true
+                                        this[curFld.field].disabled = true;
                                         break;
                                     case "hide":
-                                        fieldElement.style.display = 'none';  // Hide or show based on the rule
+                                        if (fieldElement !== undefined && fieldElement.style !== undefined) {
+                                            fieldElement.style.display = 'none';  // Hide the element
+                                        }
+                                        break;
+                                    case "show":
+                                        if (fieldElement !== undefined && fieldElement.style !== undefined) {
+                                            fieldElement.style.display = 'block';  // Show the element
+                                        }
                                         break;
                                     default:
-                                        this[curFld.field].disabled=true
+                                        this[curFld.field].disabled = true;
                                         break;
                                 }
-                            }else{
-                                switch(curFld.action){
+                            } else {
+                                switch(curFld.action) {
                                     case "disable":
-                                        this[curFld.field].disabled=false;
+                                        this[curFld.field].disabled = false;
                                         break;
                                     case "hide":
-                                        fieldElement.style.display = '';  // Hide or show based on the rule
+                                        if (fieldElement !== undefined && fieldElement.style !== undefined) {
+                                            fieldElement.style.display = '';  // Show the element
+                                        }
+                                        break;
+                                    case "show":
+                                        if (fieldElement !== undefined && fieldElement.style !== undefined) {
+                                            fieldElement.style.display = 'none';  // Hide the element
+                                        }
                                         break;
                                     default:
-                                        this[curFld.field].disabled=false
+                                        this[curFld.field].disabled = false;
                                         break;
                                 }
-                                // this[curFld.field].disabled=false
-                                // if (curFld.hide !== undefined) {
-                                //     fieldElement.style.display = '';  // Hide or show based on the rule
-                                // }
-                            }           
+                            }
+                            break;
+                        case "whenThisFieldValueIs":
+                            if (curFld.checkValue !== undefined && itemKeyName === curFld.checkValue) {
+                                switch(curFld.action) {
+                                    case "disable":
+                                        this[curFld.field].disabled = true;
+                                        break;
+                                    case "hide":
+                                        if (fieldElement !== undefined && fieldElement.style !== undefined) {
+                                            fieldElement.style.display = 'none';  // Hide the element
+                                        }
+                                        break;
+                                    case "show":
+                                        if (fieldElement !== undefined && fieldElement.style !== undefined) {
+                                            fieldElement.style.display = 'block';  // Show the element
+                                        }
+                                        break;
+                                    default:
+                                        this[curFld.field].disabled = true;
+                                        break;
+                                }
+                            } else {
+                                switch(curFld.action) {
+                                    case "disable":
+                                        this[curFld.field].disabled = false;
+                                        break;
+                                    case "hide":
+                                        if (fieldElement !== undefined && fieldElement.style !== undefined) {
+                                            fieldElement.style.display = '';  // Show the element
+                                        }
+                                        break;
+                                    case "show":
+                                        if (fieldElement !== undefined && fieldElement.style !== undefined) {
+                                            fieldElement.style.display = 'none';  // Hide the element
+                                        }
+                                        break;
+                                    default:
+                                        this[curFld.field].disabled = false;
+                                        break;
+                                }
+                            }
+                            break;
+                        case "whenThisFieldValueIsNot":
+                            if (curFld.checkValue !== undefined && itemKeyName !== curFld.checkValue) {
+                                switch(curFld.action) {
+                                    case "disable":
+                                        this[curFld.field].disabled = false;
+                                        break;
+                                    case "hide":
+                                        if (fieldElement !== undefined && fieldElement.style !== undefined) {
+                                            fieldElement.style.display = 'none';  // Show the element
+                                        }
+                                        break;
+                                    case "show":
+                                        if (fieldElement !== undefined && fieldElement.style !== undefined) {
+                                            fieldElement.style.display = '';  // Show the element
+                                        }
+                                        break;
+                                    default:
+                                        this[curFld.field].disabled = false;
+                                        break;
+                                }
+                            } else {
+                                switch(curFld.action) {
+                                    case "disable":
+                                        this[curFld.field].disabled = true;
+                                        break;
+                                    case "hide":
+                                        if (fieldElement !== undefined && fieldElement.style !== undefined) {
+                                            fieldElement.style.display = 'none';  // Hide the element
+                                        }
+                                        break;
+                                    case "show":
+                                        if (fieldElement !== undefined && fieldElement.style !== undefined) {
+                                            fieldElement.style.display = 'none';  // Hide the element
+                                        }
+                                        break;    
+                                    default:
+                                        this[curFld.field].disabled = true;
+                                        break;
+                                }
+                            }
                             break;
                         default:
+                            break;
                     }
                 }
-            })
+            });
         }
+        
+        
         updateListEntries(listFieldName, fldMDDef, newData) {            
             let itemsToInject=this.buildFrontListFromData(this[listFieldName].definition.valuesFromMasterData, newData, true)
-            this[listFieldName] = { ...this[listFieldName], items: itemsToInject };
-            return
+           
+            //return
+            //this[listFieldName] = { ...this[listFieldName], items: itemsToInject };
+            //return
             //this[listFieldName].items = itemsToInject;
             //this.requestUpdate(); // This method call is necessary to re-render the component
+            let htmlListEntries=this.convertListToHtmlListEntries(fldMDDef, itemsToInject);
             if (this[listFieldName] && this[listFieldName].items) {
-                this[listFieldName].items = itemsToInject;
+                this[listFieldName] = { ...this[listFieldName], items: htmlListEntries };
+                //this[listFieldName].items = htmlListEntries //this.convertListToHtmlListEntries(fldMDDef, itemsToInject);
                 this.requestUpdate();
             }            
         }
+
+        convertListToHtmlListEntries(fld, newList){
+            return html`
+            ${newList.map((c, i) =>
+                html`<mwc-list-item 
+                        value="${c.keyName}" 
+                        ?selected="${fld.selectedValue === c.keyName}" 
+                        data-index="${i}"
+                        data-item="${JSON.stringify(c)}">${c["keyValue_" + this.lang]}</mwc-list-item>`
+            )}`;
+            ``
+        }
+
         listEntries(fld, multilist = false) {
             if (multilist === undefined) {
                 multilist = false;
@@ -176,7 +284,7 @@ export function ListsFunctions(base) {
             )}`;
         }
         entriesForTheList(fld, multilist=false) {
-            console.log('entriesForTheList', fld, multilist);
+            //console.log('entriesForTheList', fld, multilist);
             let blankEmpty = {keyName: "", keyValue_en: "", keyValue_es: "", allRecord: {}};
             let newList = [];
         
@@ -191,6 +299,9 @@ export function ListsFunctions(base) {
         
             // Check if there is dynamic data provided (through actions based on another field's selection)
             if (fld.items && fld.items.length > 0) {
+                if (fld.valuesFromMasterData){
+                    alert('This element has both, items and valuesFromMasterData, be careful and use only one. it will use the items...')
+                }
                 newList = [...newList, ...fld.items]; // merge static or dynamically set items
             } else if (fld.valuesFromMasterData) {
                 // Handle values from a master data source
@@ -300,8 +411,13 @@ export function ListsFunctions(base) {
             `
         }   
         getProcMasterData(){
+            let userSession = JSON.parse(sessionStorage.getItem("userSession"))
+            this.isProcManagement=userSession.isProcManagement
             if (this.isProcManagement===undefined||this.isProcManagement!==true){
-                let userSession = JSON.parse(sessionStorage.getItem("userSession"))
+                //let userSession = JSON.parse(sessionStorage.getItem("userSession"))
+
+                
+
                 //console.log('userSession.procedures_list.procedures', userSession.procedures_list.procedures)
                 let findProc =[]
                 if (this.area!==undefined){
