@@ -126,10 +126,10 @@
     "viewName": "Deviation", 
     "filterName" :  "pending" 
   },
-  "localDefaultView": {
+  "localDefaultViewzzz": {
     "procName":  "mb_em", 
     "viewName": "SamplePlateReading", 
-    "filterName" :  "PlateReadingSMP" 
+    "filterName" :  "LOCATION" 
   },
   "localDefaultView1231231231": {
     "procName":  "em-demo-a", 
@@ -162,8 +162,8 @@
     "viewName": "WhiteIpList", 
     "filterName" :  "WhiteIpList" 
   },  
-   "localDefaultViewzxccccz": {
-    "procName":  "inv-draft", 
+   "localDefaultViewzzz": {
+    "procName":  "stock", 
     "viewName": "InventoryLotsGeneral", 
     "filterName" :  "InventoryLots.1" 
   },  
@@ -236,7 +236,7 @@
     "viewName": "tree-view", 
     "filterName" :  "tree-view" 
   },
-  "localDefaultView111231": {
+  "localDefaultView": {
     "procName":  "fake-developers", 
     "viewName": "prototype-elements-view-main", 
     "filterName" :  "prototype-elements-view-main" 
@@ -274,8 +274,31 @@
     "viewName": "drag-box", 
     "filterName" :  "drag-box" 
   },  
-  "localDefaultViewsssssssss": {
+  "localDefaultViewxxx": {
+    "procName":  "fake-developers", 
+    "procNameData":  "RandD",
+    "viewName": "stability", 
+    "filterName" :  "stability" 
+  },  
+  "localDefaultView123": {
+    "procName":  "RandD", 
+    "viewName": "rdprojects", 
+    "filterName" :  "rdprojects" 
+  },
+  "localDefaultViewzzz": {
+    "procName":  "RandD", 
+    "viewName": "methodvalidation", 
+    "filterName" :  "methodvalidation" 
+  },
+  
+  
+  "localDefaultViewqqqq": {
     "procName":  "instruments", 
+    "viewName": "Deviation", 
+    "filterName" :  "Deviation" 
+  },
+  "localDefaultViewqq": {
+    "procName":  "stock", 
     "viewName": "Deviation", 
     "filterName" :  "Deviation" 
   },

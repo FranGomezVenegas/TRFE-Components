@@ -52,6 +52,7 @@ export class DependencyForm extends LitElement {
       objectTypesStr: this.objectTypesStr,
       rowSelectedData: this.rowSelectedData,
       notificationChecked: this.notificationChecked,
+      endpoint: this.endpoint,
       handleChangeEndpoint: this._handleChangeEndpoint,
       toggleChanged: this._toggleChanged,
       handleChangeStep: this._handleChangeStep,
@@ -92,10 +93,12 @@ export class DependencyForm extends LitElement {
   };
 
   _handleChangeEndpoint = (e) => {
-    sessionStorage.setItem('actionName',"SCRIPT_ADD_STEP");
-    this.rowSelectedData = undefined;
+    //sessionStorage.setItem('actionName',"SCRIPT_ADD_STEP");
+    //this.rowSelectedData = undefined;
+    //this.rowSelectedData={}
     this.willUpdateData = undefined;
     this.toggles = {};
+    if (this.endpoints === undefined) return [];
     const idx = this.endpoints.findIndex(
       (endpoint) => endpoint.keyName === e.target.value
     );

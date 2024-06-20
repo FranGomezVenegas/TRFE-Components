@@ -75,6 +75,21 @@ TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestiga
           #vaadin-text-field-input{
           background-color: #d0f1fa;
           }
+          vaadin-grid::part(row) {
+            background-color: transparent;
+          }
+      
+          vaadin-grid::part(header-cell) {
+            background-color: transparent;
+          }
+      
+          vaadin-grid::part(body-cell) {
+            background-color: transparent;
+          }
+      
+          vaadin-grid::part(footer-cell) {
+            background-color: transparent;
+          }          
         `
       ];
     }
@@ -222,15 +237,29 @@ TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestiga
     }
 
   }
-  getTitleElement(){    
-    if (this.viewModelFromProcModel.isStaged){
+  getTitleElement(sectionModel = this.viewModelFromProcModel){      
+    let stageData={}
+    if (sectionModel.langConfig && sectionModel.langConfig.isStaged) {
+      // Find the object in the array that matches filterName
+      const filteredStageData = sectionModel.langConfig.isStaged.find(obj => obj.hasOwnProperty(this.filterName));
+      
+      // If found, assign it to stageData
+      if (filteredStageData) {
+        stageData = filteredStageData[this.filterName];
+      } else {
+        // If not found, assign the first object in the array to stageData
+        stageData = sectionModel.langConfig.isStaged[0];
+      }
+    }
+    if (Object.keys(stageData).length !== 0){
       return html`<stages-view style="margin:17.6779px;"
-      .stages="${this.viewModelFromProcModel.isStaged.stages}"
-      .currentstage="${this.viewModelFromProcModel.isStaged.currentstage}" .lang="${this.lang}"></stages-view>`  
-    }else{
+      .stages="${stageData.stages}"
+      .currentstage="${stageData.currentstage}" .lang="${this.lang}"></stages-view>`  
+    } else {
       return html`${this.getTitle()}`
     }
   }
+
   abstractBlock(){
     //console.log('abstractBlock')
     let addContextMenu=this.addContextMenu()    
@@ -251,7 +280,7 @@ TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestiga
               html`
               ${addContextMenu!==undefined&&addContextMenu===true?html`
                 <vaadin-context-menu .items=${this.contextMenuItems} @item-selected="${this.contextMenuAction}">
-                <vaadin-grid id="mainGrid" theme="row-dividers" column-reordering-allowed multi-sort 
+                <vaadin-grid id="mainGrid" style="background-color: #ffffffa1;" theme="row-dividers" column-reordering-allowed multi-sort 
                   @active-item-changed=${this.activeItemChanged}
                   .items=${this.gridItems} .selectedItems="${this.selectedItems}"
                   ${gridRowDetailsRenderer(this.detailRenderer)}
@@ -261,7 +290,7 @@ TrazitTakePictureDialog(TrazitCredentialsDialogs(AuditFunctions((TrazitInvestiga
                 </vaadin-grid>
                 </vaadin-context-menu>`
               :html`
-                <vaadin-grid id="mainGrid" theme="row-dividers" column-reordering-allowed multi-sort 
+                <vaadin-grid id="mainGrid" style="background-color: #ffffffa1;"  theme="row-dividers" column-reordering-allowed multi-sort 
                 @active-item-changed=${this.activeItemChanged}
                 .items=${this.gridItems} .selectedItems="${this.selectedItems}"
                 ${gridRowDetailsRenderer(this.detailRenderer)}
@@ -371,7 +400,10 @@ get rowTooltip() {
       "warning_reason_label_en": "Warning Reason", "warning_reason_label_es": "Razón Aviso",
       "locking_reason_label_en": "Locking Reason", "locking_reason_label_es": "Razón Bloqueo"
     }
-    if (this.grid.items[i - 1].is_locked) {
+    let curItem={}
+    curItem=this.grid.items[i - 1]
+    console.log(curItem)
+    if (curItem!==undefined&&curItem.is_locked!==undefined&&curItem.is_locked===true) {
       this.rowTooltip.style.backgroundColor = "#24C0EB"
       this.rowTooltip.style.visibility = "visible"
       let txtValue=labels['locking_reason_label_' + this.lang] + ": "

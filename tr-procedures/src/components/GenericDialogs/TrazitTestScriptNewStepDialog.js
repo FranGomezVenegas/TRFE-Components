@@ -62,11 +62,16 @@ export function TrazitTestScriptNewStepDialog(base) {
         }
       }
       let rowData={}
-      
-      let rowSelectedRowStr=sessionStorage.getItem ('rowSelectedData')
-      if (rowSelectedRowStr!==undefined&& rowSelectedRowStr !== "[object Object]" ){
-        rowData=JSON.parse(rowSelectedRowStr)
+      if (this.actionBeingPerformedModel.actionName==="SCRIPT_UPDATE_STEP"){
+        rowData=this.selectedItems[0]
+      }else{
+        rowData={}
       }
+      
+      // let rowSelectedRowStr=sessionStorage.getItem ('rowSelectedData')
+      // if (rowSelectedRowStr!==undefined&& rowSelectedRowStr !== "[object Object]" ){
+      //   rowData=JSON.parse(rowSelectedRowStr)
+      // }
 //      console.log(rowData)
       // @closed=${this.resetFields} this is in use but moved to be executed about to perform the fetchApi
       //     otherwise it is not compatible with actions requiring credentials dialog.
@@ -503,7 +508,46 @@ export function TrazitTestScriptNewStepDialog(base) {
       //console.log(e.targetValue)
     }
     // listEntries(fld){
+
+    scriptStepArguments(fld, data){
+      s
+      this.isProcManagement=true
+      //alert("Remember to remove line 510, TrazitTestScriptNewStepDialog")
+      this.moduleName=sessionStorage.getItem('selectedProcedureModuleName')
+      //this.moduleName="STOCKS"
+      //alert(this.moduleName)
+      this.getProcMasterData(); 
+      let flattenedArray = Object.values(this.masterData).flatMap(group => Object.values(group));
+      let findProc = flattenedArray.filter(item => item.module_name === this.moduleName);
+      if (findProc.length==0) {return}
+      let endPointList=this.listTestEndpointsList()
+      const idx =endPointList.findIndex(
+        (endpoint) => endpoint.keyName === data.action_name
+      );
+      if (idx === -1) return [];
+      let endpointParams =endPointList[idx]?.arguments_array ?? [];  
+      console.log(endpointParams)    
+      return html`
+        ${endpointParams.map((curParam, curParamIdx) => html` 
+            <span style="color:blue;">${curParam.name}:</span><span style="color:green;">${this.dataArgumentValue(data,curParamIdx)}</span> `
+        )}
+        
+      ` 
+    }
+    dataArgumentValue(data, index){
+      index=(index+1)
+      let argFldName=""
+      if (index==1){argFldName="argument_0"}else{argFldName="argument_"}
+      argFldName=argFldName+index
+      
+      return data[argFldName]===undefined||data[argFldName].length===0?"N/A": data[argFldName]
+    }
+
     listTestEndpointsList() {
+      let userSession = JSON.parse(sessionStorage.getItem("userSession"))
+      this.isProcManagement=userSession.isProcManagement
+      if (this.isProcManagement===undefined||this.isProcManagement===false){return}
+
       let fld = {};
       fld.addBlankValueOnTop = true;
       fld.valuesFromMasterData = {
@@ -567,6 +611,10 @@ export function TrazitTestScriptNewStepDialog(base) {
       // `
     }
     listTestNotificationsList() {
+      let userSession = JSON.parse(sessionStorage.getItem("userSession"))
+      this.isProcManagement=userSession.isProcManagement
+      if (this.isProcManagement===undefined||this.isProcManagement===false){return}
+
       let fld = {};
       fld.addBlankValueOnTop = true;
       fld.valuesFromMasterData = {
@@ -814,6 +862,7 @@ export function TrazitTestScriptNewStepDialog(base) {
     }
 
     listTestEntriesFromMasterData(fldMDDef) {
+      this.isProcManagement=true
       this.getProcMasterData();
       return this.buildTestFrontListFromData(fldMDDef, this.masterData);
     }
@@ -913,26 +962,22 @@ export function TrazitTestScriptNewStepDialog(base) {
         return [];
       }
 
-      if (
+      if (fldMDDef==undefined&&(
         this.actionBeingPerformedModel.dialogInfo === undefined ||
         this.actionBeingPerformedModel.dialogInfo.name === undefined ||
-        this.actionBeingPerformedModel.dialogInfo.name
-          .toString()
-          .toUpperCase() !== "TESTSCRIPTNEWSTEPDIALOG"
+        this.actionBeingPerformedModel.dialogInfo.name.toString().toUpperCase() !== "TESTSCRIPTNEWSTEPDIALOG")
       ) {
         return false;
       }
-
+      let userSession = JSON.parse(sessionStorage.getItem("userSession"))
+      this.isProcManagement=userSession.isProcManagement
+      if (this.isProcManagement===undefined||this.isProcManagement===false){return}
       console.log("masterData", data);
       console.log("actionBeingPerformedModel", this.actionBeingPerformedModel);
       let entries = [];
 
       if (data[fldMDDef.propertyNameContainer] === undefined) {
-        alert(
-          "Property " +
-            fldMDDef.propertyNameContainer +
-            " not found in Master Data"
-        );
+        alert('Property ' +fldMDDef.propertyNameContainer +' not found in Master Data');
         return entries;
       }
       if (
