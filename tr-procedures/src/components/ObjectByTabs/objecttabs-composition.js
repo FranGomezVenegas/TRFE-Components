@@ -1,9 +1,25 @@
 import { html, css, nothing } from 'lit';
+
 import { CredDialog } from '@trazit/cred-dialog';
 import { Layouts } from '@collaborne/lit-flexbox-literals';
-import '@alenaksu/json-viewer';
+//import '@alenaksu/json-viewer';
 import '@spectrum-web-components/split-view/sp-split-view';
 import {DataViews} from '../../components/Views/DataViews';
+
+// import { kpiReportTitle, kpiReportTitleLvl2 } from '../../components/kpiChart/kpiChart.main.js';
+// import { kpiCard, kpiCardSomeElementsSingleObject, cardSomeElementsRepititiveObjects } from '../../components/kpiGrid/kpiGrid.main.js';
+// import { jsonViewer } from '../../components/jsonViewer/jsonViewer.main.js';
+// //import { parentReadOnlyTable } from '../../components/parentReadOnlyTable/parentReadOnlyTable.main.js';
+// import { readOnlyTable, readOnlyTableByGroup, readOnlyTableByGroupAllInOne } from '../../components/rolesAndActions/rolesAndActions.main.js';
+// import { rolesAndActions } from '../../components/rolesAndActions/rolesAndActions.main.js';
+// //import { coa, dragDropBoxes, cardMultipleElementsView, ReportController, scripts, specScripts, buttonsOnly, treeElement } from './components/your-other-components.js';
+
+
+//import '../../components/parentReadOnlyTable/parentReadOnlyTable.main.js';
+// import '../../components/kpiChart/kpiChart.main.js';
+// import '../../components/jsonViewer/jsonViewer.main.js';
+// import '../../components/kpiGrid/kpiGrid.main.js';
+// import '../../components/rolesAndActions/rolesAndActions.main.js';
 
 import { CardMultipleElementsView } from '../Views/CardMultipleElementsView';
 
@@ -21,10 +37,11 @@ import { ModuleEnvMonitDialogsMicroorganism } from "../../module_env_monit/Dialo
 import { TrazitInvestigationsDialog } from "../GenericDialogs/TrazitInvestigationsDialog";
 
 import { TrazitCredentialsDialogs } from "../GenericDialogs/TrazitCredentialsDialogs";
+import { TrazitTakePictureDialog } from '../GenericDialogs/TrazitTakePictureDialog';
 
 
 
-export class ObjecttabsComposition extends (CardMultipleElementsView(TrazitCredentialsDialogs((TrazitInvestigationsDialog(ModuleEnvMonitDialogsMicroorganism(TrazitEnterResultWithSpec(ModuleEnvMonitClientMethods(TrazitReactivateObjectsDialog(CoaView(TrazitGenericDialogs(TrazitTestScriptNewStepDialog(DataViews(CredDialog))))))))))))) {
+export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleElementsView(TrazitCredentialsDialogs((TrazitInvestigationsDialog(ModuleEnvMonitDialogsMicroorganism(TrazitEnterResultWithSpec(ModuleEnvMonitClientMethods(TrazitReactivateObjectsDialog(CoaView(TrazitGenericDialogs(TrazitTestScriptNewStepDialog(DataViews(CredDialog))))))))))))) {
   static get styles() {
     return [
       Layouts,
@@ -60,14 +77,16 @@ export class ObjecttabsComposition extends (CardMultipleElementsView(TrazitCrede
         span.cardLabel {
           font-weight: bold;
           color: #032bbc;
-          font-size: 10px;
+          font-size: 16px;
+          font-family: Montserrat;
           word-break: auto-phrase;
           color: rgb(41, 137, 216); /* #032bbc; */
   
         }
         span.cardValue {
           color: #009879;
-          font-size:8px; 
+          font-size:16px; 
+          font-family: Montserrat;
           display:inherit;            
           word-break: auto-phrase;
         }
@@ -100,7 +119,7 @@ export class ObjecttabsComposition extends (CardMultipleElementsView(TrazitCrede
     super()
     this.viewModelFromProcModel={}
     this.selectedItem = {}
-    this.selectedItemInView ={}
+    this.selectedItemInView ={}    
     this.selectedTabModelFromProcModel = {}
     this.config = {}
     this.sopsPassed=false    
@@ -118,24 +137,26 @@ export class ObjecttabsComposition extends (CardMultipleElementsView(TrazitCrede
     this.dispatchEvent(new CustomEvent('tab-selected', {bubbles: true,composed: true}));  
   }
   render(){
+    //this.selectedItem=this.selectedItemInView
     //console.log('viewName', this.viewName, 'view_definition', this.selectedTabModelFromProcModel.view_definition, 'selectedItem', this.selectedItem)
     return html`
       <div id="mainDiv">
         ${this.selectedTabModelFromProcModel===undefined?nothing:html`
-          ${this.kpiElementsController(this.selectedTabModelFromProcModel.view_definition, this.selectedItem)}
+          ${this.kpiElementsController(this.selectedTabModelFromProcModel.view_definition, this.selectedItemInView, this.selectedItem)}
         `}
       </div>
       ${this.genericFormDialog()}
       ${this.reactivateObjectsDialog()}
       ${this.testScriptNewStepFormDialog()}
 
-      ${this.credentialsDialog()} 
+      ${this.credentialsDialog()}  
       ${this.reactivateObjectsDialog()}
       ${this.moduleEnvMonitMicroorganismsDialogAdd()}
       ${this.moduleEnvMonitMicroorganismsDialogRemove()}
 
+      ${this.takePictureFormDialog()}
      
-      ${this.pointTemplate()} ${this.resultTemplate()}
+      ${this.pointTemplate()} ${this.resultTemplate(this.procInstanceName)}
       ${this.investigationTemplate()}
       ${this.filterName == "open"
         ? html`${this.decisionTemplate()}`
@@ -245,8 +266,11 @@ export class ObjecttabsComposition extends (CardMultipleElementsView(TrazitCrede
     }
   }
 
-  print2LevelsObject(elem, data){    
+  print2LevelsObject(elem, data, data2){    
     console.log(elem.elements)
+    if (this.isEmptyObject(data2)) {
+      data2 = data;
+    }
     return html`    
     ${elem.type==="reportTitle" ? this.kpiReportTitle(elem, data) : nothing}
     <div style="display: flex; flex-wrap: wrap; padding-left:30px; gap: 10px">        
@@ -295,8 +319,67 @@ export class ObjecttabsComposition extends (CardMultipleElementsView(TrazitCrede
     </div>
   `
   }
-  print1LevelObject(elem, data){   
-    
+
+  print2LevelsObjectGpt(elem, data, data2) {
+    console.log(elem.elements);
+    if (isEmptyObject(data2)) {
+      data2 = data;
+    }
+    return html`    
+      ${elem.type === "reportTitle" ? kpiReportTitle(elem, data) : nothing}
+      <div style="display: flex; flex-wrap: wrap; padding-left: 30px; gap: 10px">        
+        ${elem.elements.map((elem2, i) => {
+          return html`
+            ${elem2.is_translation === undefined || (elem2.is_translation !== undefined && elem2.is_translation === true && elem2.lang !== undefined && elem2.lang === this.lang) ?
+              html`              
+                ${elem2.type === "reportTitle" ? kpiReportTitleLvl2(elem2, data[elem.endPointResponseObject], true) : nothing}
+                ${elem2.type === "card" ? kpiCard(elem2, data[elem2.endPointResponseObject], true) : nothing}
+                ${elem2.type === "cardSomeElementsSingleObject" ? kpiCardSomeElementsSingleObject(elem2, data, true) : nothing}
+                ${elem2.type === "cardSomeElementsRepititiveObjects" ? cardSomeElementsRepititiveObjects(elem2, data, true) : nothing}              
+                ${elem2.type === "recovery_rate" ? kpiRecoveryRate(elem2, true) : nothing}
+                ${elem2.type === "grid" ? kpiGrid(elem2, data[elem2.endPointResponseObject], true) : nothing}
+                ${elem2.type === "chart" ? kpiChartFran(elem2, true) : nothing}   
+  
+                ${elem2.type === "jsonViewer" ? jsonViewer(elem2, data, true): nothing}
+                ${elem2.type === "readOnlyTable" ? readOnlyTable(elem2, data, true): nothing}
+                ${elem2.type === "parentReadOnlyTable" ? parentReadOnlyTable(elem2, data, true, undefined, undefined): nothing}
+                ${elem2.type === "readOnlyTableByGroup" ? readOnlyTableByGroup(elem2, data, true): nothing}
+                ${elem2.type === "readOnlyTableByGroupAllInOne" ? readOnlyTableByGroupAllInOne(elem2, data, true): nothing}
+  
+                ${elem2.type === "rolesAndActions" && elem2.endPointResponseObject2 !== undefined && data[elem2.endPointResponseObject] !== undefined ? 
+                  rolesAndActions(elem2, data[elem2.endPointResponseObject][elem2.endPointResponseObject2], true, this.lang) : nothing}
+                ${elem2.type === "rolesAndActions" && elem2.endPointResponseObject2 === undefined ? 
+                  rolesAndActions(elem2, data[elem2.endPointResponseObject], true, this.lang) : nothing}   
+  
+                ${elem2.type === "coa" ? coa(elem, data[elem.endPointResponseObject], true): nothing}
+  
+                ${elem2.type === "dragDropBoxes" ? dragDropBoxes(elem, data[elem2.endPointResponseObject]) : nothing}
+                
+                ${elem2.type === "cardMultipleElementsView" ? cardMultipleElementsView(elem2, data[elem2.endPointResponseObject]) : nothing}
+  
+                ${(elem2.includeChild === undefined || elem2.includeChild === false) ? nothing :
+                  html`
+                    ${kpiCardSomeElementsChild(elem2, data, true)}
+                  `}              
+                ${elem2.type === "Report" ? ReportController(elem2, true) : nothing}
+                ${elem2.type === "testScripts" ? scripts(elem2, true) : nothing}
+                ${elem2.type === "spectestScripts" ? specScripts(elem, true) : nothing}
+                ${elem2.type === "buttonsOnly" ? buttonsOnly(elem2, data[elem.endPointResponseObject]) : nothing}
+                ${elem2.type === "tree" ? treeElement(elem2, data) : nothing}
+              ` : nothing}
+          `;
+        })} 
+      </div>
+    `;
+  }  
+  isEmptyObject(obj) {
+    if (obj===null||obj===undefined){return true}
+    return Object.keys(obj).length === 0 && obj.constructor === Object;
+}
+  print1LevelObject(elem, data, data2){   
+    if (this.isEmptyObject(data2)) {
+      data2 = data;
+    }    
     return html`    
       ${elem.type==="reportTitle" ? this.kpiReportTitle(elem, data[elem.endPointResponseObject]) : nothing}
       ${elem.type==="card" ? this.kpiCard(elem, data[elem.endPointResponseObject]) : nothing}
@@ -350,21 +433,21 @@ export class ObjecttabsComposition extends (CardMultipleElementsView(TrazitCrede
     return html`<tree-view .specification=${elem.view_definition} .data=${dataArr}></tree-view>`
   }
 
-  kpiElementsController(elemDef = this.selectedTabModelFromProcModel, data = this.selectedItem) {
+  kpiElementsController(elemDef = this.selectedTabModelFromProcModel, data, data2) {
     if (data===undefined||elemDef===undefined){return}
     // if (this.selectedItem!==undefined){
     //   console.log(this.selectedItem.procInstanceName, 'kpiElementsController', 'data', data, 'elemDef', elemDef)
     // }    
     //console.log('elemDef', elemDef)
     return  html`
-        <div style="display:block">
+        <div style="display:block; padding-left:5px;">
           ${elemDef!==undefined&&Array.isArray(elemDef)?
           html`    
             ${elemDef.map((elem, i) =>           
             html`
               ${elem.is_translation===undefined||(elem.is_translation!==undefined&&elem.is_translation===true&&elem.lang!==undefined&&elem.lang===this.lang) ?
               html`              
-                ${elem.elements!==undefined? html` ${this.print2LevelsObject(elem, data)}`: html`${this.print1LevelObject(elem, data)}`}
+                ${elem.elements!==undefined? html` ${this.print2LevelsObject(elem, data, data2)}`: html`${this.print1LevelObject(elem, data, data2)}`}
               `:nothing}
             `                
             )}
@@ -372,7 +455,7 @@ export class ObjecttabsComposition extends (CardMultipleElementsView(TrazitCrede
             html`
             ${elemDef.is_translation===undefined||(elemDef.is_translation!==undefined&&elemDef.is_translation===true&&elemDef.lang!==undefined&&elemDef.lang===this.lang) ?
             html`              
-              ${elemDef.elements!==undefined? html` ${this.print2LevelsObject(elemDef, data)}`: html`${this.print1LevelObject(elemDef, data)}`}
+              ${elemDef.elements!==undefined? html` ${this.print2LevelsObject(elemDef, data, data2)}`: html`${this.print1LevelObject(elemDef, data, data2)}`}
             `:nothing}
           `}
         </div>

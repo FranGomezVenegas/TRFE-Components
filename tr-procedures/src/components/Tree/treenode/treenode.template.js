@@ -43,21 +43,19 @@ export const template = (props) => {
   
 
   return html`
-  
-  <vaadin-accordion-panel @dragstart=${handleDragStart} summary=${label} 
+  <vaadin-accordion-panel summary=${label} @dragstart=${handleDragStart}  @click=${handleShowChildrenItem}
   draggable="true"      
   >
     <vaadin-vertical-layout>
     <ul>
-      ${children
+      ${showChildren && children
         ? html`<tree-view
             .data=${children}
             .selectedItems=${selectedItems}
             .handleSelectItem=${handleSelectItem}
             .specification=${specification}
             .level=${level + 1}
-          ></tree-view>
-          `
+          ></tree-view>`
         : ''}
     </ul>
     </vaadin-vertical-layout>

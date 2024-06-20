@@ -89,8 +89,10 @@ export function ReadOnlyTableParts(base) {
             }
   
             table.TRAZiT-UsersArea thead tr th {
-              background-color: white;
-              color: gray;
+              background-color: #b6d6f3;
+              color: rgb(0 0 0 / 55%);
+              font-size: 16px;
+              font-family: Montserrat;
             }
   
             table {
@@ -98,10 +100,11 @@ export function ReadOnlyTableParts(base) {
               width: 100%;
               font-family: Montserrat;
               font-size: 16px;
+              border solid 1px rgba(78, 162, 240, 0.69);
             }
   
             table.TRAZiT-UsersArea tr {
-              border: none; 
+              border: solid 1px rgba(78, 162, 240, 0.69); 
               border-bottom: 1px solid #dddddd;
             }
   
@@ -112,11 +115,11 @@ export function ReadOnlyTableParts(base) {
             }
   
             table.TRAZiT-UsersArea tr:nth-child(even) {
-              background-color: white;
+              /* background-color: white; */
             }
   
             table.TRAZiT-UsersArea tr:last-child {
-              border: none;
+              /* border: none; */
             }
          
             table.TRAZiT-UsersArea thead {
@@ -128,12 +131,12 @@ export function ReadOnlyTableParts(base) {
             }
   
             table.TRAZiT-DefinitionArea th {
-              padding: 16px 20px;
+              padding: 5px 5px;
               border: 1px solid #dddddd !important;
             }
   
             td, th {
-              padding: 16px 20px;
+              padding: 5px 5px;
               border: 1px solid #dddddd !important;
             }
   
@@ -158,7 +161,8 @@ export function ReadOnlyTableParts(base) {
               display: none;
             }
             .selected {
-              background-color: #bdbaba !important;
+              background: linear-gradient(45deg, #54ccef6e, #03a9f400);
+              /* background-color: #148cfa36 !important; */
             }
   
             .js-context-popup {
@@ -486,9 +490,12 @@ export function ReadOnlyTableParts(base) {
         
 
 
-        cellContentController(elem, fld, data, lang, index){
+        cellContentController(elem, fld, data, lang, columnIndex, rowIndex){
+          //alert(fld.name+' '+fld.edit)
             let applyOther=true
-            if (fld.name === "pretty_spec" || fld.name === "reportTitle") {
+            if (fld.edit!==undefined&&fld.edit===true){
+              applyOther = false;
+            } else if (fld.name === "pretty_spec" || fld.name === "reportTitle") {
                 applyOther = false;
             } else if (fld.is_tag_list !== undefined &&fld.is_tag_list === true) {
                 applyOther = false;
@@ -500,17 +507,133 @@ export function ReadOnlyTableParts(base) {
                 applyOther = false;
             }                  
             return html`
-                                  
+            ${fld.edit!==undefined&&fld.edit===true?
+            html`
+                ${this.cellEditNumeric(fld, data, lang, columnIndex, rowIndex)}
+            `:html`
                 ${fld.name === "pretty_spec"==="reportTitle" ? this.cellIsPrettySpec(fld, data, lang) : nothing}
                 ${fld.is_tag_list !== undefined && fld.is_tag_list === true ? this.cellIsTagList(fld, data, lang) : nothing}
                 ${fld.as_progress !== undefined && fld.as_progress === true ? this.cellIsAsProgress(fld, data, lang) : nothing}
                 ${fld.as_paragraph !== undefined && fld.as_paragraph === true ? this.cellIsParagraph(fld, data, lang) : nothing}
-                ${fld.is_icon !== undefined && fld.is_icon === true ? this.cellIsIcon(fld, data, index) : nothing}
-                ${applyOther===true?this.cellIsOther(elem, fld, data, lang, index) : nothing}
-            
+                ${fld.is_icon !== undefined && fld.is_icon === true ? this.cellIsIcon(fld, data, columnIndex) : nothing}
+                ${applyOther===true?this.cellIsOther(elem, fld, data, lang, columnIndex) : nothing}
+            `}
             `
         }
 
+        cellEditNumeric(fld, data, lang, columnIndex, rowIndex) {
+          const id = `col_${columnIndex}_row_${rowIndex}`; // Changed ID format
+          //console.log('Rendering cell:', columnIndex, rowIndex);
+          return html`
+            <input class="enterResultVal" id="${id}" 
+              type="number" 
+              .step=${fld.step !== undefined ? fld.step : ''} 
+              .min=${fld.min !== undefined ? fld.min : ''} 
+              .max=${fld.max !== undefined ? fld.max : ''} 
+              .value=${data[fld.name]} 
+              @input=${e => this.cellEditSetValidVal(e, data)}
+              @keydown=${e => this.cellEditOnKeyDown(e, fld, columnIndex, rowIndex, data)}
+              @paste=${e => this.cellEditOnPaste(e, fld, columnIndex, rowIndex, data)}>          
+          `;
+        }
+        
+        cellEditOnPaste(event, fld, columnIndex, rowIndex, data) {
+          event.preventDefault();
+        
+          const clipboardData = event.clipboardData || window.clipboardData;
+          const pastedData = clipboardData.getData('Text');
+        
+          console.log('Pasted data:', pastedData);
+        
+          const rows = pastedData.split('\n').filter(row => row.trim() !== '');
+          
+          console.log('Rows:', rows);
+        
+          rows.forEach((row, index) => {
+            const currentRowIndex = rowIndex + index;
+            const nextInputId = `col_${columnIndex}_row_${currentRowIndex}`;
+            console.log(`Processing input ID: ${nextInputId}`);
+            const nextInput = this.shadowRoot.querySelector(`#${nextInputId}`);
+        
+            if (nextInput) {
+              const currentValue = nextInput.value.trim();
+              const newValue = row.trim();
+        
+              if (currentValue !== '') {
+                const replace = confirm(`The cell ${nextInputId} is not empty. Replace "${currentValue}" with "${newValue}"?`);
+                if (replace) {
+                  console.log(`Replacing value in ${nextInputId}:`, newValue);
+                  nextInput.value = newValue;
+                  this.cellEditSetValidVal(event, data);
+                  this.trazitButtonsMethod(event, fld.action, true, 1, event.target, data);
+                  this.cellEditMoveToNextRow(columnIndex, rowIndex);
+                } else {
+                  console.log(`Keeping existing value in ${nextInputId}:`, currentValue);
+                }
+              } else {
+                console.log(`Setting value in empty cell ${nextInputId}:`, newValue);
+                nextInput.value = newValue;
+                this.cellEditSetValidVal(event, data);
+                this.trazitButtonsMethod(event, fld.action, true, 1, event.target, data);
+                this.cellEditMoveToNextRow(columnIndex, rowIndex);      
+              }
+            } else {
+              console.warn(`Next input with ID ${nextInputId} not found`);
+            }
+          });
+        }
+
+        
+        cellEditSetValidVal(event, data) {
+          const input = event.target;
+          const value = input.value;
+        
+          console.log('Validating and setting value:', value);
+          // Actualiza tus datos aquí según sea necesario
+        }
+        
+        cellEditOnKeyDown(event, fld, columnIndex, rowIndex, data) {
+         // alert('this.cellEditOnKeyDown'+ + event.key)
+         // console.log('cellEditOnKeyDown triggered:', event.key, event.code);
+          if (event.key === 'Enter' || event.code === 'Enter') {
+            event.preventDefault();
+            //console.log('Enter key pressed, calling handleKeyDown');
+            this.cellEditHandleKeyDown(event, fld, columnIndex, rowIndex, data);
+          } else {
+            //console.log('Other key pressed:', event.key);
+          }
+        }
+        
+        cellEditHandleKeyDown(event, fld, columnIndex, rowIndex, data) {
+          //console.log('cellEditHandleKeyDown called');
+          this.trazitButtonsMethod(event, fld.action, true, 1, event.target, data);
+          this.cellEditMoveToNextRow(columnIndex, rowIndex);
+        }
+        
+        cellEditMoveToNextRow(columnIndex, rowIndex) {
+          const nextRowIndex = rowIndex + 1;
+          const nextInputId = `#col_${columnIndex}_row_${nextRowIndex}`;
+          //console.log(`Attempting to focus next input: ${nextInputId}`);
+        
+          let nextInput = this.shadowRoot.querySelector(nextInputId);
+          
+          if (!nextInput) {
+            //console.log(`Next input not found immediately: ${nextInputId}`);
+            setTimeout(() => {
+              nextInput = this.shadowRoot.querySelector(nextInputId);
+              if (nextInput) {
+              //  console.log(`Focusing next input after delay: ${nextInputId}`);
+                nextInput.focus();
+              } else {
+              //  console.warn(`Next input still not found after delay: ${nextInputId}`);
+              }
+            }, 100);
+          } else {
+            //console.log(`Focusing next input immediately: ${nextInputId}`);
+            nextInput.focus();
+          }
+        }
+                        
         cellIsPrettySpec(fld, data, lang){
             return html`   cellIsPrettySpec             
                     <span style="color:green">${data["spec_text_green_area_" + lang]}</span>
@@ -609,22 +732,23 @@ export function ReadOnlyTableParts(base) {
                 </td>    
             `
         }
-        getRowsInfo(elem, curRow, idx, lang, parentData, handler){
+        getRowsInfo(elem, curRow, rowIndex, lang, parentData, handler){
+          //console.log(rowIndex)
           return html`
-              ${elem.columns.map((fld, index) =>                     
+              ${elem.columns.map((fld, columnIndex) =>                     
                   html`
                   <td>
                       ${fld.tooltip !== undefined ? html`
                           <grid-cell-tooltip lang="${lang}" .element="${fld}" .data="${curRow}">                        
-                              ${this.cellContentController(elem, fld, curRow, lang, index)}                    
+                              ${this.cellContentController(elem, fld, curRow, lang, columnIndex, rowIndex)}                    
                           </grid-cell-tooltip>
                       `:html`
-                          ${this.cellContentController(elem, fld, curRow, lang, index)}
+                          ${this.cellContentController(elem, fld, curRow, lang, columnIndex, rowIndex)}
                       `}
                   </td>
                   `
               )}
-              ${this.generateRowButtons(elem, curRow, parentData, idx, handler, lang)}
+              ${this.generateRowButtons(elem, curRow, parentData, rowIndex, handler, lang)}
           `
           }
       

@@ -9,8 +9,6 @@ export class DependencyForm extends LitElement {
 
   static get properties() {
     return {
-      action: { type: Object },
-      selectedItem: { type: Object },
       endpoint: { type: String },
       endpoints: { type: Array },
       notification: { type: String },
@@ -100,6 +98,7 @@ export class DependencyForm extends LitElement {
     //this.rowSelectedData={}
     this.willUpdateData = undefined;
     this.toggles = {};
+    if (this.endpoints === undefined) return [];
     const idx = this.endpoints.findIndex(
       (endpoint) => endpoint.keyName === e.target.value
     );

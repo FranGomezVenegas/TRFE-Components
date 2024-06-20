@@ -80,6 +80,30 @@ return class extends ActionsFunctions(LitElement) {
             --mdc-dialog-min-width: 100vw;
           }
         }
+<style>
+            input {
+              border-style: solid;
+              border-color: #999999;
+              border-width: 1px;
+              border-radius: 7px;
+              font-family: Montserrat;
+              font-weight: bold;
+              /* font-size: 19px; */
+              background-color: #FFFFFF;
+              padding: 8px;
+              flex: 1;
+            }
+            .input-container {
+              display: flex;
+              align-items: center;
+            }
+            .input-container span {
+              font-family: Montserrat;
+              font-weight: bold;
+              /* font-size: 19px; */
+              margin: 0 4px;
+            }          
+          </style>          
       `
     ];
   }  
@@ -87,7 +111,8 @@ return class extends ActionsFunctions(LitElement) {
         return {
           enterResults: { type: Array },
           selectedItems: { type: Array },
-          actionBeingPerformedModel: {type: Object}
+          actionBeingPerformedModel: {type: Object},
+          procInstanceName: { type:String}
         }
     }
     constructor() {
@@ -102,7 +127,9 @@ return class extends ActionsFunctions(LitElement) {
     get rowTooltipEnterResults() {return this.shadowRoot.querySelector("#rowTooltipenterresults")}
     get uomDialog() {return this.shadowRoot.querySelector("tr-dialog#uomConvertionDialog")}
 
-    resultTemplate() {
+    resultTemplate(procInstanceName) {
+      //alert(procInstanceName)
+      this.procInstanceName=procInstanceName
       // console.log('resultTemplate', 'this.actionBeingPerformedModel', this.actionBeingPerformedModel)
       // if(this.actionBeingPerformedModel===undefined||this.actionBeingPerformedModel.dialogInfo===undefined||this.actionBeingPerformedModel.dialogInfo.name===undefined){return nothing}
       // if (this.actionBeingPerformedModel.dialogInfo.name !== "resultDialog"&&
@@ -474,7 +501,7 @@ return class extends ActionsFunctions(LitElement) {
           `
         } else if (result.param_type.toUpperCase() == "FILE") {
           return html` 
-          <upload-button .action="${this.selectedDialogAction}" .selectedItem="${result}" 
+          <upload-button procInstanceName="${this.procInstanceName}" .config="${this.config}" .action="${this.actionBeingPerformedModel}" .selectedItem="${result}" 
             name="upload"  label="File"></upload-button>
 <!--          <mwc-icon-button icon="print" @click=${this.printCoa}></mwc-icon-button>   
           <mwc-icon-button icon="print" @click=${() => {this.openFile(result)}}></mwc-icon-button>   
@@ -545,7 +572,7 @@ return class extends ActionsFunctions(LitElement) {
     }
 
     valRendererInstrument(result) {
-      alert(result.param_type)
+      //alert(result.param_type)
       //console.log('valRendererInstrument', 'result', result)
       if (result.is_locked) {
         return html`
@@ -560,7 +587,7 @@ return class extends ActionsFunctions(LitElement) {
           `
         } else if (result.param_type.toUpperCase() == "FILE") {
           return html` 
-          <upload-button .action="${this.selectedDialogAction}" .selectedItem="${result}" 
+          <upload-button procInstanceName="${this.procInstanceName}" .config="${this.config}" .action="${this.actionBeingPerformedModel}" .selectedItem="${result}" 
             name="upload"  label="File"></upload-button>
 <!--          <mwc-icon-button icon="print" @click=${this.printCoa}></mwc-icon-button>   
           <mwc-icon-button icon="print" @click=${() => {this.openFile(result)}}></mwc-icon-button>   

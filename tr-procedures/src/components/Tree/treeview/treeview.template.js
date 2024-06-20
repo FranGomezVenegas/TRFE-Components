@@ -9,7 +9,7 @@ export const template = (props) => {
 
   
   return html`
-    
+    <vaadin-accordion @item-selected=${handleItemSelected}>
       ${data.map((node) => {
         return html`
           <tree-node
@@ -22,5 +22,6 @@ export const template = (props) => {
           ></tree-node>
         `;
       })}
+    </vaadin-accordion>
   `;
 };

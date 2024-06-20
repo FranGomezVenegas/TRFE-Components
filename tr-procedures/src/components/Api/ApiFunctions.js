@@ -15,7 +15,7 @@ export function ApiFunctions(base) {
         urlParams += "&isForTesting="+ this.config.isForTesting
         this.dispatchEvent(new CustomEvent('set-activity', {bubbles: true, composed: true}))
         return fetch(urlParams).then(async r => {
-          if (r.status == 200) {
+          if (r.status == 200) {             
             return r.json()
           } else {
             let err = await r.json()
@@ -30,7 +30,7 @@ export function ApiFunctions(base) {
             }))
           }
           if (actionModel!==undefined){
-            this.refreshMasterData(j, actionModel)
+           this.refreshMasterData(j, actionModel)
           }
           return j
         }).catch(e => {
@@ -111,8 +111,15 @@ export function ApiFunctions(base) {
     
 
       refreshMasterData(endPointResponse, actionModel) {
-        
-        if ( (actionModel.area===undefined)&&(endPointResponse===undefined||endPointResponse.master_data===undefined)) {
+        if (this.procInstanceName===undefined){
+          let currentTabView=JSON.parse(sessionStorage.getItem("currentOpenView"))
+          if (currentTabView!==null&&currentTabView!==undefined&&currentTabView.procInstanceName!==undefined){
+            this.procInstanceName=currentTabView.procInstanceName
+          }
+        }
+        console.log(endPointResponse.master_data)
+        if ( endPointResponse===undefined||endPointResponse.master_data===undefined) {
+         // alert('master Data no se va a refrescar!')
           return
         } 
        // console.log('refreshMasterDataaaa', 'procInstanceName', this.procInstanceName, 'actionModel.area', actionModel.area,  'endPointResponse', endPointResponse)        
@@ -132,6 +139,13 @@ export function ApiFunctions(base) {
       }  
 
       getAPICommonParams(action, excludeProcInstanceName = false){
+        if (this.procInstanceName===undefined){
+          let currentTabView=JSON.parse(sessionStorage.getItem("currentOpenView"))
+          if (currentTabView!==null&&currentTabView!==undefined&&currentTabView.procInstanceName!==undefined){
+            this.procInstanceName=currentTabView.procInstanceName
+          }
+        }
+
         if (action===undefined){return}
         let extraParams={}  
         extraParams.actionName=action.actionName
@@ -141,7 +155,7 @@ export function ApiFunctions(base) {
           let userSession = JSON.parse(sessionStorage.getItem("userSession"))
           extraParams.dbName = userSession.dbName
         }   
-        if (excludeProcInstanceName!==undefined&&excludeProcInstanceName===false){
+        if (this.procInstanceName!==undefined&&excludeProcInstanceName!==undefined&&excludeProcInstanceName===false){
           extraParams.procInstanceName = this.procInstanceName
         }
         extraParams.finalToken= JSON.parse(sessionStorage.getItem("userSession")).finalToken
@@ -187,6 +201,13 @@ export function ApiFunctions(base) {
           return jsonParam
       }
       getActionAPIUrl(action){
+        if (this.procInstanceName===undefined){
+          let currentTabView=JSON.parse(sessionStorage.getItem("currentOpenView"))
+          if (currentTabView!==null&&currentTabView!==undefined&&currentTabView.procInstanceName!==undefined){
+            this.procInstanceName=currentTabView.procInstanceName
+          }
+        }
+
         //console.log('getActionAPIUrl', this.procInstanceName)
         if (action!==undefined&&action.endPoint!==undefined){
           return action.endPoint ? action.endPoint : this.config.SampleAPIactionsUrl
@@ -216,6 +237,12 @@ export function ApiFunctions(base) {
         }
       }
       getQueryAPIUrl(query){
+        if (this.procInstanceName===undefined){
+          let currentTabView=JSON.parse(sessionStorage.getItem("currentOpenView"))
+          if (currentTabView!==null&&currentTabView!==undefined&&currentTabView.procInstanceName!==undefined){
+            this.procInstanceName=currentTabView.procInstanceName
+          }
+        }
         //console.log('getQueryAPIUrl', this.procInstanceName)
         if (query!==undefined&&query.endPoint!==undefined){
           return query.endPoint ? query.endPoint : this.config.SampleAPIqueriesUrl
@@ -434,8 +461,8 @@ export function ApiFunctions(base) {
           }else{
             jsonParam[p.argumentName] = selObject[p.selObjectPropertyName] // get value from selected item
           }
-        } else if (p.targetValue) {
-          jsonParam[p.argumentName] = targetValue[p.argumentName] // get value from target element passed
+        } else if (p.targetValue) {          
+          jsonParam[p.argumentName] = p.targetValuePropertyName!==undefined?targetValue[p.targetValuePropertyName]: targetValue[p.argumentName] 
         } else if (p.fixValue) {
           jsonParam[p.argumentName] = p.fixValue
         } else if (p.contextVariableName) {
