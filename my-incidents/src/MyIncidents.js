@@ -165,11 +165,17 @@ export class MyIncidents extends CommonCore {
   }
 
   render() {
+    let hasConfirmDate=false    
+    if (this.selectedItem!==null&this.selectedItem!==undefined&&this.selectedItem.date_confirmed!==undefined){
+      hasConfirmDate=String(this.selectedItem.date_confirmed).length>0      
+    }
     return html`
     <div class="layout horizontal center flex wrap">
       <mwc-icon-button icon="refresh" @click=${this.getOpenIncidents}></mwc-icon-button>
       <mwc-icon-button style="color:#c9252d" .title="${langConfig.button.new["label_"+this.lang]}" icon="add" @click=${()=>{this.action=`${langConfig.button.new["label_"+this.lang]} Incident`;this.openDialog("createStep1")}}></mwc-icon-button>
-      <mwc-icon-button style="color:#12805c" .title="${langConfig.button.confirm["label_"+this.lang]}" icon="check" ?disabled=${!this.selectedItem} @click=${()=>{this.action=`${langConfig.button.confirm["label_"+this.lang]} Incident`;this.openDialog("confirm")}}></mwc-icon-button>
+      ${hasConfirmDate?nothing:html`
+          <mwc-icon-button style="color:#12805c" .title="${langConfig.button.confirm["label_"+this.lang]}" icon="check" ?disabled=${!this.selectedItem} @click=${()=>{this.action=`${langConfig.button.confirm["label_"+this.lang]} Incident`;this.openDialog("confirm")}}></mwc-icon-button>
+      `}      
       <mwc-icon-button style="color:#0d66d0" .title="${langConfig.button.note["label_"+this.lang]}" icon="note_add" ?disabled=${!this.selectedItem} @click=${()=>{this.action=`${langConfig.button.note["label_"+this.lang]}`;this.openDialog("note")}}></mwc-icon-button>
       <mwc-icon-button style="color:#747474" .title="${langConfig.button.close["label_"+this.lang]}" icon="close" ?disabled=${!this.selectedItem} @click=${()=>{this.action=`${langConfig.button.close["label_"+this.lang]} Incident`;this.openDialog("close")}}></mwc-icon-button>
       <mwc-icon-button .title="${langConfig.button.reopen["label_"+this.lang]}" icon="lock_open" @click=${()=>{this.action=`${langConfig.button.reopen["label_"+this.lang]} Incident`;this.openDialog("reopen")}} ?disabled=${!this.closedIds.length}></mwc-icon-button>
@@ -220,7 +226,7 @@ export class MyIncidents extends CommonCore {
   addDialogTitle(){
     if (this.category.name===undefined){return html``}//${this.action}`}
     return html`
-      ${this.dialogType=="ZZZcreate"?html`<button disabled><img .src="/images/incidentType/${this.category.name}_${this.flag}.webp" style="width:80px; background-color: transparent;"></button>`:html``}
+      ${this.dialogType=="ZZZcreate"?html`<button disabled><img .src="/images/incidentType/${this.category.name}_${this.flag}.png" style="width:80px; background-color: transparent;"></button>`:html``}
     <!--${this.action}        -->
     `
   }
@@ -253,7 +259,7 @@ export class MyIncidents extends CommonCore {
       return html`
         <div style="display: grid; ${gridStyle}" class="reopenPart">
           ${incidentsType.map((curType, idx) => html`
-            <button style="width:100px; border: none; background-color: transparent;" @click=${() =>{this.newTicketForm(curType)}}><img .src="/images/incidentType/${curType.name}_${this.lang}.webp" style="width:100%"></button><br><br></br>
+            <button style="width:100px; border: none; background-color: transparent;" @click=${() =>{this.newTicketForm(curType)}}><img .src="/images/incidentType/${curType.name}_${this.lang}.png" style="width:100%"></button><br><br></br>
           `)}
         </div>
       `
@@ -295,14 +301,14 @@ export class MyIncidents extends CommonCore {
   buttonsByTypeAndAction(){
     switch (this.dialogType){
       case "createStep2":
-        return html`<img .src="/images/incidentType/${this.category.name}_${this.flag}.webp" style="width:80px; background-color: transparent; position: absolute; top:-10px; left:-15px;">
+        return html`<img .src="/images/incidentType/${this.category.name}_${this.flag}.png" style="width:80px; background-color: transparent; position: absolute; top:-10px; left:-15px;">
         <sp-button class="dialogButton" size="m" @click=${this.createIncident}>${langConfig.button.new["label_"+this.lang]}</sp-button>`
       case "confirm":
         return html`<sp-button class="dialogButton" size="m" @click=${this.confirmIncident} ?hidden=${this.dialogType!="confirm"}>${langConfig.button.confirm["label_"+this.lang]}</sp-button>`
       case "note":
         return html`<sp-button class="dialogButton" size="m" @click=${this.addNote} ?hidden=${this.dialogType!="note"}>${langConfig.button.note["label_"+this.lang]}</sp-button>`
       case "close":
-        return html`<sp-button class="dialogButton" size="m" @click=${this.closeIncident} ?hidden=${this.dialogType!="close"}>${langConfig.button.reopen["label_"+this.lang]}</sp-button>`
+        return html`<sp-button class="dialogButton" size="m" @click=${this.closeIncident} ?hidden=${this.dialogType!="close"}>${langConfig.button.close["label_"+this.lang]}</sp-button>`
       case "reopen":
         return html`<sp-button class="dialogButton" size="m" @click=${this.reopenIncident} ?hidden=${this.dialogType!="reopen"} ?disabled=${!this.closedIds.length}>${langConfig.button.reopen["label_"+this.lang]}</sp-button>`
       default: return html``
@@ -455,14 +461,21 @@ export class MyIncidents extends CommonCore {
   }
 
   reopenIncident() {
-    if (!this.icdNote.validity.valid) {
-      return this.icdNote.focus()
+    if (this.icdNote===null){
+      this.incidentAPI({
+        actionName: 'REOPEN_INCIDENT',
+        incidentId: this.icdId.value
+      })
+    }else{
+      if (!this.icdNote.validity.valid) {
+        return this.icdNote.focus()
+      }
+      this.incidentAPI({
+        actionName: 'REOPEN_INCIDENT',
+        incidentId: this.icdId.value,
+        note: this.icdNote.value
+      })
     }
-    this.incidentAPI({
-      actionName: 'REOPEN_INCIDENT',
-      incidentId: this.icdId.value,
-      note: this.icdNote.value
-    })
   }
 
   openDialog(type) {
