@@ -1,190 +1,144 @@
 import { css } from 'lit';
 
 export const flipCardStyles = css`
-    /* Colors */
-:root {
-    --background-color: #ece0e8;
-    --primary-light: #ca3782;
-    --primary-dark: #1e0b36;
-    --black: #000;
-    --gray-dark: #aaa;
-    --gray-light: #eee;
-    --white: #fff;
-}
-
-/* Reset */
-*,
-*::after,
-*::before {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html {
-    font-size: 62.5%;
-}
-
-body {
-    height: 100vh;
-    background-color: var(--background-color);
-    font-family: 'Inconsolata', monospace;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.flip-card-container {
+  /* Your CSS styles here */
+  .flip-card-container {
     perspective: 1000px;
-}
+  }
 
-.flip-card {
-    width: 30rem;
-    height: 40rem;
+  .flip-card {
+    width: 300px;
+    height: 400px;
     position: relative;
-}
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    cursor: pointer;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
 
-.flip-card-inner {
+  .flip-card-inner {
     width: 100%;
     height: 100%;
-    transition: transform 0.6s ease;
+    transition: transform 0.6s;
     transform-style: preserve-3d;
     position: relative;
-}
+  }
 
-.flip-card-front,
-.flip-card-back {
-    width: 100%;
+  .flip-card-front,
+  .flip-card-back {
+    // width: 100%;
     height: 100%;
     position: absolute;
     backface-visibility: hidden;
-    border-radius: 5px;
+    border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.2);
-}
+  }
 
-.flip-card-front {
-    background-image: linear-gradient(
-        to right bottom,
-        rgba(30, 11, 54, 0.65),
-        rgba(202, 55, 130, 0.7)
-    ),
-    url('https://cdn.spacetelescope.org/archives/images/screen/heic0406a.jpg');
-    background-size: cover;
+  .flip-card-front {
+    background: linear-gradient(to right bottom, #ca3782, #1e0b36);
+    color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.flip-card-back {
-    background-color: var(--white);
-    transform: rotateY(180deg);
-    display: flex;
     flex-direction: column;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .flip-card-back {
+    background-color: white;
+    transform: rotateY(180deg);
+    display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.flip-card:hover .flip-card-inner {
-    transform: rotateY(180deg);
-}
-
-.card-content {
+    flex-direction: column;
+    color: #333;
+    padding: 20px;
     text-align: center;
-    color: var(--white);
-}
+  }
 
-.card-header {
-    margin-bottom: 4rem;
-}
+  .card-header {
+    margin-bottom: 20px;
+  }
 
-.card-role {
-    letter-spacing: 0.5rem;
+  .card-role {
     font-size: 1.6rem;
     text-transform: uppercase;
-    margin-bottom: 1rem;
-}
+    letter-spacing: 2px;
+    margin-bottom: 5px;
+  }
 
-.card-title {
+  .card-title {
     font-family: 'VT323', monospace;
-    text-transform: uppercase;
-    font-size: 4rem;
+    font-size: 3.6rem;
     font-weight: 100;
-}
+    margin-bottom: 10px;
+  }
 
-.card-cover {
-    position: relative;
+  .card-cover {
     width: 100%;
-    height: 14rem;
-    background-size: cover;
-    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
-    background-image: linear-gradient(
-            to top right,
-            rgba(30, 11, 54, 0.65),
-            rgba(202, 55, 130, 0.65)
-        ),
-        url('https://cdn.spacetelescope.org/archives/images/screen/heic0406a.jpg');
+    height: 40%;
+    background: linear-gradient(to top right, #ca3782, #1e0b36);
+    color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-}
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+  }
 
-.card-heading {
-    text-align: center;
-    color: var(--white);
-}
-
-.card-heading-text {
+  .card-heading-text {
     font-family: 'VT323', monospace;
-    font-size: 3rem;
+    font-size: 2.4rem;
     font-weight: 300;
     text-transform: uppercase;
-    padding: 1rem 1.5rem;
-}
+    padding: 10px 15px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+  }
 
-.card-details {
-    padding: 2rem;
+  .card-details {
+    padding: 20px;
     text-align: center;
-}
+  }
 
-.skills-list {
+  .skills-list {
     list-style: none;
     padding: 0;
-}
+    overflow-y: auto;
+    max-height: 200px; /* Adjust as needed */
+  }
 
-.skills-list li {
-    font-size: 1.4rem;
-    padding: 1rem 0;
-}
+  .skills-list li {
+    font-size: 1.6rem;
+    padding: 10px 0;
+  }
 
-.skills-list li:not(:last-child) {
-    border-bottom: 1px solid var(--gray-light);
-}
+  .flip-button {
+    background-color: #ca3782;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.6rem;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+  }
 
-/* Responsivity */
-@media only screen and (max-width: 600px) {
+  .flip-button:hover {
+    background-color: #1e0b36;
+  }
+
+  .flipped .flip-card-inner {
+    transform: rotateY(180deg);
+  }
+
+  @media only screen and (max-width: 600px) {
     .flip-card {
-        width: 80%;
-        height: auto;
+      width: 80%;
+      height: auto;
     }
-
-    .flip-card-front,
-    .flip-card-back {
-        height: auto;
-        box-shadow: none;
-    }
-
-    .card-cover {
-        height: 10rem;
-    }
-
-    .card-title {
-        font-size: 3rem;
-    }
-
-    .card-heading-text {
-        font-size: 2rem;
-    }
-}
-
+  }
 `;
+
