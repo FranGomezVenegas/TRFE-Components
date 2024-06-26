@@ -1,24 +1,32 @@
 import { html } from "lit";
 export function ListsFunctions(base) {
     return class extends (base) {
-        actionWhenListValueSelected(event, fld, dialogInfo){
-            if (fld===undefined){return}
-            if (fld.dependencyActionFields===undefined&&fld.dependencyFieldBehavior===undefined&&
-                fld.dependencyFieldBehaviorForAll===undefined){return}
-            const selectedItem = event.target.selected;
+        actionWhenListValueSelected(event, fld, dialogInfo) {
+            if (!fld) return;
+            if (!fld.dependencyActionFields && !fld.dependencyFieldBehavior && !fld.dependencyFieldBehaviorForAll) return;
+          
+            const selectedItem = event.target.selectedItem; // use selectedItem instead of selected
+            if (!selectedItem) return;
+          
             const index = selectedItem.getAttribute('data-index');
-            const itemData = JSON.parse(selectedItem.getAttribute('data-item')); 
-            if (fld.dependencyActionFields!==undefined){
-                this.dependencyActionFields(fld, itemData.allRecord);
+            const itemData = selectedItem.getAttribute('data-item');
+            if (!itemData) return;
+          
+            const parsedItemData = JSON.parse(itemData);
+          
+            if (fld.dependencyActionFields) {
+              this.dependencyActionFields(fld, parsedItemData.allRecord);
             }
-            if (fld.dependencyFieldBehavior!==undefined){
-                this.dependencyFieldBehavior(fld.dependencyFieldBehavior, itemData.allRecord, true, itemData.keyName);
+            if (fld.dependencyFieldBehavior) {
+              this.dependencyFieldBehavior(fld.dependencyFieldBehavior, parsedItemData.allRecord, true, parsedItemData.keyName);
             }
-            if (fld.dependencyFieldBehaviorForAll!==undefined){
-                this.dependencyFieldBehaviorForAll(fld.dependencyFieldBehaviorForAll, event.target.id, itemData.allRecord, dialogInfo, true, itemData.keyName);
+            if (fld.dependencyFieldBehaviorForAll) {
+              this.dependencyFieldBehaviorForAll(fld.dependencyFieldBehaviorForAll, event.target.id, parsedItemData.allRecord, dialogInfo, true, parsedItemData.keyName);
             }
-            return 
-        }
+          
+            return;
+          }
+          
         actionWhenOtherThanListValueChanged(event, fld, dialogInfo, itemData){
             if (fld===undefined){return}
             if (fld.dependencyActionFields===undefined&&fld.dependencyFieldBehavior===undefined&&
