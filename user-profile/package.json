@@ -3,7 +3,7 @@
   "description": "Component user profile of trazit platform",
   "license": "MIT",
   "author": "Trazit Team",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "index.js",
   "module": "index.js",
   "scripts": {
@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@collaborne/lit-flexbox-literals": "^0.2.2",
+    "@material/mwc-dialog": "^0.27.0",
     "@material/mwc-icon-button": "^0.27.0",
     "@material/mwc-textfield": "^0.27.0",
     "@spectrum-web-components/button": "^0.15.0",
