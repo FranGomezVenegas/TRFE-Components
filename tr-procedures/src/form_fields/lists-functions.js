@@ -1,24 +1,32 @@
 import { html } from "lit";
 export function ListsFunctions(base) {
     return class extends (base) {
-        actionWhenListValueSelected(event, fld, dialogInfo){
-            if (fld===undefined){return}
-            if (fld.dependencyActionFields===undefined&&fld.dependencyFieldBehavior===undefined&&
-                fld.dependencyFieldBehaviorForAll===undefined){return}
-            const selectedItem = event.target.selected;
+        actionWhenListValueSelected(event, fld, dialogInfo) {
+            if (!fld) return;
+            if (!fld.dependencyActionFields && !fld.dependencyFieldBehavior && !fld.dependencyFieldBehaviorForAll) return;
+          
+            const selectedItem = event.target.selected; // use selectedItem instead of selected
+            if (!selectedItem) return;
+          
             const index = selectedItem.getAttribute('data-index');
-            const itemData = JSON.parse(selectedItem.getAttribute('data-item')); 
-            if (fld.dependencyActionFields!==undefined){
-                this.dependencyActionFields(fld, itemData.allRecord);
+            const itemData = selectedItem.getAttribute('data-item');
+            if (!itemData) return;
+          
+            const parsedItemData = JSON.parse(itemData);
+          
+            if (fld.dependencyActionFields) {
+              this.dependencyActionFields(fld, parsedItemData.allRecord);
             }
-            if (fld.dependencyFieldBehavior!==undefined){
-                this.dependencyFieldBehavior(fld.dependencyFieldBehavior, itemData.allRecord, true, itemData.keyName);
+            if (fld.dependencyFieldBehavior) {
+              this.dependencyFieldBehavior(fld.dependencyFieldBehavior, parsedItemData.allRecord, true, parsedItemData.keyName);
             }
-            if (fld.dependencyFieldBehaviorForAll!==undefined){
-                this.dependencyFieldBehaviorForAll(fld.dependencyFieldBehaviorForAll, event.target.id, itemData.allRecord, dialogInfo, true, itemData.keyName);
+            if (fld.dependencyFieldBehaviorForAll) {
+              this.dependencyFieldBehaviorForAll(fld.dependencyFieldBehaviorForAll, event.target.id, parsedItemData.allRecord, dialogInfo, true, parsedItemData.keyName);
             }
-            return 
-        }
+          
+            return;
+          }
+          
         actionWhenOtherThanListValueChanged(event, fld, dialogInfo, itemData){
             if (fld===undefined){return}
             if (fld.dependencyActionFields===undefined&&fld.dependencyFieldBehavior===undefined&&
@@ -232,30 +240,40 @@ export function ListsFunctions(base) {
         }
         
         
-        updateListEntries(listFieldName, fldMDDef, newData) {            
+        updateListEntries(listFieldName, fldMDDef, newData) {
             let itemsToInject = this.buildFrontListFromData(this[listFieldName].definition.valuesFromMasterData, newData, true);
             let htmlListEntries = this.convertListToHtmlListEntries(fldMDDef, itemsToInject);
-        
+            console.log(this[listFieldName])
+            console.log(htmlListEntries)
             if (this[listFieldName]) {
-                // Manipula directamente el contenido HTML del elemento de lista
-                this[listFieldName].innerHTML = '';
-                this[listFieldName].appendChild(htmlListEntries);
-                this.requestUpdate(); // Fuerza la actualización del componente
-            }            
-        }
+              // Clear the existing list items
+              this[listFieldName].innerHTML = '';
+              
+              // Append each new list item directly to the mwc-select
+              htmlListEntries.forEach(item => {
+                this[listFieldName].appendChild(item);
+              });
+          
+              this.requestUpdate(); // Force the component to update
+            }
+          }
+          
         
         convertListToHtmlListEntries(fld, newList) {
-            // Crea un contenedor temporal para las nuevas entradas HTML
-            let container = document.createElement('div');
-            container.innerHTML = newList.map((c, i) => `
-                <mwc-list-item 
-                    value="${c.keyName}" 
-                    ?selected="${fld.selectedValue === c.keyName}" 
-                    data-index="${i}"
-                    data-item="${JSON.stringify(c)}">${c["keyValue_" + this.lang]}
-                </mwc-list-item>`).join('');
-            return container;
-        }
+            // Create an array to hold the new mwc-list-item elements
+            let listItems = newList.map((c, i) => {
+              let listItem = document.createElement('mwc-list-item');
+              listItem.value = c.keyName;
+              listItem.selected = fld.selectedValue === c.keyName;
+              listItem.setAttribute('data-index', i);
+              listItem.setAttribute('data-item', JSON.stringify(c));
+              listItem.textContent = c["keyValue_" + this.lang];
+              return listItem;
+            });
+          
+            return listItems;
+          }
+          
         
 
         listEntries(fld, multilist = false) {

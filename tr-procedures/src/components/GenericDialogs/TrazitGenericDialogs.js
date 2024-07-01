@@ -11,6 +11,7 @@ import '../MultiSelect';
 import '../Tree/treeview/index';
 import '../speclimitquantitative/index';
 import { ListsFunctions } from '../../form_fields/lists-functions';
+import '@vaadin/accordion';
 
 import {DialogsFunctions} from './DialogsFunctions';
 export function TrazitGenericDialogs(base) {
@@ -245,6 +246,12 @@ export function TrazitGenericDialogs(base) {
             `: html`              
             ${actionModel.dialogInfo.fields.map((fld, i) =>             
                 html`   
+                ${!fld.tree1 ?
+                    html``: html` 
+                    <vaadin-accordion>       
+                        <tree-view id="tree1" .data=${fld.tree1.treeElementData} .specification=${fld.tree1.treeElementSpecification} @item-selected=${fld.tree1.treeSelection}></tree-view>  
+                        </vaadin-accordion>      `
+                } 
                 ${!fld.acceptancecriteria ?
                     html``: html`        
                         <speclimit-quantitative id="acceptancecriteria" .fld=${fld.acceptancecriteria} ></speclimit-quantitative>         
@@ -474,7 +481,7 @@ export function TrazitGenericDialogs(base) {
                         value="${fld.checkbox5.default_value}"
                     ></mwc-checkbox>
                         </mwc-formfield>
-                    `}                              
+                    `}                               
                     ${!fld.checkbox6 ?
                     html``: html`        
                         <mwc-formfield label="${this.fieldLabel(fld.checkbox6)}" >
@@ -584,11 +591,21 @@ export function TrazitGenericDialogs(base) {
                         <mwc-textfield id="daterange5dateEnd" label="${this.fieldLabel(fld.daterange5.dateEnd)}" type="date"></mwc-textfield>
                         </div>
                 `}
-                ${!fld.list1 ?html``: html`       
-                <div class="layout horizontal flex center-center"> 
-                    <mwc-select id="list1" label="${this.fieldLabel(fld.list1)}" @selected=${(e)=>this.actionWhenListValueSelected(e, fld.list1, actionModel.dialogInfo)} ?disabled=${this.isFieldDisabled(fld.list1)} .definition=${fld.list1}
-                        style="width:100%;">
-                        ${this.listEntries(fld.list1)}</mwc-select>`}  
+                ${!fld.list1 
+                    ? html`` 
+                    : html`       
+                        <div class="layout horizontal flex center-center"> 
+                            <mwc-select 
+                            id="list1" 
+                            label="${this.fieldLabel(fld.list1)}" 
+                            @selected=${(e) => this.actionWhenListValueSelected(e, fld.list1, actionModel.dialogInfo)} 
+                            ?disabled=${this.isFieldDisabled(fld.list1)} 
+                            .definition=${fld.list1}
+                            style="width:100%;">
+                            ${this.listEntries(fld.list1)}
+                            </mwc-select>
+                        </div>
+                    `}
                 </div>
                 ${!fld.list2 ?html``: html`        
                     <div class="layout horizontal flex center-center"> 

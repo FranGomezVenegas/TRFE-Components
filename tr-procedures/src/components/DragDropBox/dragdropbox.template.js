@@ -48,12 +48,29 @@ export const template = (tmpLogic, selectedBox, viewModel, lang, componentRef) =
                 </div>
             
             </div>
-
-        ${boxContentStructured===true?
-            html`${boxStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, boxAllowMoveObject)}`
-        :
-            html`${boxNotStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, boxAllowMoveObject)}`
-        }
+            <div style="display:flex; justify-content: flex-start; align-items: flex-start;">
+            ${viewModel.boxPosicsViews===undefined||viewModel.boxPosicsViews.length==1? html``:html`
+                <div >
+                    <mwc-icon style="color:#54CCEF; cursor:pointer; " @click=${() => tmpLogic.setShowBoxViewModeList()}> view_agenda </mwc-icon>
+                    ${tmpLogic.listBoxViewMode ? html `
+                        ${viewModel.boxPosicsViews.map((view, i) => html `
+                        <div style="display:flex;">
+                            <input style="transform: translateY(3px);" type="radio" id="${view[1]}" name="fav_language" value="${view[1]}"  @click=${() => tmpLogic.setBoxPosicsViewFilter(i)}>                            
+                            <label for="${view[1]}" @click=${() => tmpLogic.setBoxPosicsViewFilter(i)}> 
+                                <multi-select id="${view[1]}" @click=${() => tmpLogic.setBoxPosicsViewFilter(i)} .label="" .props=${{"readOnly":true, "displayLabel":false}} .activeOptions=${view} .options=${{}}> </multi-select>                            
+                            </label><br>                            
+                        </div>                        
+                        `)}
+                    `: 
+                    html ``}
+                </div>
+                `}
+            ${boxContentStructured===true?
+                html`${boxStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, boxAllowMoveObject)}`
+            :
+                html`${boxNotStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, boxAllowMoveObject)}`
+            }
+            </div>
         </div>  
         ${viewModel.boxPosicsViews===undefined||viewModel.boxPosicsViews.length==1? html``:html`
         <div >
@@ -165,7 +182,7 @@ function boxStructured(tmpLogic, selectedBox, viewModel, lang, componentRef, box
                             ${printObjectData(tmpLogic, selectedBox, axisCols, boxPosicsViews, i, j)}
                             <div class="position">
                                 <span> ${rowN + (j + 1)} </span>
-                                <span> ${ i * axisCols.length + (j + 1) } </span>
+                                <!--<span> ${ i * axisCols.length + (j + 1) } </span>-->
                             </div>
                         </div>
                     </div>
