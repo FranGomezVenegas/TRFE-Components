@@ -30,88 +30,91 @@ function myTable(elem, dataArr, lang, props, thisComponent) {
  }
  
 
-  const renderTable = () => {
-      return html`
-          <div style="flex:1;">
-              <!-- Smart Filter UI -->
-              ${elem.smartFilter ? html`
+ const renderTable = () => {
+  return html`
+      <div style="flex:1;">
+          <!-- Smart Filter UI -->
+          ${elem.smartFilter ? html`
+              <div class="smart-filter-container">
                   <div>
                       <span>
-                          <mwc-button label="${elem.smartFilter?.displayFilterButton?.title["label_" + lang]}" raised @click="${()=>{thisComponent.toggleFilterDialog(elem.name)}}"></mwc-button>
+                          <button class="smart-filter-button" @click="${() => { thisComponent.toggleFilterDialog(elem.name) }}">
+                              ${elem.smartFilter?.displayFilterButton?.title["label_" + lang]}
+                          </button>
                       </span>
                   </div>
                   <div id="smartFilterDiv_${elem.name}" ?hidden="${thisComponent.hideFilters(elem.name)}">
                       ${elem.smartFilter?.dialogInfo?.fields?.map((fld, i) =>
                           html`
-                              ${!fld ?
-                                  html`` : html`
-                                      ${fld.type === 'select' ? 
-                                      html`
-                                      <div class="layout horizontal flex center-center">
-                                      <mwc-select id="list1" name="${fld.name}">  
-                                      <mwc-list-item value="" name="">Select</mwc-list-item>                       
-                                      ${fld.select_options.map((c, i) =>
-                                          html`<mwc-list-item value="${c.value}" name="${c.name}">${c["lable_" + lang]}</mwc-list-item>`
-                                      )}
-                                      </mwc-select>
+                              ${!fld ? html`` : html`
+                                  ${fld.type === 'select' ? html`
+                                      <div class="smart-filter-field layout horizontal flex center-center">
+                                          <mwc-select id="list1" name="${fld.name}">
+                                              <mwc-list-item value="" name="">Select</mwc-list-item>
+                                              ${fld.select_options.map((c, i) =>
+                                                  html`<mwc-list-item value="${c.value}" name="${c.name}">${c["lable_" + lang]}</mwc-list-item>`
+                                              )}
+                                          </mwc-select>
                                       </div>
-                                      `
-                                      :
-                                      html`
-                                      <div class="layout horizontal flex center-center">
+                                  ` : html`
+                                      <div class="smart-filter-field layout horizontal flex center-center">
                                           <mwc-textfield class="layout flex" id="smartFilter_text_${i}" type="text"
                                               value=${fld.default_value ? fld.default_value : ''}
                                               label="${fld["label_" + lang]}"
                                               @keypress=${e => e.keyCode == 13 && thisComponent.genomaSuperDialogClickedAction()}>
                                           </mwc-textfield>
                                       </div>
-                                      `
-                                    }
-                                      
                                   `}
+                              `}
                           `
                       )}
-                      <div>
+                      <div class="smart-filter-actions">
                           <span>
-                              <mwc-button label="${elem.smartFilter?.applyFilterButton?.title["label_" + lang]}" raised @click="${()=>handleFilter(elem,thisComponent)}"></mwc-button>
+                              <button class="smart-filter-button" @click="${() => handleFilter(elem, thisComponent)}">
+                                  ${elem.smartFilter?.applyFilterButton?.title["label_" + lang]}
+                              </button>
                           </span>
                           <span>
-                              <mwc-button label="${elem.smartFilter?.clearFilterButton?.title["label_" + lang]}" raised @click="${()=>handleClear(elem,thisComponent)}"></mwc-button>
+                              <button class="smart-filter-button" @click="${() => handleClear(elem, thisComponent)}">
+                                  ${elem.smartFilter?.clearFilterButton?.title["label_" + lang]}
+                              </button>
                           </span>
                       </div>
                   </div>
-              ` : undefined}
-              <!-- Table -->
-              <table class="dragdropable TRAZiT-DefinitionArea" style="width: 400px;">
-                  <thead>
-                      ${elem.columns.map((column, i) => html`<th>${column["label_" + lang]}</th>`)}
-                  </thead>
-                  <tbody>
-                      ${dataArr=== undefined || !Array.isArray(dataArr) ? html `No Data` :
-                          html`
-                              ${dataArr.map((p, idx) => { return html `
-                                  <tr class="dragdropabletr" draggable="${elem.dragEnable}"
-                                      @dragstart=${(e) => props.dragTableTr(e, elem, p)}
-                                      @dragover=${(e) => props.allowDropTr(e)}
-                                      @drop=${(e) => props.dropTableTr(e, elem, p)}>
-                                      ${elem.columns.map((fld, index) =>
-                                          html`<td>${p[fld.name]}</td>`
-                                      )}
-                                      ${elem.row_buttons === undefined ? html`` : html`
-                                          <td>
-                                              <div class="layout horizontal center flex wrap">
-                                                  ${thisComponent.getButtonForRows(elem.row_buttons, p, false, parentData)}
-                                              </div>
-                                          </td>
-                                      `}
-                                  </tr>
-                              `})}
-                          `}
-                  </tbody>
-              </table>
-          </div>
-      `;
-  };
+              </div>
+          ` : undefined}
+          <!-- Table -->
+          <table class="dragdropable TRAZiT-DefinitionArea">
+              <thead>
+                  ${elem.columns.map((column, i) => html`<th>${column["label_" + lang]}</th>`)}
+              </thead>
+              <tbody>
+                  ${dataArr === undefined || !Array.isArray(dataArr) ? html `No Data` :
+                      html`
+                          ${dataArr.map((p, idx) => html`
+                              <tr class="dragdropabletr" draggable="${elem.dragEnable}"
+                                  @dragstart=${(e) => props.dragTableTr(e, elem, p)}
+                                  @dragover=${(e) => props.allowDropTr(e)}
+                                  @drop=${(e) => props.dropTableTr(e, elem, p)}>
+                                  ${elem.columns.map((fld, index) =>
+                                      html`<td>${p[fld.name]}</td>`
+                                  )}
+                                  ${elem.row_buttons === undefined ? html`` : html`
+                                      <td>
+                                          <div class="layout horizontal center flex wrap">
+                                              ${thisComponent.getButtonForRows(elem.row_buttons, p, false, parentData)}
+                                          </div>
+                                      </td>
+                                  `}
+                              </tr>
+                          `)}
+                      `}
+              </tbody>
+          </table>
+      </div>
+  `;
+};
+
 
   return renderTable();
 }
@@ -165,50 +168,54 @@ function cardSomeElementsRepititiveObjects(elem, data, lang, props,thisComponent
       <div style="flex:1;">
       <!-- Smart Filter UI -->
       ${elem.smartFilter ? html`
-          <div>
-              <span>
-                  <mwc-button label="${elem.smartFilter?.displayFilterButton?.title["label_" + lang]}" raised @click="${()=>{thisComponent.toggleFilterDialog(elem.name)}}"></mwc-button>
-              </span>
-          </div>
-          <div id="smartFilterDiv_${elem.name}" ?hidden="${thisComponent.hideFilters(elem.name)}">
-              ${elem.smartFilter?.dialogInfo?.fields?.map((fld, i) =>
-                  html`
-                      ${!fld ?
-                          html`` : html`
-                              ${fld.type === 'select' ? 
-                              html`
-                              <div class="layout horizontal flex center-center">
-                              <mwc-select id="list1" label="${fld["label_" + lang]}" name="${fld.name}">                                      
-                              ${fld.select_options.map((c, i) =>
-                                  html`<mwc-list-item value="${c.value}" name="${c.name}">${c["lable_" + lang]}</mwc-list-item>`
-                              )}
-                              </mwc-select>
-                              </div>
-                              `
-                              :
-                              html`
-                              <div class="layout horizontal flex center-center">
-                                  <mwc-textfield class="layout flex" id="smartFilter_text_${i}" type="text"
-                                      .value=${fld.default_value ? fld.default_value : ''}
-                                      label="${fld["label_" + lang]}"
-                                      @keypress=${e => e.keyCode == 13 && thisComponent.genomaSuperDialogClickedAction()}>
-                                  </mwc-textfield>
-                              </div>
-                              `
-                            }
-                              
-                          `}
-                  `
-              )}
-              <div>
-                  <span>
-                      <mwc-button label="${elem.smartFilter?.applyFilterButton?.title["label_" + lang]}" raised @click="${()=>handleFilter(elem,thisComponent)}"></mwc-button>
-                  </span>
-                  <span>
-                      <mwc-button label="${elem.smartFilter?.clearFilterButton?.title["label_" + lang]}" raised @click="${()=>handleClear(elem,thisComponent)}"></mwc-button>
-                  </span>
+                        <div class="smart-filter-container">
+                  <div>
+                      <span>
+                          <button class="smart-filter-button" @click="${() => { thisComponent.toggleFilterDialog(elem.name) }}">
+                              ${elem.smartFilter?.displayFilterButton?.title["label_" + lang]}
+                          </button>
+                      </span>
+                  </div>
+                  <div id="smartFilterDiv_${elem.name}" ?hidden="${thisComponent.hideFilters(elem.name)}">
+                      ${elem.smartFilter?.dialogInfo?.fields?.map((fld, i) =>
+                          html`
+                              ${!fld ? html`` : html`
+                                  ${fld.type === 'select' ? html`
+                                      <div class="smart-filter-field layout horizontal flex center-center">
+                                          <mwc-select id="list1" name="${fld.name}">
+                                              <mwc-list-item value="" name="">Select</mwc-list-item>
+                                              ${fld.select_options.map((c, i) =>
+                                                  html`<mwc-list-item value="${c.value}" name="${c.name}">${c["lable_" + lang]}</mwc-list-item>`
+                                              )}
+                                          </mwc-select>
+                                      </div>
+                                  ` : html`
+                                      <div class="smart-filter-field layout horizontal flex center-center">
+                                          <mwc-textfield class="layout flex" id="smartFilter_text_${i}" type="text"
+                                              value=${fld.default_value ? fld.default_value : ''}
+                                              label="${fld["label_" + lang]}"
+                                              @keypress=${e => e.keyCode == 13 && thisComponent.genomaSuperDialogClickedAction()}>
+                                          </mwc-textfield>
+                                      </div>
+                                  `}
+                              `}
+                          `
+                      )}
+                      <div class="smart-filter-actions">
+                          <span>
+                              <button class="smart-filter-button" @click="${() => handleFilter(elem, thisComponent)}">
+                                  ${elem.smartFilter?.applyFilterButton?.title["label_" + lang]}
+                              </button>
+                          </span>
+                          <span>
+                              <button class="smart-filter-button" @click="${() => handleClear(elem, thisComponent)}">
+                                  ${elem.smartFilter?.clearFilterButton?.title["label_" + lang]}
+                              </button>
+                          </span>
+                      </div>
+                  </div>
               </div>
-          </div>
+              
       ` : undefined}
           ${data.map(
             (d, i) => html` ${kpiCardSomeElementsMain(elem, d, lang, props,thisComponent)} `
