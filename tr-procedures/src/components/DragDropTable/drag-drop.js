@@ -93,7 +93,7 @@ export class DrapDrop extends (TrazitTakePictureDialog(TrazitCredentialsDialogs(
         selectedItems: { type: Array },
         actionBeingPerformedModel:{type:Object},
         localProceduresModels: { type: Object},
-        masterData:{type: Object},
+        data:{type: Object},
         contextMenuItems: { type: Array }
 
       };
@@ -107,7 +107,7 @@ export class DrapDrop extends (TrazitTakePictureDialog(TrazitCredentialsDialogs(
       this.viewModelFromProcModel={}   
       this.actionBeingPerformedModel={}
       this.localProceduresModels=ProceduresModel
-      this.masterData={}
+      this.data={}
       this.contextMenuItems=[]
     }
     resetView(){
@@ -120,7 +120,7 @@ export class DrapDrop extends (TrazitTakePictureDialog(TrazitCredentialsDialogs(
           ${this.ready===false ? html`${this.GetViewData()}`: nothing}            
         </div>
         <dragdrop-table .action=${this.actionModelForTable} .config=${this.config} .viewModelFromProcModel=${this.viewModelFromProcModel}
-          .data=${this.gridItems}
+          .data=${this.data}
           .lang=${this.lang} .procName=${this.procName} .procInstanceName=${this.procInstanceName} .desktop=${this.desktop} > </dragdrop-table>
       `
     }

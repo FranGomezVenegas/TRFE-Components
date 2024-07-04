@@ -1,26 +1,34 @@
-import { html } from 'lit-element';
-
+import { html } from "lit-element";
 import '@material/mwc-icon';
-import '@material/mwc-button';
-export const template = (props, data, lang,thisComponent) => {
-	let genericDialog = thisComponent.genericFormDialog()
-    return html`
-        <div style="display:flex; flex-direction:row; gap:12px;">
-		${genericDialog}
-        ${props.definition.map((curTable, ii) =>
-        html`
-          ${curTable.name===undefined||curTable.type===undefined ? html`The object ${ii} has no name or type attribute, this is mandatory`
-          :
-          html`
-          ${curTable.type==='table'?myTable(curTable, data, lang, props,thisComponent):html``}
-          ${curTable.type==='cards'?cardSomeElementsRepititiveObjects(curTable, data, lang, props,thisComponent):html``}
-          ${curTable.type!=='table'&&curTable.type!=='cards'?html`The type ${curTable.type} is not recognized`:html``}
-          `
-          }
-        `)}
 
-        </div>
-    `;
+export const template = (props, data, lang) => {    
+  return html`
+    <div style="display:flex; flex-direction:row; gap:12px;">
+      ${props.definition.map((curTable, ii) => 
+      html`
+        ${curTable.name === undefined || curTable.type === undefined ? 
+          html`The object ${ii} has no name or type attribute, this is mandatory`
+          :html` 
+            <div style="display:flex; flex-direction:column; gap:12px; align-items: center;">
+              ${curTable.title === undefined ? html`` : html` 
+                <p style="width: 100%; display: flex; justify-content: center;">
+                  <span class="title">${curTable.title["label_" + lang]}</span>
+                </p>
+              `}              
+              ${curTable.type === 'table' ? myTable(curTable, data, lang, props) : html``}
+              ${curTable.type === 'cards' ? cardSomeElementsRepititiveObjects(curTable, data, lang, props) : html``}
+              ${curTable.type !== 'table' && curTable.type !== 'cards' ? 
+                html`The type ${curTable.type} is not recognized` 
+                : 
+                html``
+              }
+            </div>
+          `
+        }  
+      `)}        
+    </div>
+  `;
+
 }
 
 function myTable(elem, dataArr, lang, props, thisComponent) {  
@@ -215,7 +223,7 @@ function cardSomeElementsRepititiveObjects(elem, data, lang, props,thisComponent
                       </div>
                   </div>
               </div>
-              
+
       ` : undefined}
           ${data.map(
             (d, i) => html` ${kpiCardSomeElementsMain(elem, d, lang, props,thisComponent)} `
