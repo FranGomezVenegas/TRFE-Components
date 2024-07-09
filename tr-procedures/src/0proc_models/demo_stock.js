@@ -12,12 +12,13 @@ export const Stock =
 	  "last_change_note_20230327_2": "Added new view, QualificationInProgress"
   },
   "ModuleSettings":{
-	  "actionsEndpoints":[
-		{ "name": "InventoryLot" , "url" : "/app/procs/InvTrackingAPIactions"}
-	  ],
-	  "queriesEndpoints":[
-		{ "name": "InventoryLot" , "url" : "/app/procs/InvTrackingAPIqueries"}
-	  ]
+	"serviceAPIurl": "https://platform.trazit.net:8443/TRAZiT-API",
+	"actionsEndpoints":[
+	{ "name": "InventoryLot" , "url" : "/app/procs/InvTrackingAPIactions"}
+	],
+	"queriesEndpoints":[
+	{ "name": "InventoryLot" , "url" : "/app/procs/InvTrackingAPIqueries"}
+	]
   },
   "MasterData":{
     "component": "ObjectByTabs",
@@ -121,7 +122,7 @@ export const Stock =
 			  "theme":"TRAZiT-DefinitionArea",
 			  "endPointPropertyArray":["active_batches"],
 			  "dataIntegrityCheck":{
-				"dropingEntryRequiredProperties":["sample_id", "study", "temperature"],
+				"dropingEntryRequiredProperties":["sample_id", "study", "temperature"]
 			  },        
 			  "fieldsToDisplay": [
 				{
@@ -148,7 +149,7 @@ export const Stock =
 				  "title": {
 					"label_en": "Add to Batch", "label_es": "Añadir a Tanda"
 				  },
-				  "requiresGridItemSelected": true,
+				  "requiresGridItemSelected": true
 				},
 				"endPointParams": [
 				  { "argumentName": "sampleId", "dragElement": "sample_id" },
@@ -169,7 +170,7 @@ export const Stock =
 			"theme":"TRAZiT-DefinitionArea",
 			"endPointPropertyArray":["variables_set"],
 			"dataIntegrityCheck":{
-			  "dropingEntryRequiredProperties":["param_name"],
+			  "dropingEntryRequiredProperties":["param_name"]
 			},
 			"columns": [
 				{
@@ -200,7 +201,7 @@ export const Stock =
 				"title": {
 				  "label_en": "Add to Batch", "label_es": "Añadir a Tanda"
 				},
-				"requiresGridItemSelected": true,          
+				"requiresGridItemSelected": true       
 			  },
 			  "endPointParams": [
 				{ "argumentName": "sampleId", "selObjectPropertyName": "sample_id" },
@@ -217,7 +218,7 @@ export const Stock =
 				"title": {
 				  "label_en": "Add to Batch", "label_es": "Añadir a Tanda"
 				},
-				"requiresGridItemSelected": true,
+				"requiresGridItemSelected": true
 			  },
 			  "endPointParams": [
 				{ "argumentName": "variableName", "dragElement": "param_name" },
@@ -1869,7 +1870,7 @@ export const Stock =
 				  {
 					"name": "measurement_family",
 					"label_en": "Family",
-					"label_es": "Familia",					
+					"label_es": "Familia"					
 				  },
 				  {
 					"name": "is_base",
@@ -1994,7 +1995,7 @@ export const Stock =
 					{
 					  "name": "measurement_family",
 					  "label_en": "Family",
-					  "label_es": "Familia",					
+					  "label_es": "Familia"				
 					},
 					{
 					  "name": "is_base",
@@ -2059,7 +2060,7 @@ export const Stock =
 				  {
 					"name": "measurement_family",
 					"label_en": "Family",
-					"label_es": "Familia",					
+					"label_es": "Familia"					
 				  },
 				  {
 					"name": "is_base",
@@ -2672,8 +2673,9 @@ export const Stock =
 		{"actionName": "zzzNEW_INVENTORY_LOT",
 		"requiresDialog": true,
         "endPointParams": [
-          { "argumentName": "reference", "element": "tree1", "defaultValue": ""  },
-          { "argumentName": "category", "element": "list1", "defaultValue": "" },
+          { "argumentName": "referenceTree", "element": "tree1", "defaultValue": ""  },
+          { "argumentName": "category", "element": "listLinked1", "defaultValue": "" },
+		  { "argumentName": "reference", "element": "listLinked2", "defaultValue": ""  },
           { "argumentName": "lotName", "element": "text2", "defaultValue": "" },
 		  { "argumentName": "quantity", "element": "number1", "defaultValue": "" },
 		  { "argumentName": "quantityUom", "fixValue": "mL" },
@@ -2697,14 +2699,32 @@ export const Stock =
         "dialogInfo": {          
           "name": "genericDialog",
           "fields": [
+			{"qrcode":{}},
 			{"tree1":{
+				"label_en": "Tree", "label_es": "Arbol",
 				"treeElementData":[
 					{
 					  "name": "hola lvl1",
 					  "level2":[
 						{ 
-						  "otro":"hola lvl2"
+						  "otro":"hola lvl2",
+						  "otrolabel":"hola lbl lvl2",
+						  "level3":[
+							{ 
+								"otro":"holaa lvl3"
+							}
+						  ]
+
 						},
+						{ 
+							"otro":"holaa lvl2"
+						},						
+						{ 
+							"otro":"holaaa lvl2"
+						},						
+						{ 
+							"otro":"holaaaaa lvl2"
+						},						
 						{ 
 						  "otro":"adios lvl2"
 						}
@@ -2713,8 +2733,8 @@ export const Stock =
 					{
 					  "name": "adios lvl1"
 					}
-				  ],
-				"treeElementSpecification":[
+				],
+				"treeElementSpecification":
 					{
 					  "key": "name",
 					  "label": "name",
@@ -2724,61 +2744,67 @@ export const Stock =
 						"') '",
 						"name"
 					  ],
-					  "children": "level2"
-					},
-					{
-					  "key": "otro",
-					  "label": "otro",
-					  "label2": [
-						"'('",
-						"otro",
-						"') '",
-						"otro"
-					  ],
-					  "children": "children"
-					}
-				]
-			}
-
+					  "children": "level2",
+					  "children_definition":{
+						"key": "otro",
+						"label": "otrolabel",
+						"label2": [
+						  "'('",
+						  "otro",
+						  "') '",
+						  "otro"
+						],
+						"children": "level3",
+						"children_definition":{
+							"key": "otro",
+							"label": "otro",
+							"label2": [
+							  "'('",
+							  "otro",
+							  "') '",
+							  "otro"
+							],
+						}	
+					  },
+				}
+				
+				},
 			},
-			{"list1": {
-				"label_en": "Category", "label_es": "Categoría", "optional": true,
-				"addBlankValueOnTop": true, "addBlankValueAtBottom": false,
-				"valuesFromMasterData": {
+			
+			{"twoListsLinked": {
+				"listLinked1": {
+				  "label_en": "Category", "label_es": "Categoría", "optional": true,
+				  "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
+				  "xxxitems": [
+					{ "keyName": '1', "keyValue_en":"Option 1", "keyValue_es":"Opción 1", "label": 'Option 1' },
+					{ "keyName": '2', "keyValue_en":"Option 2", "keyValue_es":"Opción 2", "label": 'Option 2' }
+					
+				  ],
+				  "valuesFromMasterData": {
 					"propertyNameContainer": "category_and_references",
 					"propertyNameContainerLevelPropertyKeyName": "name",
-					"propertyKeyName": "name", "propertyKeyValueEn": "name", "propertyKeyValueEs": "name"
+					"filterDependency": ["list1"],
+					"selectedEntryFromFilterPropertyName": "inv_reference",
+					"propertyKeyName": "name", "propertyKeyValueEn": "name", "propertyKeyValueEs": "name"				
+					}					  
 				},
-				"dependencyActionFields":[
-					{"field": "text4", "staticValue": "hola" },
-					{"field": "text3", "fieldValue": "name" },
-					{"field": "list2", "allRecordEntryWithList": "inv_reference", 
-						"propertyNameInDestination": "category_and_references"}
-				],
-				"dependencyFieldBehaviorForAll":
-					{"rule": "whenEmpty", "resetValue": true, "action": "disable", 
-						"exceptionFields":[ "list2"]}
-				,
-				"dependencyFieldBehavior":[
-					{"field": "text4", "rule": "whenEmpty", "resetValue": true}, 
-					{"field": "text5", "rule": "whenEmpty"}, 
-					{"field": "list2", "rule": "whenEmpty", "resetValue": true},
-					{"field": "number2", "rule": "whenEmpty", "resetValue": true, 
-						"action": "hide"}
-				]
-
-			}},
-			{"list2": { "label_en": "Reference", "label_es": "Referencia",
-			  "valuesFromMasterData": {
-				"propertyNameContainer": "category_and_references",
-				"propertyNameContainerLevelPropertyKeyName": "name",
-				"filterDependency": ["list1"],
-				"selectedEntryFromFilterPropertyName": "inv_reference",
-				"propertyKeyName": "name", "propertyKeyValueEn": "name", "propertyKeyValueEs": "name"				
-			  }			
-
-			}
-			},
+				"listLinked2": {
+				  "label_en": "Reference", "label_es": "Referencia",
+				  "addBlankValueOnTop": true, "addBlankValueAtBottom": false,
+				  "xxxitems": [
+					{ "keyName": 'a', "keyValue_en":"Option 1-A", "keyValue_es":"Opción 1-A", "label": 'Option A', "parentValue": '1' },
+					{ "keyName": 'b', "keyValue_en":"Option 2-B", "keyValue_es":"Opción 2-B", "label": 'Option B', "parentValue": '2' }					
+				  ],
+				  "valuesFromMasterData": {
+					"propertyNameContainer": "category_and_references",
+					"propertyNameContainerLevelPropertyKeyName": "name",
+					"filterDependency": ["list1"],
+					"selectedEntryFromFilterPropertyName": "inv_reference",
+					"propertyKeyName": "name", "propertyKeyValueEn": "name", "propertyKeyValueEs": "name"				
+					}					  
+				}
+			  },			
+			},			
             {"text2": { "label_en": "lot id", "label_es": "id Lote" ,
 				}
 			},

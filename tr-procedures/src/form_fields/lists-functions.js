@@ -232,7 +232,8 @@ export function ListsFunctions(base) {
         }
         
         
-        updateListEntries(listFieldName, fldMDDef, newData) {            
+        updateListEntries(listFieldName, fldMDDef, newData) {     
+            return       
             let itemsToInject = this.buildFrontListFromData(this[listFieldName].definition.valuesFromMasterData, newData, true);
             let htmlListEntries = this.convertListToHtmlListEntries(fldMDDef, itemsToInject);
         
@@ -245,6 +246,7 @@ export function ListsFunctions(base) {
         }
         
         convertListToHtmlListEntries(fld, newList) {
+            return
             // Crea un contenedor temporal para las nuevas entradas HTML
             let container = document.createElement('div');
             container.innerHTML = newList.map((c, i) => `
@@ -410,11 +412,15 @@ export function ListsFunctions(base) {
         }   
         getProcMasterData(){
             let userSession = JSON.parse(sessionStorage.getItem("userSession"))
+            if (this.procInstanceName===undefined){                
+                this.procInstanceName=sessionStorage.getItem("currentProcInstanceName")
+            }
+            //sessionStorage.getItem("currentProcInstanceName")
             this.isProcManagement=userSession.isProcManagement
             if (this.isProcManagement===undefined||this.isProcManagement!==true){
                 //let userSession = JSON.parse(sessionStorage.getItem("userSession"))
 
-                
+                //alert(this.procInstanceName)
 
                 //console.log('userSession.procedures_list.procedures', userSession.procedures_list.procedures)
                 let findProc =[]
@@ -440,6 +446,7 @@ export function ListsFunctions(base) {
         }
         listEntriesFromMasterData(fldMDDef){
             this.getProcMasterData()
+            console.log(fldMDDef, this.masterData)
             return this.buildFrontListFromData(fldMDDef, this.masterData)
         }
     
@@ -511,16 +518,18 @@ export function ListsFunctions(base) {
                 }
             }
             if (fldMDDef.filterInFirstLevel===undefined||fldMDDef.filterInFirstLevel!==true){
-                data[fldMDDef.propertyNameContainer].forEach(item =>{
-                   // console.log('item', item, 'fldMDDef.propertyNameContainer.propertyKeyName', fldMDDef.propertyKeyName)
-                    let blankEmpty={keyName:'', keyValue_en:'', keyValue_es:''}
-                    blankEmpty.keyName=item[fldMDDef.propertyKeyName]
-                    blankEmpty.keyValue_en=item[fldMDDef.propertyKeyValueEn]
-                    blankEmpty.keyValue_es=item[fldMDDef.propertyKeyValueEs]
-                    blankEmpty.allRecord=item
-                    //console.log('blankEmpty', blankEmpty)
-                    entries.push(blankEmpty)
-                })
+                if (data[fldMDDef.propertyNameContainer]!==undefined){
+                    data[fldMDDef.propertyNameContainer].forEach(item =>{
+                    // console.log('item', item, 'fldMDDef.propertyNameContainer.propertyKeyName', fldMDDef.propertyKeyName)
+                        let blankEmpty={keyName:'', keyValue_en:'', keyValue_es:''}
+                        blankEmpty.keyName=item[fldMDDef.propertyKeyName]
+                        blankEmpty.keyValue_en=item[fldMDDef.propertyKeyValueEn]
+                        blankEmpty.keyValue_es=item[fldMDDef.propertyKeyValueEs]
+                        blankEmpty.allRecord=item
+                        //console.log('blankEmpty', blankEmpty)
+                        entries.push(blankEmpty)
+                    })
+                }
             }else{
                 // if ((fldMDDef.elementName===undefined||fldMDDef.elementName===null)&&
                 //     (fldMDDef.propertyNameContainerLevelfixValue===undefined||fldMDDef.propertyNameContainerLevelfixValue===null)

@@ -2,19 +2,23 @@ import { html, nothing } from 'lit';
 import { commonLangConfig } from '@trazit/common-core';
 import {GridFunctions} from '../grid_with_buttons/GridFunctions';
 import '@material/mwc-textarea';
+import '@cicciosgamino/qr-code-element';
 
 import '@material/mwc-list/mwc-list-item';
 import '@material/mwc-select';
 import '@material/mwc-checkbox';
 import '@material/mwc-formfield';
 import '../MultiSelect';
-import '../Tree/treeview/index';
+//import '../Tree/treeview/index';
+import '../Tree/tree-viewfran';
 import '../speclimitquantitative/index';
 import { ListsFunctions } from '../../form_fields/lists-functions';
-
+import '../../form_fields/twolistslinked'
 import {DialogsFunctions} from './DialogsFunctions';
+import { DialogsFeatures } from './CommonFunctions/DialogsFeatures';
 export function TrazitGenericDialogs(base) {
-  return class extends ListsFunctions(GridFunctions(DialogsFunctions(base))) {
+
+  return class extends DialogsFeatures(ListsFunctions(GridFunctions(DialogsFunctions(base)))) {
     static get properties() {
       return {
         selectedResults: { type: Array },
@@ -40,6 +44,7 @@ export function TrazitGenericDialogs(base) {
         genericDialogGridItems: { type: Array },
         genericDialogGridSelectedItems: { type: Array },
         area: { type: String },
+        procInstanceName: { type: String }
       }
     }
 
@@ -57,7 +62,42 @@ export function TrazitGenericDialogs(base) {
       this.masterData={}
       this.genericDialogGridItems=[]
       this.genericDialogGridSelectedItems=[]
+      this.procInstanceName = ''; 
     }
+    handleQRCodeDecoded(e) {
+        const decodedData = e.detail.value; // Asumiendo que el evento tiene los datos decodificados
+        const dialogFields = this.actionBeingPerformedModel.dialogInfo.fields;
+        dialogFields.forEach(field => {
+            const keyName = Object.keys(field)[0];
+            const fieldDef = field[keyName];
+            if (fieldDef.qrCodeParsing && decodedData[fieldDef.qrCodeParsing]) {
+                this[keyName].value = decodedData[fieldDef.qrCodeParsing];
+            }
+        });
+    }
+    renderQRCodeScanner(actionModel) {
+        const qrCodeField = actionModel.dialogInfo.fields.find(field => field.qrcode);
+        if (qrCodeField) {
+            return html`
+            <div class="layout horizontal flex center-center">
+                <qr-code-element
+                    continuous
+                    @qrcode-decoded=${this.handleQRCodeDecoded}>
+                </qr-code-element>
+            </div>
+            `;
+        }
+        return nothing;
+    }
+    
+    renderDialogFields(actionModel) {
+        return html`
+        ${actionModel.dialogInfo.fields.map((fld, i) => html`
+            // Renderiza tus campos aquí como antes
+        `)}
+        `;
+    }
+
     openGenericDialog(actionModel = this.actionBeingPerformedModel){
         //alert('openGenericDialog')
         if (actionModel===undefined||actionModel.dialogInfo===undefined){
@@ -109,14 +149,9 @@ export function TrazitGenericDialogs(base) {
            e.stopPropagation();
         }
     }
-    isFieldDisabled(fld){        
-        if (fld.disabled!==undefined&&fld.disabled===true){
-            return true
-        }
-        return false
-    }
     /** Date Template Dialog part  @open=${this.defaultValue()}*/
-    genericFormDialog(actionModel) {
+    genericFormDialog(actionModel, procInstanceName) {
+        this.procInstanceName=procInstanceName
         if (actionModel === undefined) {
             actionModel = this.actionBeingPerformedModel
             if (actionModel!==undefined){
@@ -156,7 +191,9 @@ export function TrazitGenericDialogs(base) {
         --mdc-select-hover-line-color:rgba(36, 192, 235, 1);
         --mdc-notched-outline-border-color: rgba(186, 235, 248, 0.4);
         --mdc-select-disabled-dropdown-icon-color:rgba(36, 192, 235, 1);
-
+        --mdc-select-label-ink-color: #148CFA;
+        
+        
         font-family : Montserrat;
         font-weight : bold;
         font-size : 19px;
@@ -210,6 +247,7 @@ export function TrazitGenericDialogs(base) {
                 <sp-button size="xl" slot="primaryAction" dialogAction="accept" @click=${this.acceptedGenericGridDialog}>
                     ${commonLangConfig.confirmDialogButton["label_" + this.lang]}</sp-button>
             </div>  
+            
             ${this.genericDialogGridItems==undefined||this.genericDialogGridItems.length==0?
                 html`${this.lang==="en"?'No items to display':'No hay elementos para ver'}`
             :html`
@@ -229,6 +267,7 @@ export function TrazitGenericDialogs(base) {
                     ${this.genericDialogGridItems==undefined||this.genericDialogGridItems.length==0?html`${this.lang==="en"?'No items to display':'No hay elementos para ver'}`
                     :html`
                     <ul class="file-list">
+                    ${this.renderQRCodeScanner(actionModel)}
                         ${this.genericDialogGridItems.map((fld, i) =>
                         html`
                         <li class="file-list-item">
@@ -251,8 +290,11 @@ export function TrazitGenericDialogs(base) {
                 `}          
 
                 ${!fld.tree1 ?
-                    html``: html`        
-                        <tree-view id="tree1" .data=${fld.tree1.treeElementData} .specification=${fld.tree1.treeElementSpecification} @item-selected=${fld.tree1.treeSelection}></tree-view>         
+                    html``: html`     
+  <tree-viewfran    id="tree1" .data="${fld.tree1.treeElementData}"   label="${this.fieldLabel(fld.tree1)}" .specification="${fld.tree1.treeElementSpecification}"    
+    @item-selected=${fld.tree1.treeSelection}    .level="${0}"  ></tree-viewfran>                       
+               <!--         <tree-view id="tree1" .data=${fld.tree1.treeElementData} .specification=${fld.tree1.treeElementSpecification} 
+               @item-selected=${fld.tree1.treeSelection}></tree-view>         -->
                 `}          
                 ${!fld.text1 ?
                     html``: html`        
@@ -583,7 +625,10 @@ export function TrazitGenericDialogs(base) {
                         <mwc-textfield id="daterange5dateStart" label="${this.fieldLabel(fld.daterange5.dateStart)}" type="date"></mwc-textfield>
                         <mwc-textfield id="daterange5dateEnd" label="${this.fieldLabel(fld.daterange5.dateEnd)}" type="date"></mwc-textfield>
                         </div>
-                `}
+                `}                
+                ${!fld.twoListsLinked ?html``: html`                
+                    <two-lists-linked .procInstanceName=${this.procInstanceName} lang=${this.lang} .fld=${fld.twoListsLinked}></two-lists-linked>
+                `}      
                 ${!fld.list1 ?html``: html`       
                 <div class="layout horizontal flex center-center"> 
                     <mwc-select id="list1" label="${this.fieldLabel(fld.list1)}" @selected=${(e)=>this.actionWhenListValueSelected(e, fld.list1, actionModel.dialogInfo)} ?disabled=${this.isFieldDisabled(fld.list1)} .definition=${fld.list1}
@@ -957,20 +1002,27 @@ export function TrazitGenericDialogs(base) {
     }
 
     
-    fldDisabled(){
-        return false
-    }   
 
-    fieldLabel(fld){        
-        let fldLbl= fld["label_" + this.lang]
-        if (fld.optional===undefined||fld.optional===false){
-            fldLbl="* "+fldLbl
-        }
-        return fldLbl
-    }
      
     get acceptancecriteria() {return this.shadowRoot.querySelector("speclimit-quantitative#acceptancecriteria")    }        
-    get tree1() {    return this.shadowRoot.querySelector("tree-view#tree1")    }        
+    get twoListsLinked() {    return this.shadowRoot.querySelector("two-lists-linked")    }    
+
+    get twoListsLinked() {
+        return this.shadowRoot.querySelector("two-lists-linked");
+      }
+    
+      get listLinked1() {
+        const twoListsLinkedComponent = this.twoListsLinked;
+        return twoListsLinkedComponent ? twoListsLinkedComponent.listLinked1 : null;
+      }
+    
+      get listLinked2() {
+        const twoListsLinkedComponent = this.twoListsLinked;
+        return twoListsLinkedComponent ? twoListsLinkedComponent.listLinked2 : null;
+      }
+    
+
+    get tree1() {    return this.shadowRoot.querySelector("tree-viewfran#tree1")    }        
     get text1() {    return this.shadowRoot.querySelector("mwc-textfield#text1")    }        
     get text2() {    return this.shadowRoot.querySelector("mwc-textfield#text2")    }        
     get text3() {    return this.shadowRoot.querySelector("mwc-textfield#text3")    }        
@@ -1026,6 +1078,7 @@ export function TrazitGenericDialogs(base) {
     get daterange5dateStart() {    return this.shadowRoot.querySelector("mwc-textfield#daterange5dateStart")    }        
     get daterange5dateEnd() {    return this.shadowRoot.querySelector("mwc-textfield#daterange5dateEnd")    }    
         
+    
     get number1() {    return this.shadowRoot.querySelector("mwc-textfield#number1")    }    
     get number2() {    return this.shadowRoot.querySelector("mwc-textfield#number2")    }    
     get number3() {    return this.shadowRoot.querySelector("mwc-textfield#number3")    }    
