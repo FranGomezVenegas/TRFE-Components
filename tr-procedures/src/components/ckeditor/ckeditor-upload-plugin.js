@@ -1,4 +1,4 @@
-export class MyUploadAdapter {
+export default class MyUploadAdapter {
     constructor(loader) {
       this.loader = loader;
       this.url = 'https://jsonplaceholder.typicode.com/posts'; // Replace with your image upload URL
