@@ -170,16 +170,25 @@ export class Dropzone extends ApiFunctions(LitElement) {
 
     let actionParams = this.jsonParam(this.action, this.selectedItem, undefined, this.selectedItem, undefined, undefined, undefined);
 
-    Object.keys(actionParams).forEach(key => {
-      form.append(key, actionParams[key]);
-    });
-    Object.keys(APIParams).forEach(key => {
-      form.append(key, APIParams[key]);
-    });
+    if (actionParams!==undefined){
+      Object.keys(actionParams).forEach(key => {
+        form.append(key, actionParams[key]);
+      });
+    }
+    if (APIParams!==undefined){
+      Object.keys(APIParams).forEach(key => {
+        form.append(key, APIParams[key]);
+      });
+    }
     let serviceAPIurl=this.getServiceAPIUrl(this.action)
     let params = serviceAPIurl + endPointUrl;
 
     try {
+      // Emitir evento para ocultar el progreso circular
+      this.dispatchEvent(new CustomEvent('show-progress', {
+        bubbles: true,
+        composed: true
+      }));            
       const response = await fetch(params, {
         method: 'POST',
         body: form,
@@ -213,9 +222,11 @@ export class Dropzone extends ApiFunctions(LitElement) {
         }
       }, 300);
     }
-    
-
-
+    // Emitir evento para ocultar el progreso circular
+    this.dispatchEvent(new CustomEvent('hide-progress', {
+      bubbles: true,
+      composed: true
+    }));      
   };
   
 }
