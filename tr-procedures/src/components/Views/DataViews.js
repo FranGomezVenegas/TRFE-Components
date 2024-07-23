@@ -211,20 +211,7 @@ export function DataViews(base) {
         }</p>
           `;
     }
-    kpiRecoveryRate() {
-      //console.log('kpiRecoveryRate', this.data.recoveryrate_datatable)
-      return html`
-        ${!this.data.recoveryrate_datatable ||
-          !this.data.recoveryrate_datatable.data
-          ? nothing
-          : html`
-              <lit-datatable
-                .data="${this.data.recoveryrate_datatable.data}"
-                .conf="${this.data.recoveryrate_datatable.conf}"
-              ></lit-datatable>
-            `}
-      `;
-    }
+
     kpiGrid(elem, data = this.data) {
       //console.log('kpiGrid', elem, "data", this.data[elem.elementName])
       let fldsToDisplay = [];
@@ -2918,6 +2905,59 @@ export function DataViews(base) {
             : "No columns defined"}`
           : html`
               <style>
+    .table-container {
+      max-height: 400px; /* Adjust the height as needed */
+      overflow-y: auto;
+    }
+
+    .styled-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .styled-table thead th {
+      position: sticky;
+      top: 0;
+      background: #fff; /* Adjust background as needed */
+      z-index: 1;
+    }
+
+    .styled-table th, .styled-table td {
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
+
+    .styled-table tbody tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    .styled-table tbody tr:hover {
+      background-color: #ddd;
+    }
+
+    /* Custom scrollbar for Chrome, Safari, and Edge */
+    .table-container::-webkit-scrollbar {
+      width: 12px; /* Width of the scrollbar */
+    }
+
+    .table-container::-webkit-scrollbar-track {
+      background: linear-gradient(79deg, rgb(70, 104, 219), rgb(157, 112, 205)); /* Background of the track */
+    }
+
+    .table-container::-webkit-scrollbar-thumb {
+      background: linear-gradient(79deg, rgb(157, 112, 205), rgb(70, 104, 219)); /* Color of the scroll thumb */
+      border-radius: 10px; /* Rounded corners */
+    }
+
+    .table-container::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(79deg, rgb(157, 112, 205), rgb(70, 104, 219)); /* Hover color */
+    }
+
+    /* Custom scrollbar for Firefox */
+    .table-container {
+      scrollbar-width: thin; /* Thin scrollbar */
+      scrollbar-color: linear-gradient(79deg, rgb(157, 112, 205), rgb(70, 104, 219)) linear-gradient(79deg, rgb(70, 104, 219), rgb(157, 112, 205)); /* Thumb and track colors */
+    }     
               .search-container {
                 background: #fff;
                 padding: 10px;
@@ -3017,7 +3057,7 @@ export function DataViews(base) {
                 `
               }
 
-              
+              <div class="table-container">
                   <table id=${elem.endPointResponseObject} class="styled-table read-only ${tmp}">
                     <thead>
                       <tr>
@@ -3085,6 +3125,7 @@ export function DataViews(base) {
                         `}
                     </tbody>
                   </table>
+                </div>
                 `}
           </div>
         </div>
@@ -3109,6 +3150,16 @@ export function DataViews(base) {
           .procInstanceName=${this.procName} .desktop=${this.desktop} .viewName=${this.viewName} .filterName=${this.filterName} 
           .model=${elem} ?ready="true" .data=${data}
           .viewModelFromProcModel=${elem} .config=${this.config}></drag-drop>      
+      `
+    }    
+    calendar(elem, data) {
+      import('../Calendar/index')
+      console.log('calendar', 'elem', elem, 'data', data)
+      return html`
+        <calendar-component .fakeData=${false} .windowOpenable=${this.windowOpenable} .sopsPassed=${this.sopsPassed} .lang=${this.lang}
+          .procInstanceName=${this.procName} .desktop=${this.desktop} .viewName=${this.viewName} .filterName=${this.filterName} 
+          .model=${elem} ?ready="true" .data=${data}
+          .viewModelFromProcModel=${elem} .config=${this.config}></calendar-component>      
       `
     }    
   };

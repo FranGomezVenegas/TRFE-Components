@@ -231,6 +231,9 @@ export class ProcManagementHome extends TrazitCredentialsDialogs(ButtonsFunction
     this.selectedProcInstance = undefined;
     this.selectedViewDefinition = undefined;
     this.selectedCompositionView = undefined;
+    sessionStorage.setItem('procName', undefined)
+    sessionStorage.setItem('procedureVersion', undefined)
+    sessionStorage.setItem('procInstanceName', undefined)
     //this.GetViewData(this.viewModelFromProcModel.viewQuery)
     if (this.localModel) {
       this.allProcedures =
@@ -399,7 +402,7 @@ export class ProcManagementHome extends TrazitCredentialsDialogs(ButtonsFunction
   render() {
     return html`
      ${this.credentialsDialog()}
-      ${this.selectedProcInstance === undefined
+      ${this.selectedProcInstance === undefined||this.selectedProcInstance === null
         ? html`
             <style>
               $red: #aa392e;
@@ -1028,6 +1031,9 @@ export class ProcManagementHome extends TrazitCredentialsDialogs(ButtonsFunction
     let selectedItemArr=[]
     selectedItemArr.push(this.selectedItem)
     sessionStorage.setItem('selectedProcedureModuleName', this.moduleName)
+    sessionStorage.setItem('procName', this.procName)
+    sessionStorage.setItem('procedureVersion', this.procedureVersion)
+    sessionStorage.setItem('procInstanceName', this.procInstanceName)
     
     return html`
       <sp-split-view show-divider=${this.showDivider}>
