@@ -81,7 +81,7 @@ export const template = (props) => {
 
   return html`
     <diagram-component></diagram-component>
-    <graph-flow-component .model="${{
+   <!-- <graph-flow-component .model="${{
     "class": "GraphLinksModel",
     "nodeDataArray": [
       {"key":-1,"category":"Start","loc":"-237 41","text":"Start"},
@@ -117,49 +117,50 @@ export const template = (props) => {
       {"from":-17,"to":-10},
       {"from":-10,"to":-15}
     ]}}">
-  </graph-flow-component>
+  </graph-flow-component> -->
 
-     <table-diagram
-    .nodeDataArray=${[
-      {
-        key: 'Record1',
-        fields: [
-          { name: 'field1', info: '', color: '#F7B84B', figure: 'Ellipse' },
-          { name: 'field2', info: 'the second one', color: '#F25022', figure: 'Ellipse' },
-          { name: 'fieldThree', info: '3rd', color: '#00BCF2' },
-        ],
-        loc: '0 0',
-      },
-      {
-        key: 'Record2',
-        fields: [
-          { name: 'fieldA', info: '', color: '#FFB900', figure: 'Diamond', info: 'diamond' },
-          { name: 'fieldB', info: '', color: 'green', figure: 'Circle', info: 'circle' },
-          { name: 'fieldC', info: '', color: 'red', figure: 'Triangle', info: 'triangle' },
-          { name: 'fieldD', info: '', figure: 'XLine', info: 'X' },
-        ],
-        loc: '250 0',
-      },
-      {
-        key: 'Sample',
-        fields: [
-          { name: 'sampleField1', info: '', color: '#00BCF2', figure: 'Ellipse' },
-          { name: 'sampleField2', info: 'example', color: '#F25022', figure: 'Ellipse' },
-        ],
-        loc: '500 0',
-      },
-    ]}
-    .links=${[
-      { from: { key: 'Record1', field: 'field2' }, to: { key: 'Record2', field: 'fieldD' } },
-      { from: { key: 'Record1', field: 'field1' }, to: { key: 'Sample', field: 'sampleField1' } },
-      { from: { key: 'Record2', field: 'fieldA' }, to: { key: 'Sample', field: 'sampleField2' } },
-    ]}
-  ></table-diagram>
+    <table-diagram
+  .nodeDataArray=${[
+    {
+      key: 'Record1',
+      fields: [
+        { name: 'field1', info: '', color: '#F7B84B' },
+        { name: 'field2', info: 'the second one', color: '#F25022' },
+        { name: 'fieldThree', info: '3rd', color: '#00BCF2' },
+      ],
+      loc: '100 100',
+    },
+    {
+      key: 'Record2',
+      fields: [
+        { name: 'fieldA', info: '', color: '#FFB900' },
+        { name: 'fieldB', info: '', color: 'green' },
+        { name: 'fieldC', info: '', color: 'red' },
+        { name: 'fieldD', info: '', color: 'blue' },
+      ],
+      loc: '400 100',
+    },
+    {
+      key: 'Sample',
+      fields: [
+        { name: 'sampleField1', info: '', color: '#00BCF2' },
+        { name: 'sampleField2', info: 'example', color: '#F25022' },
+      ],
+      loc: '700 100',
+    },
+  ]}
+  .links=${[
+    { from: { key: 'Record1', field: 'field2' }, to: { key: 'Record2', field: 'fieldD' } },
+    { from: { key: 'Record1', field: 'field1' }, to: { key: 'Sample', field: 'sampleField1' } },
+    { from: { key: 'Record2', field: 'fieldA' }, to: { key: 'Sample', field: 'sampleField2' } },
+  ]}
+></table-diagram>
 
-      <button @click=${handleGenerateLabel}>Generate Label Preview</button>
+
+<!--      <button @click=${handleGenerateLabel}>Generate Label Preview</button>
       <button @click=${() => window.print()}>Print</button>
-      <div id="labelPreviewContainer" style="border: 1px solid #000; width: 400px; height: 600px;"></div>
-<!--      <preview-file></preview-file> -->
+      <div id="labelPreviewContainer" style="border: 1px solid #000; width: 400px; height: 600px;"></div> -->
+<!--      <preview-file></preview-file>
       <flip-card .lang=${lang} .config=${flipCardConfig1} .data=${flipCardDataGroup1}></flip-card>
       
       <flip-card .lang=${lang} .config=${flipCardConfig2} .data=${flipCardDataGroup2}></flip-card>
@@ -193,6 +194,6 @@ export const template = (props) => {
         <h3>QRCode & BarCode</h3>
         <qrcode-scanner></qrcode-scanner>
         <code-view></code-view>
-      </div>
+      </div> -->
   `;
 };
