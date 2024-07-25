@@ -1,36 +1,33 @@
 import { css } from 'lit';
 
 export const flipCardStyles = css`
-  .flip-card-container {
-    perspective: 1000px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    align-items: flex-start;
-    margin: 20px 0;
-    gap: 20px; /* Espacio entre las tarjetas */
-  }
+.flip-card-container {
+  display: grid;
+  grid-template-columns: repeat(var(--cards-per-row, 3), minmax(300px, 1fr));
+  gap: 20px; /* Espacio entre las tarjetas */
+  margin: 20px 0;
+}
 
-  .flip-card {
-    width: calc((100% / var(--cards-per-row, 3)) - 20px); /* Ajuste dinámico para 3 columnas por defecto */
-    height: var(--flip-card-height, 400px);
-    position: relative;
-    transition: transform 0.6s;
-    transform-style: preserve-3d;
-    cursor: pointer;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    background-color: #fff; /* Asegura un fondo blanco */
-  }
+.flip-card {
+  height: var(--flip-card-height, 400px);
+  position: relative;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  min-width: 300px;
+  max-width: 350px;
+}
 
-  .flip-card-inner {
-    width: 100%;
-    height: 100%;
-    transition: transform 0.6s;
-    transform-style: preserve-3d;
-    position: relative;
-  }
+.flip-card-inner {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  position: relative;
+}
 
   .card-content {
     display: flex;
@@ -105,7 +102,7 @@ export const flipCardStyles = css`
 
   .card-heading-text {
     font-family: Montserrat;
-    font-size: 2.1rem;
+    font-size: 1.5rem;
     font-weight: 300;
     text-transform: uppercase;
     padding: 10px 15px;    
@@ -134,7 +131,7 @@ export const flipCardStyles = css`
     color: white;
     border: none;
     padding: 10px 20px;
-    font-size: 1.6rem;
+    font-size: 1rem;
     cursor: pointer;
     border-radius: 5px;
     margin-top: 20px;
