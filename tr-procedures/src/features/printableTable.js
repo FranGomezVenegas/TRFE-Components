@@ -29,26 +29,28 @@ export function PrintableTable(base) {
             // if (headerDataDiv !== undefined) {
             //   headerData = headerDataDiv[0].outerHTML
             // }
-            let mainDivContent = ''
-            let mainDivContentDiv = this.shadowRoot.querySelectorAll('#gridwithbuttons')
-            console.log(mainDivContent)
-            if (mainDivContentDiv !== undefined) {
-              mainDivContent = mainDivContentDiv[0].outerHTML
-            }
+            // let mainDivContent = ''
+            // let mainDivContentDiv = this.shadowRoot.querySelectorAll('#gridwithbuttons')
+            // console.log(mainDivContent)
+            // if (mainDivContentDiv !== undefined) {
+            //   mainDivContent = mainDivContentDiv[0].outerHTML
+            // }
             let pagerFooter = ''
             // let pagerFooterDiv = this.shadowRoot.querySelectorAll("div#pagefooter")
             // if (pagerFooterDiv !== undefined) {
             //   pagerFooter = headerDataDiv[0].outerHTML
             // }
       
-            const element = this.shadowRoot.querySelector('#rightSplit object-by-tabs');
+            // const element = this.shadowRoot.querySelector('#rightSplit object-by-tabs');
             let dataTable = '';
-            if (element) {
-              const compositionObj = element.shadowRoot.querySelector('objecttabs-composition');
-              if (compositionObj) {
-                const allDivs = compositionObj.shadowRoot.querySelectorAll('#gridwithbuttons > div > div > div');
-                allDivs.forEach(div => {
-                  const table = div.querySelector('.styled-table');
+            if (1) {
+              const compositionObj = this.shadowRoot.querySelector('objecttabs-composition');
+              console.log(this)
+              if (compositionObj || this) {
+                let mainContent = compositionObj || this
+                const mainDiv = mainContent.shadowRoot.querySelector('#mainDiv');
+                // allDivs.forEach(div => {
+                  const table = mainDiv.querySelector('table');
                   if (table) {
                     const clonedTable = table;
                     const headers = clonedTable.querySelectorAll('th');
@@ -70,11 +72,11 @@ export function PrintableTable(base) {
                       });
                     }
       
-                    dataTable += div.outerHTML;
+                    dataTable += clonedTable.outerHTML;
                   } else {
-                    dataTable += div.outerHTML;
+                    dataTable += '';
                   }
-                });
+                // });
       
               } else {
                 console.error("objecttabs-composition not found.");
@@ -280,6 +282,131 @@ export function PrintableTable(base) {
                             );
                           }                      
                         <!----></style>
+                        <style>
+                  * {
+                    font-family: 'Montserrat', sans-serif;
+                  }
+                  .table-container {
+                    max-height: 400px; /* Adjust the height as needed */
+                    overflow-y: auto;
+                    overflow-x: auto;
+                    width: 100%;
+                  }
+                  .styled-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                  }
+                  .styled-table thead th {
+                    position: sticky;
+                    top: 0;
+                    background: #fff; /* Adjust background as needed */
+                    z-index: 1;
+                  }
+                  .styled-table th, .styled-table td {
+                    padding: 10px;
+                    border: 1px solid #ddd;
+                    text-align: left;
+                  }
+                  .styled-table tbody tr:nth-child(even) {
+                    background-color: #f2f2f2;
+                  }
+                  .styled-table tbody tr:hover {
+                    background-color: #ddd;
+                  }
+                  .styled-table tbody tr.selected-row {
+                    background-color: #FFDDB3; /* Highlight color for selected rows */
+                  }
+                 
+                  @media screen and (max-width: 768px) {
+                    .styled-table th, .styled-table td {
+                      padding: 8px;
+                      font-size: 14px;
+                    }
+                  }
+                  .search-container {
+                    background: #fff;
+                    padding: 10px;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                    display: flex;
+                    align-items: center;
+                    max-width: 100%;
+                    margin: 0 auto;
+                    margin-left: 10px;
+                  }
+  
+                  .search-input {
+                    display: flex;
+                    flex-wrap: nowrap;
+                    margin-right: 10px;
+                    width: 100%;
+                  }
+  
+                  .search-input input {
+                    flex: 1;
+                    padding: 10px;
+                    margin-right: 10px;
+                    border: 1px solid #ddd;
+                    border-radius: 4px;
+                    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+                    transition: border-color 0.3s, box-shadow 0.3s;
+                  }
+  
+                  .search-input input:focus {
+                    outline: none;
+                    border-color: #007bff;
+                    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 123, 255, 0.3);
+                  }
+  
+                  .search-buttons {
+                    display: flex;
+                  }
+  
+                  .search-buttons button {
+                    padding: 10px 20px;
+                    margin-left: 10px;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    transition: background-color 0.3s, box-shadow 0.3s;
+                  }
+  
+                  .search-buttons button:hover {
+                    background-color: #007bff;
+                  }
+  
+                  .search-buttons button:active {
+                    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+                  }
+  
+                  .search-buttons .apply-filter {
+                    background-color: #007bff;
+                    color: white;
+                  }
+  
+                  .search-buttons .clear-filter {
+                    background-color: #6c757d;
+                    color: white;
+                  }
+  
+                  .toggle-filter {
+                    display: flex;
+                    width: 120px;
+                    background-color: #007bff;
+                    color: white;
+                    padding: 10px 20px;
+                    margin-left: 10px;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    transition: background-color 0.3s, box-shadow 0.3s;               
+                    transition: color 0.3s;
+                  }
+  
+                  .toggle-filter:hover {
+                    color: #fff;
+                  }
+                </style>
                         </head>
                         <body>  
                         <div id="print-document-header" class="print-document-footer">This Is Page Heaser Content</div>  
