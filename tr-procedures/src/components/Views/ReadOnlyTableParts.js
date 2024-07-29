@@ -153,8 +153,8 @@ export function ReadOnlyTableParts(base) {
             }
   
             mwc-icon-button {
-              --mdc-icon-button-size: 24px;
-              --mdc-icon-size: 16px;
+              --mdc-icon-button-size: 35px;
+              --mdc-icon-size: 25px;
             }
   
             .hidden {
@@ -332,6 +332,7 @@ export function ReadOnlyTableParts(base) {
             `
         }
         getActionsButtons(elem, dataArr){
+          //console.log('getActionsButtons', dataArr)
             return html`
                 <div class="layout horizontal center flex wrap">
                     ${this.getButton(elem, dataArr, true)}
