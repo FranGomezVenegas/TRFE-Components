@@ -1,8 +1,8 @@
 export function PrintableTable(base) {
     return class extends (base) {
 
-        printTables() {
-            this.setPrintContentTables();
+        printTable(index) {
+            this.setPrintContentTable(index);
             let printWindow = window.open('', '_blank');
             printWindow.document.write(this.printObj.contentWithFooter);
             printWindow.document.title = 'Title Here';
@@ -12,17 +12,20 @@ export function PrintableTable(base) {
             }, 500);
         }
 
-        setPrintContentTables() {
-            const dataTables = this._getTablesHTML();
+        setPrintContentTable(index) {
+            const styles = this._getAllStyles();
+            const dataTable = this._getTableHTML(index);
 
             this.printObj = {
                 header: '.',
                 contentWithFooter: `
                     <html>
-                        <head></head>
+                        <head>
+                            ${styles}
+                        </head>
                         <body>
-                            <div id="print-content" style="display: flex; flex-wrap: wrap; padding-left:30px; gap: 10px">
-                                ${dataTables}
+                            <div id="print-content" style="display: flex; flex-wrap: wrap; padding-left: 30px; gap: 10px">
+                                ${dataTable}
                             </div>
                         </body>
                     </html>
@@ -30,39 +33,48 @@ export function PrintableTable(base) {
             };
         }
 
-        _getTablesHTML() {
-            const tables = this.shadowRoot.querySelectorAll('table');
-            if (tables.length === 0) {
-                console.error(`No tables found in objecttabs-composition.`);
+        _getAllStyles() {
+            const styles = Array.from(document.querySelectorAll('style, link[rel="stylesheet"]'))
+                .map(style => style.outerHTML)
+                .join('\n');
+            return styles;
+        }
+
+        _getTableHTML(index) {
+            const table = this.shadowRoot.querySelector(`table[data-index="${index}"]`);
+            if (!table) {
+                console.error(`Table with data-index="${index}" not found.`);
                 return '';
             }
 
-            let combinedTablesHTML = '';
-            tables.forEach(table => {
-                const clonedTable = table.cloneNode(true);
-                const headers = clonedTable.querySelectorAll('th');
-                let actionsColumnIndex = -1;
+            const clonedTable = table.cloneNode(true);
+            const headers = clonedTable.querySelectorAll('th');
+            let actionsColumnIndex = -1;
 
-                headers.forEach((header, index) => {
-                    if (header.textContent.trim() === "Actions") {
-                        actionsColumnIndex = index;
-                    }
-                });
-
-                if (actionsColumnIndex !== -1) {
-                    headers[actionsColumnIndex].remove();
-                    const rows = clonedTable.querySelectorAll('tr');
-                    rows.forEach(row => {
-                        if (row.cells.length > actionsColumnIndex) {
-                            row.deleteCell(actionsColumnIndex);
-                        }
-                    });
+            headers.forEach((header, headerIndex) => {
+                if (header.textContent.trim() === "Actions") {
+                    actionsColumnIndex = headerIndex;
                 }
-
-                combinedTablesHTML += clonedTable.outerHTML;
             });
 
-            return combinedTablesHTML;
+            if (actionsColumnIndex !== -1) {
+                headers[actionsColumnIndex].remove();
+                const rows = clonedTable.querySelectorAll('tr');
+                rows.forEach(row => {
+                    if (row.cells.length > actionsColumnIndex) {
+                        row.deleteCell(actionsColumnIndex);
+                    }
+                });
+            }
+
+            const inputs = clonedTable.querySelectorAll('input');
+            inputs.forEach(input => {
+                const value = input.value;
+                const textNode = document.createTextNode(value);
+                input.parentNode.replaceChild(textNode, input);
+            });
+
+            return clonedTable.outerHTML;
         }
     }
 }
