@@ -1,74 +1,54 @@
 export function PrintableTable(base) {
     return class extends (base) {
-      
-          printTable() {            
-            this.setPrintContentTable()
+
+        printTables() {
+            this.setPrintContentTables();
             let printWindow = window.open('', '_blank');
             printWindow.document.write(this.printObj.contentWithFooter);
-            printWindow.document.title = 'Title Hear';
+            printWindow.document.title = 'Title Here';
             setTimeout(function () {
-              printWindow.print();
-              printWindow.close();
+                printWindow.print();
+                printWindow.close();
             }, 500);
-          }         
-      
-          setPrintContentTable() {  
-            const dataTable = this._getTablesHTML('objecttabs-composition', '#mainDiv');
-        
+        }
+
+        setPrintContentTables() {
+            const dataTables = this._getTablesHTML();
+
             this.printObj = {
                 header: '.',
-                content: headerData,
                 contentWithFooter: `
                     <html>
                         <head></head>
                         <body>
                             <div id="print-content" style="display: flex; flex-wrap: wrap; padding-left:30px; gap: 10px">
-                                ${dataTable}
+                                ${dataTables}
                             </div>
                         </body>
                     </html>
                 `
             };
         }
-        
-        _getOuterHTML(selector) {
-            const element = this.shadowRoot.querySelector(selector);
-            return element ? element.outerHTML : '';
-        }
-        
-        _getTablesHTML(componentSelector, mainDivSelector) {
-            const compositionObj = this.shadowRoot.querySelector(componentSelector);
-            if (!compositionObj) {
-                console.error(`${componentSelector} not found.`);
+
+        _getTablesHTML() {
+            const tables = this.shadowRoot.querySelectorAll('table');
+            if (tables.length === 0) {
+                console.error(`No tables found in objecttabs-composition.`);
                 return '';
             }
-        
-            const mainContent = compositionObj.shadowRoot ? compositionObj : this;
-            const mainDiv = mainContent.shadowRoot.querySelector(mainDivSelector);
-        
-            if (!mainDiv) {
-                console.error(`${mainDivSelector} not found.`);
-                return '';
-            }
-        
-            const tables = mainDiv.querySelectorAll('table');
-            if (!tables.length) {
-                console.error('No tables found.');
-                return '';
-            }
-        
-            let tablesHTML = '';
+
+            let combinedTablesHTML = '';
             tables.forEach(table => {
                 const clonedTable = table.cloneNode(true);
                 const headers = clonedTable.querySelectorAll('th');
                 let actionsColumnIndex = -1;
-        
+
                 headers.forEach((header, index) => {
                     if (header.textContent.trim() === "Actions") {
                         actionsColumnIndex = index;
                     }
                 });
-        
+
                 if (actionsColumnIndex !== -1) {
                     headers[actionsColumnIndex].remove();
                     const rows = clonedTable.querySelectorAll('tr');
@@ -78,12 +58,11 @@ export function PrintableTable(base) {
                         }
                     });
                 }
-        
-                tablesHTML += clonedTable.outerHTML;
+
+                combinedTablesHTML += clonedTable.outerHTML;
             });
-        
-            return tablesHTML;
+
+            return combinedTablesHTML;
         }
-          
     }
 }
