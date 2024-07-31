@@ -34,7 +34,7 @@ export function PrintableTable(base) {
         }
 
         _getAllStyles() {
-            const styles = Array.from(document.querySelectorAll('style, link[rel="stylesheet"]'))
+            const styles = Array.from(this.shadowRoot.querySelectorAll('style, link[rel="stylesheet"]'))
                 .map(style => style.outerHTML)
                 .join('\n');
             return styles;

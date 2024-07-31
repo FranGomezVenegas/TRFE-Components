@@ -84,7 +84,7 @@ export function DataViews(base) {
     }
 
     getDataFromRoot(elem, data) {
-      if (this.viewModelFromProcModel!==undefined&&this.viewModelFromProcModel.viewQuery.dataResponse!==undefined&&this.viewModelFromProcModel.viewQuery.dataResponse==="ArrayInRoot"){
+      if (this.viewModelFromProcModel!==undefined&&this.viewModelFromProcModel?.viewQuery?.dataResponse!==undefined&&this.viewModelFromProcModel?.viewQuery?.dataResponse==="ArrayInRoot"){
         return data.queryData?data.queryData:''
       }
       if (elem !== undefined && elem.contextVariableName !== undefined) {
