@@ -1657,7 +1657,7 @@ export function DataViews(base) {
                   }
                 }
               </style>
-              <div
+              <div data-index="${elem.index}"
                 id="main${elem.add_border !== undefined &&
               elem.add_border == true
               ? "addborder"

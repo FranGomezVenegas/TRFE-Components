@@ -81,19 +81,19 @@ export function PrintableTable(base) {
         }
 
         _getFallbackContent(index) {
-            const mainDiv = this.shadowRoot.querySelector('#mainDiv');
+            const mainDiv = this.shadowRoot.querySelector('#mainDiv > div');
             if (!mainDiv) {
                 console.error(`Main div not found.`);
                 return { header: 'Error', content: 'Main div not found.' };
             }
 
-            const targetDivs = mainDiv.querySelectorAll('div');
-            if (index >= targetDivs.length) {
+            const targetDivs = mainDiv.querySelector(`div[data-index="${index}"]`);;
+            if (index >= targetDivs?.length) {
                 console.error(`Div with index "${index}" not found.`);
                 return { header: 'Error', content: `Div with index "${index}" not found.` };
             }
 
-            const targetDiv = targetDivs[index];
+            const targetDiv = targetDivs;
             const headerTitle = targetDiv.querySelector('p span') ? targetDiv.querySelector('p span').textContent.trim() : 'Print';
 
             const clonedDiv = targetDiv.cloneNode(true);
