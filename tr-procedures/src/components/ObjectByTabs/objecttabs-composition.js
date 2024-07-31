@@ -289,6 +289,7 @@ export class ObjecttabsComposition extends TrazitTakePictureDialog(CardMultipleE
     ${elem.type==="reportTitle" ? this.kpiReportTitle(elem, data) : nothing}
     <div style="display: flex; flex-wrap: wrap; padding-left:30px; gap: 10px">        
       ${elem.elements.map((elem2, i) => {
+        elem2['index'] = i
         return html`
           ${elem2.is_translation===undefined||(elem2.is_translation!==undefined&&elem2.is_translation===true&&elem2.lang!==undefined&&elem2.lang===this.lang) ?
           html`              
