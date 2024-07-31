@@ -30,7 +30,7 @@ export function PrintableTable(base) {
                             </div>
                         </body>
                     </html>
-                `
+                ` 
             };
         }
 
